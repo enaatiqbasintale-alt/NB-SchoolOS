@@ -144,3 +144,24 @@ header {
     font-size: 0.8rem;
     font-weight: 600;
 }
+@media (max-width: 768px) {
+    .main-content {
+        padding: 10px;
+    }
+    .main-content .card, 
+    .main-content table, 
+    .content-body div {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+@media (max-width: 768px) {
+    .main-content {
+        padding: 10px;
+    }
+    .main-content .card, 
+    .main-content table, 
+    .content-body div {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
