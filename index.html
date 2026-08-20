@@ -116,9 +116,19 @@
 
         <!-- Teacher List Container -->
         <div id="teacherList">
-            <div style="padding: 10px; border-bottom: 1px solid #eee;">Kwame Mensah <span style="float: right; background: #e0e0ff; padding: 2px 8px; border-radius: 4px; font-size: 12px;">Mathematics</span></div>
-            <div style="padding: 10px; border-bottom: 1px solid #eee;">Abigail Osei <span style="float: right; background: #e0e0ff; padding: 2px 8px; border-radius: 4px; font-size: 12px;">English Language</span></div>
+            <div style="padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
+                <span>Kwame Mensah <span style="background: #e0e0ff; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-left: 10px;">Mathematics</span></span>
+                <button onclick="deleteItem(this)" style="background: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">Delete</button>
+            </div>
+            <div style="padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
+                <span>Abigail Osei <span style="background: #e0e0ff; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-left: 10px;">English Language</span></span>
+                <button onclick="deleteItem(this)" style="background: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">Delete</button>
+            </div>
         </div>
+        
+            
+    
+        
     </div>
 </section>
     
@@ -143,11 +153,21 @@
             <button onclick="addStudent()" style="background: #1e1e2f; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; width: 100%;">Add Student</button>
         </div>
 
-        <!-- Student List Container -->
+       <!-- Student List Container -->
         <div id="studentList">
-            <div style="padding: 10px; border-bottom: 1px solid #eee;">Kofi Mensah <span style="float: right; background: #e0e0ff; padding: 2px 8px; border-radius: 4px; font-size: 12px;">Form 1</span></div>
-            <div style="padding: 10px; border-bottom: 1px solid #eee;">Ama Serwaa <span style="float: right; background: #e0e0ff; padding: 2px 8px; border-radius: 4px; font-size: 12px;">Form 2</span></div>
+            <div style="padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
+                <span>Kofi Mensah <span style="background: #e0e0ff; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-left: 10px;">Form 1</span></span>
+                <button onclick="deleteItem(this)" style="background: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">Delete</button>
+            </div>
+            <div style="padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
+                <span>Ama Serwaa <span style="background: #e0e0ff; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-left: 10px;">Form 2</span></span>
+                <button onclick="deleteItem(this)" style="background: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">Delete</button>
+            </div>
         </div>
+    
+            
+    
+        
     </div>
 </section>   
                 
