@@ -43,31 +43,53 @@
 
             <div class="content-body">
                 <!-- Dashboard Tab -->
-                <section id="dashboard" class="tab-section active">
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <i class="fa-solid fa-chalkboard-user" style="color: #4f46e5;"></i>
-                            <div>
-                                <h3>Total Teachers</h3>
-                                <p>24</p>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <i class="fa-solid fa-user-graduate" style="color: #10b981;"></i>
-                            <div>
-                                <h3>Total Students</h3>
-                                <p>450</p>
-                            </div>
-                        </div>
-                        <div class="stat-card">
-                            <i class="fa-solid fa-calendar-check" style="color: #f59e0b;"></i>
-                            <div>
-                                <h3>Active Term</h3>
-                                <p>Term 3</p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                
+                    <section id="dashboard" class="tab-section">
+    <div class="card">
+        <h3>Dashboard Overview</h3>
+        <p>Welcome to Right Hope Academy management portal.</p>
+        
+        <!-- Stats Summary Cards -->
+        <div style="display: flex; gap: 10px; margin: 15px 0; flex-wrap: wrap;">
+            <div style="background: #f4f6f9; padding: 15px; border-radius: 8px; flex: 1; min-width: 120px; text-align: center;">
+                <h4 style="margin: 0; color: #555;">Total Students</h4>
+                <p style="font-size: 22px; font-weight: bold; margin: 5px 0 0; color: #1e1e2f;">124</p>
+            </div>
+            <div style="background: #f4f6f9; padding: 15px; border-radius: 8px; flex: 1; min-width: 120px; text-align: center;">
+                <h4 style="margin: 0; color: #555;">Total Teachers</h4>
+                <p style="font-size: 22px; font-weight: bold; margin: 5px 0 0; color: #1e1e2f;">12</p>
+            </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div style="margin-top: 20px;">
+            <input type="text" id="searchInput" placeholder="Search teachers or students..." onkeyup="filterTable()" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+        </div>
+    </div>
+</section>
+                        
+                    
+                
+                                
+                                
+                
+                
+                        
+                            
+                            
+                    
+                                
+                
+                        
+                        
+            
+                            
+                            
+                                
+                            
+                        
+
+        
 
                 <!-- Teachers Tab -->
                 <section id="teachers" class="tab-section">
