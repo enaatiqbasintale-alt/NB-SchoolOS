@@ -78,3 +78,11 @@ function updateCounts() {
     document.getElementById('studentCount').innerText = totalStudents;
     document.getElementById('teacherCount').innerText = totalTeachers;
 }
+function deleteItem(buttonElement) {
+    // This finds the parent row (the <div>) and removes it from the list
+    let itemRow = buttonElement.parentElement;
+    itemRow.remove();
+    
+    // Update the dashboard counts right after deleting
+    updateCounts();
+}
