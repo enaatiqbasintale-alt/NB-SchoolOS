@@ -1,4 +1,4 @@
-
+q
  // Tab Switching Function
 function switchTab(tabId, event) {
     // Hide all sections with class 'tab-section'
@@ -95,3 +95,34 @@ function deleteItem(button) {
     }
 }   
     
+// Dynamic Teacher Addition
+function addTeacher() {
+    const nameInput = document.getElementById('teacherNameInput');
+    const subjectInput = document.getElementById('teacherSubjectInput');
+    
+    const name = nameInput.value.trim();
+    const subject = subjectInput.value.trim();
+
+    if (!name || !subject) {
+        alert('Please enter both the teacher\'s full name and the subject taught.');
+        return;
+    }
+
+    // Add to Teacher List (matching your id="teacherList" in HTML)
+    const teacherList = document.getElementById('teacherList');
+    if (teacherList) {
+        const newTeacherItem = document.createElement('div');
+        newTeacherItem.style.cssText = 'padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;';
+        newTeacherItem.innerHTML = `
+            <span>${name} <span style="background: #e0e0ff; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-left: 10px;">${subject}</span></span>
+            <button onclick="deleteItem(this)" style="background: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">Delete</button>
+        `;
+        teacherList.appendChild(newTeacherItem);
+    }
+
+    // Clear input fields
+    nameInput.value = '';
+    subjectInput.value = '';
+    
+    alert('Teacher added successfully to the faculty list!');
+}
