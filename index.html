@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NB-SchoolOS | School Management System</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fa-solid fa-graduation-cap"></i> NB-SchoolOS</h2>
+            </div>
+            <ul class="nav-links">
+                <li class="active" onclick="switchTab('dashboard', event)"><i class="fa-solid fa-house"></i> Dashboard</li>
+                <li onclick="switchTab('teachers', event)"><i class="fa-solid fa-chalkboard-user"></i> Teachers</li>
+                <li onclick="switchTab('students', event)"><i class="fa-solid fa-user-graduate"></i> Students</li>
+                <li onclick="switchTab('settings', event)"><i class="fa-solid fa-gear"></i> Settings</li>
+            </ul>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header>
+                <div class="header-title">
+                    <h1 id="page-title">Dashboard</h1>
+                </div>
+                <div class="user-profile">
+                    <span>Welcome, Admin</span>
+                    <i class="fa-solid fa-circle-user"></i>
+                </div>
+            </header>
+
+            <div class="content-body">
+                <!-- Dashboard Tab -->
+                <section id="dashboard" class="tab-section active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <i class="fa-solid fa-chalkboard-user" style="color: #4f46e5;"></i>
+                            <div>
+                                <h3>Total Teachers</h3>
+                                <p>24</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fa-solid fa-user-graduate" style="color: #10b981;"></i>
+                            <div>
+                                <h3>Total Students</h3>
+                                <p>450</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fa-solid fa-calendar-check" style="color: #f59e0b;"></i>
+                            <div>
+                                <h3>Active Term</h3>
+                                <p>Term 3</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Teachers Tab -->
+                <section id="teachers" class="tab-section">
+                    <h2>Teacher Management</h2>
+                    <p>Manage faculty members, track teaching schedules, and records.</p>
+                    <div class="card-list">
+                        <div class="list-item"><span>Kwame Mensah</span><span class="badge">Mathematics</span></div>
+                        <div class="list-item"><span>Abigail Osei</span><span class="badge">English Language</span></div>
+                    </div>
+                </section>
+
+                <!-- Students Tab -->
+                <section id="students" class="tab-section">
+                    <h2>Student Directory</h2>
+                    <p>View student records, class enrollment, and academic progress.</p>
+                    <div class="card-list">
+                        <div class="list-item"><span>Kofi Boateng</span><span class="badge">Form 2</span></div>
+                        <div class="list-item"><span>Ama Serwaa</span><span class="badge">Form 1</span></div>
+                    </div>
+                </section>
+
+                <!-- Settings Tab -->
+                <section id="settings" class="tab-section">
+                    <h2>System Settings</h2>
+                    <p>Configure academic year, terms, and system layout.</p>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
