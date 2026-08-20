@@ -71,3 +71,10 @@ function addStudent() {
     nameInput.value = '';
     classInput.value = '';
 }
+function updateCounts() {
+    let totalStudents = document.getElementById('studentList').children.length;
+    let totalTeachers = document.getElementById('teacherList').children.length;
+
+    document.getElementById('studentCount').innerText = totalStudents;
+    document.getElementById('teacherCount').innerText = totalTeachers;
+}
