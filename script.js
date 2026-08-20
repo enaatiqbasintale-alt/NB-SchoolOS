@@ -86,3 +86,25 @@ function deleteItem(buttonElement) {
     // Update the dashboard counts right after deleting
     updateCounts();
 }
+// Load saved data when the page opens
+window.onload = function() {
+    let savedTeachers = localStorage.getItem('rightHopeTeachers');
+    let savedStudents = localStorage.getItem('rightHopeStudents');
+
+    if (savedTeachers) {
+        document.getElementById('teacherList').innerHTML = savedTeachers;
+    }
+    if (savedStudents) {
+        document.getElementById('studentList').innerHTML = savedStudents;
+    }
+
+    updateCounts();
+};
+
+function saveLists() {
+    let teacherHTML = document.getElementById('teacherList').innerHTML;
+    let studentHTML = document.getElementById('studentList').innerHTML;
+
+    localStorage.setItem('rightHopeTeachers', teacherHTML);
+    localStorage.setItem('rightHopeStudents', studentHTML);
+}
