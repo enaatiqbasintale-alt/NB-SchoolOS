@@ -27,3 +27,25 @@ function filterTable() {
     // You can expand this to filter your lists or cards as needed
     console.log("Searching for: " + filter);
 }
+function addTeacher() {
+    let nameInput = document.getElementById('teacherNameInput');
+    let subjectInput = document.getElementById('teacherSubjectInput');
+    let teacherList = document.getElementById('teacherList');
+
+    if (nameInput.value.trim() === '' || subjectInput.value.trim() === '') {
+        alert('Please fill in both fields!');
+        return;
+    }
+
+    // Create new element for the list
+    let newDiv = document.createElement('div');
+    newDiv.style.cssText = "padding: 10px; border-bottom: 1px solid #eee;";
+    newDiv.innerHTML = `${nameInput.value} <span style="float: right; background: #e0e0ff; padding: 2px 8px; border-radius: 4px; font-size: 12px;">${subjectInput.value}</span>`;
+
+    // Add it to the top of the teacher list
+    teacherList.prepend(newDiv);
+
+    // Clear inputs
+    nameInput.value = '';
+    subjectInput.value = '';
+}
