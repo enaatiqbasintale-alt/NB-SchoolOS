@@ -108,3 +108,17 @@ function saveLists() {
     localStorage.setItem('rightHopeTeachers', teacherHTML);
     localStorage.setItem('rightHopeStudents', studentHTML);
 }
+function filterNames() {
+    let input = document.getElementById('searchInput').value.toLowerCase();
+    let studentList = document.getElementById('studentList');
+    let items = studentList.getElementsByTagName('div');
+
+    for (let i = 0; i < items.length; i++) {
+        let text = items[i].textContent || items[i].innerText;
+        if (text.toLowerCase().indexOf(input) > -1) {
+            items[i].style.display = "";
+        } else {
+            items[i].style.display = "none";
+        }
+    }
+}
