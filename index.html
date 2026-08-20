@@ -121,14 +121,33 @@
                 
 
                 <!-- Students Tab -->
-                <section id="students" class="tab-section">
-                    <h2>Student Directory</h2>
-                    <p>View student records, class enrollment, and academic progress.</p>
-                    <div class="card-list">
-                        <div class="list-item"><span>Kofi Boateng</span><span class="badge">Form 2</span></div>
-                        <div class="list-item"><span>Ama Serwaa</span><span class="badge">Form 1</span></div>
-                    </div>
-                </section>
+         <section id="students" class="tab-section" style="display: none;">
+    <div class="card">
+        <h3>Student Records</h3>
+        <p>Manage student enrollment, classes, and personal profiles.</p>
+        
+        <!-- Add Student Form -->
+        <div style="background: #f9f9fb; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+            <h4 style="margin-top: 0; color: #333;">Add New Student</h4>
+            <input type="text" id="studentNameInput" placeholder="Student's full name..." style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            <input type="text" id="studentClassInput" placeholder="Class or Form (e.g., Form 2)..." style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            <button onclick="addStudent()" style="background: #1e1e2f; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; width: 100%;">Add Student</button>
+        </div>
+
+        <!-- Student List Container -->
+        <div id="studentList">
+            <div style="padding: 10px; border-bottom: 1px solid #eee;">Kofi Mensah <span style="float: right; background: #e0e0ff; padding: 2px 8px; border-radius: 4px; font-size: 12px;">Form 1</span></div>
+            <div style="padding: 10px; border-bottom: 1px solid #eee;">Ama Serwaa <span style="float: right; background: #e0e0ff; padding: 2px 8px; border-radius: 4px; font-size: 12px;">Form 2</span></div>
+        </div>
+    </div>
+</section>   
+                
+                
+                    
+                        
+                        
+        
+                
 
                 <!-- Settings Tab -->
                 <section id="settings" class="tab-section">
