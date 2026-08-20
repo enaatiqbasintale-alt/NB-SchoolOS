@@ -1,126 +1,97 @@
+
+ // Tab Switching Function
 function switchTab(tabId, event) {
-    // Hide all tab sections
-    const sections = document.querySelectorAll('.tab-section');
+    // Hide all sections with class 'tab-section'
+    const sections = document.querySelectorAll('.tab-section, .tab');
     sections.forEach(section => {
         section.style.display = 'none';
     });
 
-    // Show the selected tab section
+    // Show the selected tab
     const activeSection = document.getElementById(tabId);
     if (activeSection) {
         activeSection.style.display = 'block';
     }
 
-    // Update active class on navigation items
-    const navItems = document.querySelectorAll('.nav-links li');
-    navItems.forEach(item => {
-        item.classList.remove('active');
-    });
-
+    // Update active state on nav links if event is passed
     if (event && event.currentTarget) {
+        const navLinks = document.querySelectorAll('.nav-links li');
+        navLinks.forEach(link => link.classList.remove('active'));
         event.currentTarget.classList.add('active');
     }
 }
-function filterTable() {
-    let input = document.getElementById('searchInput');
-    let filter = input.value.toLowerCase();
-    // You can expand this to filter your lists or cards as needed
-    console.log("Searching for: " + filter);
-}
-function addTeacher() {
-    let nameInput = document.getElementById('teacherNameInput');
-    let subjectInput = document.getElementById('teacherSubjectInput');
-    let teacherList = document.getElementById('teacherList');
 
-    if (nameInput.value.trim() === '' || subjectInput.value.trim() === '') {
-        alert('Please fill in both fields!');
-        return;
-    }
-
-    // Create new element for the list
-    let newDiv = document.createElement('div');
-    newDiv.style.cssText = "padding: 10px; border-bottom: 1px solid #eee;";
-    newDiv.innerHTML = `${nameInput.value} <span style="float: right; background: #e0e0ff; padding: 2px 8px; border-radius: 4px; font-size: 12px;">${subjectInput.value}</span>`;
-
-    // Add it to the top of the teacher list
-    teacherList.prepend(newDiv);
-
-    // Clear inputs
-    nameInput.value = '';
-    subjectInput.value = '';
-}
+// Dynamic Student Addition
 function addStudent() {
-    let nameInput = document.getElementById('studentNameInput');
-    let classInput = document.getElementById('studentClassInput');
-    let studentList = document.getElementById('studentList');
+    const nameInput = document.getElementById('studentNameInput');
+    const classInput = document.getElementById('studentClassInput');
+    
+    const name = nameInput.value.trim();
+    const studentClass = classInput.value.trim();
 
-    if (nameInput.value.trim() === '' || classInput.value.trim() === '') {
-        alert('Please fill in both fields!');
+    if (!name || !studentClass) {
+        alert('Please enter both the student name and class.');
         return;
     }
 
-    // Create new element for the list
-    let newDiv = document.createElement('div');
-    newDiv.style.cssText = "padding: 10px; border-bottom: 1px solid #eee;";
-    newDiv.innerHTML = `${nameInput.value} <span style="float: right; background: #e0e0ff; padding: 2px 8px; border-radius: 4px; font-size: 12px;">${classInput.value}</span>`;
-
-    // Add it to the top of the student list
-    studentList.prepend(newDiv);
-
-    // Clear inputs
-    nameInput.value = '';
-    classInput.value = '';
-}
-function updateCounts() {
-    let totalStudents = document.getElementById('studentList').children.length;
-    let totalTeachers = document.getElementById('teacherList').children.length;
-
-    document.getElementById('studentCount').innerText = totalStudents;
-    document.getElementById('teacherCount').innerText = totalTeachers;
-}
-function deleteItem(buttonElement) {
-    // This finds the parent row (the <div>) and removes it from the list
-    let itemRow = buttonElement.parentElement;
-    itemRow.remove();
-    
-    // Update the dashboard counts right after deleting
-    updateCounts();
-}
-// Load saved data when the page opens
-window.onload = function() {
-    let savedTeachers = localStorage.getItem('rightHopeTeachers');
-    let savedStudents = localStorage.getItem('rightHopeStudents');
-
-    if (savedTeachers) {
-        document.getElementById('teacherList').innerHTML = savedTeachers;
-    }
-    if (savedStudents) {
-        document.getElementById('studentList').innerHTML = savedStudents;
+    // 1. Add to Student List Container
+    const studentList = document.getElementById('studentList');
+    if (studentList) {
+        const newListItem = document.createElement('div');
+        newListItem.style.cssText = 'padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;';
+        newListItem.innerHTML = `
+            <span>${name} <span style="background: #e0e0ff; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-left: 10px;">${studentClass}</span></span>
+            <button onclick="deleteItem(this)" style="background: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">Delete</button>
+        `;
+        studentList.appendChild(newListItem);
     }
 
-    updateCounts();
-};
+    // 2. Add to Daily Attendance Tracker Table
+    const attendanceTableBody = document.querySelector('#students table tbody'); // Adjust if needed
+    // We can target specific tables by checking their headers or containers. 
+    // Let's add a row to the Attendance table:
+    const tables = document.querySelectorAll('#students table');
+    if (tables.length > 0) {
+        // Attendance table is usually the first or second table in the student section
+        const attendanceBody = tables[0].querySelector('tbody');
+        if (attendanceBody) {
+            const attRow = document.createElement('tr');
+            attRow.style.borderBottom = '1px solid #eee';
+            attRow.innerHTML = `
+                <td style="padding: 8px;">${name}</td>
+                <td style="padding: 8px;"><input type="checkbox" checked> Present</td>
+            `;
+            attendanceBody.appendChild(attRow);
+        }
 
-function saveLists() {
-    let teacherHTML = document.getElementById('teacherList').innerHTML;
-    let studentHTML = document.getElementById('studentList').innerHTML;
-
-    localStorage.setItem('rightHopeTeachers', teacherHTML);
-    localStorage.setItem('rightHopeStudents', studentHTML);
-}
-function filterNames() {
-    let input = document.getElementById('searchInput').value.toLowerCase();
-    let studentList = document.getElementById('studentList');
-    let items = studentList.getElementsByTagName('div');
-
-    for (let i = 0; i < items.length; i++) {
-        let text = items[i].textContent || items[i].innerText;
-        if (text.toLowerCase().indexOf(input) > -1) {
-            items[i].style.display = "";
-        } else {
-            items[i].style.display = "none";
+        // 3. Add to Grade & Tracker Table (Second table)
+        if (tables.length > 1) {
+            const gradeBody = tables[1].querySelector('tbody');
+            if (gradeBody) {
+                const gradeRow = document.createElement('tr');
+                gradeRow.style.borderBottom = '1px solid #eee';
+                gradeRow.innerHTML = `
+                    <td style="padding: 8px;">${name}</td>
+                    <td style="padding: 8px;">75%</td>
+                    <td style="padding: 8px; font-weight: bold; color: #4e73df;">C</td>
+                `;
+                gradeBody.appendChild(gradeRow);
+            }
         }
     }
-}
+
+    // Clear input fields
+    nameInput.value = '';
+    classInput.value = '';
     
+    alert('Student added successfully across all trackers!');
+}
+
+// Generic Delete Function
+function deleteItem(button) {
+    const rowOrItem = button.closest('div') || button.closest('tr');
+    if (rowOrItem) {
+        rowOrItem.remove();
+    }
+}   
     
