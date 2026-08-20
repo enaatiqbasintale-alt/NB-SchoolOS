@@ -92,14 +92,33 @@
         
 
                 <!-- Teachers Tab -->
-                <section id="teachers" class="tab-section">
-                    <h2>Teacher Management</h2>
-                    <p>Manage faculty members, track teaching schedules, and records.</p>
-                    <div class="card-list">
-                        <div class="list-item"><span>Kwame Mensah</span><span class="badge">Mathematics</span></div>
-                        <div class="list-item"><span>Abigail Osei</span><span class="badge">English Language</span></div>
-                    </div>
-                </section>
+                <section id="teachers" class="tab-section" style="display: none;">
+    <div class="card">
+        <h3>Teacher Management</h3>
+        <p>Manage faculty members, teaching schedules, and records.</p>
+        
+        <!-- Add Teacher Form -->
+        <div style="background: #f9f9fb; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+            <h4 style="margin-top: 0; color: #333;">Add New Teacher</h4>
+            <input type="text" id="teacherNameInput" placeholder="Teacher's full name..." style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            <input type="text" id="teacherSubjectInput" placeholder="Subject taught..." style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
+            <button onclick="addTeacher()" style="background: #1e1e2f; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; width: 100%;">Add Teacher</button>
+        </div>
+
+        <!-- Teacher List Container -->
+        <div id="teacherList">
+            <div style="padding: 10px; border-bottom: 1px solid #eee;">Kwame Mensah <span style="float: right; background: #e0e0ff; padding: 2px 8px; border-radius: 4px; font-size: 12px;">Mathematics</span></div>
+            <div style="padding: 10px; border-bottom: 1px solid #eee;">Abigail Osei <span style="float: right; background: #e0e0ff; padding: 2px 8px; border-radius: 4px; font-size: 12px;">English Language</span></div>
+        </div>
+    </div>
+</section>
+    
+                    
+            
+                
+                        
+                    
+                
 
                 <!-- Students Tab -->
                 <section id="students" class="tab-section">
