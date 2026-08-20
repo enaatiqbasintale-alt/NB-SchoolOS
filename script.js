@@ -49,3 +49,25 @@ function addTeacher() {
     nameInput.value = '';
     subjectInput.value = '';
 }
+function addStudent() {
+    let nameInput = document.getElementById('studentNameInput');
+    let classInput = document.getElementById('studentClassInput');
+    let studentList = document.getElementById('studentList');
+
+    if (nameInput.value.trim() === '' || classInput.value.trim() === '') {
+        alert('Please fill in both fields!');
+        return;
+    }
+
+    // Create new element for the list
+    let newDiv = document.createElement('div');
+    newDiv.style.cssText = "padding: 10px; border-bottom: 1px solid #eee;";
+    newDiv.innerHTML = `${nameInput.value} <span style="float: right; background: #e0e0ff; padding: 2px 8px; border-radius: 4px; font-size: 12px;">${classInput.value}</span>`;
+
+    // Add it to the top of the student list
+    studentList.prepend(newDiv);
+
+    // Clear inputs
+    nameInput.value = '';
+    classInput.value = '';
+}
