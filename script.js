@@ -21,3 +21,9 @@ function switchTab(tabId, event) {
         event.currentTarget.classList.add('active');
     }
 }
+function filterTable() {
+    let input = document.getElementById('searchInput');
+    let filter = input.value.toLowerCase();
+    // You can expand this to filter your lists or cards as needed
+    console.log("Searching for: " + filter);
+}
