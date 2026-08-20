@@ -176,3 +176,21 @@ header {
 .sidebar {
     width: 220px; /* keeps your sidebar intact */
 }
+/* Fix mobile layout and card clipping */
+.app-container {
+    display: flex;
+    width: 100vw;
+    overflow-x: hidden;
+}
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+    padding: 15px;
+}
+
+.card {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+}
