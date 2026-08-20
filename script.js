@@ -111,14 +111,16 @@ function saveLists() {
 function filterNames() {
     let input = document.getElementById('searchInput').value.toLowerCase();
     let studentList = document.getElementById('studentList');
-    let items = studentList.getElementsByTagName('div');
+    let items = studentList.querySelectorAll('div > span:first-child');
 
     for (let i = 0; i < items.length; i++) {
         let text = items[i].textContent || items[i].innerText;
         if (text.toLowerCase().indexOf(input) > -1) {
-            items[i].style.display = "";
+            items[i].parentElement.style.display = "";
         } else {
-            items[i].style.display = "none";
+            items[i].parentElement.style.display = "none";
         }
     }
 }
+    
+    }
