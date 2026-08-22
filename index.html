@@ -232,7 +232,41 @@
             </div>
         </main>
     </div>
+<!-- Dynamic Student Management Script -->
+<script>
+function addNewStudent() {
+    let nameBox = document.getElementById('studentNameInput');
+    let classBox = document.getElementById('studentClassInput');
+    let tbody = document.getElementById('studentTableBody');
 
+    if (!nameBox || nameBox.value.trim() === "") {
+        alert("Please enter a student name!");
+        return;
+    }
+
+    let newRow = document.createElement('tr');
+    newRow.style.borderBottom = "1px solid #eee";
+    
+    newRow.innerHTML = `
+        <td style="padding: 8px;">${nameBox.value}</td>
+        <td style="padding: 8px;">${classBox && classBox.value ? classBox.value : 'Form 1'}</td>
+        <td style="padding: 8px;"><button onclick="removeRow(this)" style="background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 4px;">Delete</button></td>
+    `;
+
+    if (tbody) {
+        tbody.appendChild(newRow);
+    }
+
+    // Clear input boxes
+    nameBox.value = "";
+    if (classBox) classBox.value = "";
+}
+
+function removeRow(button) {
+    let row = button.closest('tr');
+    if (row) row.remove();
+}
+</script>q
     <script src="script.js"></script>
 </body>
 </html>
