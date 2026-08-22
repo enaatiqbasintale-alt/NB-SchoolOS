@@ -225,36 +225,13 @@
         
 
 
-    l
     
     
     
-        <td style="padding: 8px;">${nameBox.value}</td>
-        <td style="padding: 8px;">${classBox && classBox.value ? classBox.value : 'Form 1'}</td>
-        <td style="padding: 8px;"><button onclick="removeRow(this)" style="background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 4px;">Delete</button></td>
-    `;
-
-    if (tbody) {
-        tbody.appendChild(newRow);
-    }
-
-    // Clear input boxes
-    nameBox.value = "";
-    if (classBox) classBox.value = "";
-}
-
-function removeRow(button) {
-    let row = button.closest('tr');
-    if (row) row.remove();
-}
-</script>q
-    <script src="script.js"></script>
-</body>
-</html>
-<script>
-function handleLogin() {
-    let user = document.getElementById('loginUser').value;
-    let pass = document.getElementById('loginPass').value;
+    
+    
+        
+        
 
     // You can change 'admin' and 'righthope2026' to any username and password you want!
     if (user === "admin" && pass === "righthope2026") {
