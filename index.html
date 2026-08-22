@@ -8,8 +8,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-
-    <div class="app-container">
+<!-- Login Screen Section -->
+<section id="loginSection" style="max-width: 400px; margin: 80px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h2>Right Hope Academy</h2>
+        <p style="color: #666; font-size: 14px;">Staff Portal Login</p>
+    </div>
+    <div style="margin-bottom: 15px;">
+        <label style="display: block; margin-bottom: 5px; font-size: 14px;">Username</label>
+        <input type="text" id="loginUser" placeholder="Enter username" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+    </div>
+    <div style="margin-bottom: 20px;">
+        <label style="display: block; margin-bottom: 5px; font-size: 14px;">Password</label>
+        <input type="password" id="loginPass" placeholder="Enter password" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+    </div>
+    <button onclick="handleLogin()" style="width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">Login to Portal</button>
+    <p id="loginError" style="color: red; font-size: 13px; text-align: center; margin-top: 10px; display: none;">Invalid username or password.</p>
+</section>
+    <div id="mainDashboard" class="app-container" style="display: none;">
         <!-- Sidebar Navigation -->
         <aside class="sidebar">
             <div class="sidebar-header">
@@ -220,3 +236,20 @@
     <script src="script.js"></script>
 </body>
 </html>
+<script>
+function handleLogin() {
+    let user = document.getElementById('loginUser').value;
+    let pass = document.getElementById('loginPass').value;
+
+    // You can change 'admin' and 'righthope2026' to any username and password you want!
+    if (user === "admin" && pass === "righthope2026") {
+        // Hide login screen
+        document.getElementById('loginSection').style.display = 'none';
+        // Show main dashboard
+        document.getElementById('mainDashboard').style.display = 'block';
+    } else {
+        // Show error message if details are wrong
+        document.getElementById('loginError').style.display = 'block';
+    }
+}
+</script>
