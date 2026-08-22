@@ -186,68 +186,49 @@
                         <p>🎓 Class List & Records</p>
                         
                         <!-- Interactive Student Table -->
-                        <table style="width: 100%; margin-top: 15px; border-collapse: collapse;">
-                            <thead>
-                                <tr style="border-bottom: 2px solid #ddd; text-align: left;">
-                                    <th style="padding: 8px;">Name</th>
-                                    <th style="padding: 8px;">Class</th>
-                                    <th style="padding: 8px;">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr style="border-bottom: 1px solid #eee;">
-                                    <td style="padding: 8px;">Abubakar Sadick</td>
-                                    <td style="padding: 8px;">Form 2</td>
-                                    <td style="padding: 8px; color: green;">Active</td>
-                                </tr>
-                                <tr style="border-bottom: 1px solid #eee;">
-                                    <td style="padding: 8px;">Fatima Mensah</td>
-                                    <td style="padding: 8px;">Form 1</td>
-                                    <td style="padding: 8px; color: green;">Active</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 8px;">Kwame Owusu</td>
-                                    <td style="padding: 8px;">Form 3</td>
-                                    <td style="padding: 8px; color: orange;">Pending</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </section>          
-
-                <!-- Settings Tab -->
-                <section id="settings" class="tab-section" style="display: none;">
-                    <h2>System Settings</h2>
-                    <p>Configure academic year, terms, and system layout.</p>
-                </section>
-
-                <!-- Design Services & Pricing Section -->
-                <section class="card" style="margin-top: 20px; border-left: 4px solid #4f46e5;">
-                    <h3>🎨 Graphic Design Services</h3>
-                    <p>Professional custom flyers for school events, recruitment, and announcements.</p>
-                    <div style="font-size: 1.2rem; font-weight: bold; color: #4f46e5; margin-top: 10px;">
-                        Price: 50 GHS (Cedis)
-                    </div>
-                </section>
-            </div>
-        </main>
-    </div>
-<!-- Dynamic Student Management Script -->
-<script>
-function addNewStudent() {
-    let nameBox = document.getElementById('studentNameInput');
-    let classBox = document.getElementById('studentClassInput');
-    let tbody = document.getElementById('studentTableBody');
-
-    if (!nameBox || nameBox.value.trim() === "") {
-        alert("Please enter a student name!");
-        return;
-    }
-
-    let newRow = document.createElement('tr');
-    newRow.style.borderBottom = "1px solid #eee";
+                    
+          <!-- Right Hope Academy Students Table -->
+<table style="width: 100%; margin-top: 15px; border-collapse: collapse;">
+    <thead>
+        <tr style="border-bottom: 2px solid #ddd; text-align: left;">
+            <th style="padding: 8px;">Name</th>
+            <th style="padding: 8px;">Class</th>
+            <th style="padding: 8px;">Status</th>
+            <th style="padding: 8px;">Action</th>
+        </tr>
+    </thead>
+    <tbody id="studentTableBody">
+        <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 8px;">Abubakar Sadick</td>
+            <td style="padding: 8px;">Form 2</td>
+            <td style="padding: 8px; color: green;">Active</td>
+            <td style="padding: 8px;"><button onclick="removeRow(this)" style="background: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px;">Delete</button></td>
+        </tr>
+        <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 8px;">Fatima Mensah</td>
+            <td style="padding: 8px;">Form 1</td>
+            <td style="padding: 8px; color: green;">Active</td>
+            <td style="padding: 8px;"><button onclick="removeRow(this)" style="background: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px;">Delete</button></td>
+        </tr>
+        <tr style="border-bottom: 1px solid #eee;">
+            <td style="padding: 8px;">Kwame Owusu</td>
+            <td style="padding: 8px;">Form 3</td>
+            <td style="padding: 8px; color: orange;">Pending</td>
+            <td style="padding: 8px;"><button onclick="removeRow(this)" style="background: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px;">Delete</button></td>
+        </tr>
+    </tbody>
+</table>
+</div>                  
     
-    newRow.innerHTML = `
+                    
+                    
+        
+
+
+    l
+    
+    
+    
         <td style="padding: 8px;">${nameBox.value}</td>
         <td style="padding: 8px;">${classBox && classBox.value ? classBox.value : 'Form 1'}</td>
         <td style="padding: 8px;"><button onclick="removeRow(this)" style="background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 4px;">Delete</button></td>
