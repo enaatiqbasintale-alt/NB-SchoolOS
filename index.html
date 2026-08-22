@@ -257,3 +257,66 @@
         min-height: 100vh;
     }
 </style>
+<script>
+function addNewStudent() {
+    let nameBox = document.getElementById('studentNameInput');
+    let classBox = document.getElementById('studentClassInput');
+    let tbody = document.getElementById('studentTableBody');
+
+    if (!nameBox || nameBox.value.trim() === "") {
+        alert("Please enter a student name!");
+        return;
+    }
+
+    let newRow = document.createElement('tr');
+    newRow.style.borderBottom = "1px solid #eee";
+    
+    newRow.innerHTML = `
+        <td style="padding: 8px;">${nameBox.value}</td>
+        <td style="padding: 8px;">${classBox && classBox.value ? classBox.value : 'Form 1'}</td>
+        <td style="padding: 8px; color: green;">Active</td>
+        <td style="padding: 8px;"><button onclick="removeRow(this)" style="background: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px;">Delete</button></td>
+    `;
+
+    if (tbody) {
+        tbody.appendChild(newRow);
+    }
+
+    nameBox.value = "";
+    if (classBox) classBox.value = "";
+}
+
+function removeRow(button) {
+    let row = button.closest('tr');
+    if (row) row.remove();
+}
+
+function handleLogin() {
+    let userBox = document.getElementById('loginUser');
+    let passBox = document.getElementById('loginPass');
+    let errorMsg = document.getElementById('loginError');
+
+    if (!userBox || !passBox) {
+        alert("Login inputs not found!");
+        return;
+    }
+
+    let user = userBox.value.trim();
+    let pass = passBox.value.trim();
+
+    if (user === "admin" && pass === "righthope") {
+        let loginSec = document.getElementById('loginSection');
+        let mainDash = document.getElementById('mainDashboard');
+
+        if (loginSec) loginSec.style.display = "none";
+        if (mainDash) mainDash.style.display = "block";
+    } else {
+        if (errorMsg) {
+            errorMsg.innerText = "Invalid username or password!";
+            errorMsg.style.display = "block";
+        } else {
+            alert("Invalid username or password!");
+        }
+    }
+}
+</script>q
