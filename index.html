@@ -218,7 +218,39 @@
                         </table>
                     </div>
                 </section>
-                
+                <!-- Fee Payment Tracker Card -->
+<div class="card" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-top: 20px;">
+    <h3 style="margin-bottom: 15px; color: #333;">Fee Payment Tracker</h3>
+    
+    <!-- Quick Add Fee Form -->
+    <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+        <input type="text" id="feeStudentName" placeholder="Student Name" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; flex: 1; min-width: 150px;">
+        <input type="text" id="feeAmount" placeholder="Amount Paid (e.g. 50 cedis)" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; flex: 1; min-width: 150px;">
+        <button onclick="addFeeRecord()" style="background: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">Record Payment</button>
+    </div>
+
+    <!-- Fees Table -->
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+                <tr style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+                    <th style="padding: 10px;">Student Name</th>
+                    <th style="padding: 10px;">Amount Paid</th>
+                    <th style="padding: 10px;">Status</th>
+                    <th style="padding: 10px;">Action</th>
+                </tr>
+            </thead>
+            <tbody id="feeTableBody">
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 8px;">Kwame Mensah</td>
+                    <td style="padding: 8px;">50 cedis</td>
+                    <td style="padding: 8px; color: green; font-weight: bold;">Paid</td>
+                    <td style="padding: 8px;"><button onclick="removeRow(this)" style="background: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;">Delete</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
                 <!-- Settings Tab -->
                 <section id="settings" class="tab-section" style="display: none;">
                     <div class="card">
