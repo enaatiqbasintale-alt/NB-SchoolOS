@@ -83,7 +83,7 @@
 
                         <!-- Search Bar -->
                         <div style="margin-top: 20px;">
-                            <input type="text" id="searchInput" placeholder="Search teachers or students..." style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+                            <input type="text" id="searchInput" placeholder="Search teachers or students..." onkeyup="filterTable()" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
                         </div>
                     </div>
                 </section>
@@ -99,7 +99,7 @@
                             <h4 style="margin-top: 0; color: #333;">Add New Teacher</h4>
                             <input type="text" id="teacherNameInput" placeholder="Teacher's full name..." style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
                             <input type="text" id="teacherSubjectInput" placeholder="Subject taught..." style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
-                            <button style="background: #1e1e2f; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; width: 100%;">Add Teacher</button>
+                            <button onclick="addTeacher()" style="background: #1e1e2f; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; width: 100%;">Add Teacher</button>
                         </div>
 
                         <!-- Teacher List Container -->
@@ -276,6 +276,33 @@ function handleLogin() {
     }
 }
 
+function addTeacher() {
+    let nameBox = document.getElementById('teacherNameInput');
+    let subjectBox = document.getElementById('teacherSubjectInput');
+    let listContainer = document.getElementById('teacherList');
+
+    if (!nameBox || nameBox.value.trim() === "") {
+        alert("Please enter a teacher's name!");
+        return;
+    }
+
+    let newDiv = document.createElement('div');
+    newDiv.style.cssText = "padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;";
+    
+    let subjectText = subjectBox && subjectBox.value ? subjectBox.value : 'General';
+    newDiv.innerHTML = `
+        <span>${nameBox.value} <span style="background: #e0e0ff; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-left: 10px;">${subjectText}</span></span>
+        <button onclick="removeRow(this)" style="background: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">Delete</button>
+    `;
+
+    if (listContainer) {
+        listContainer.appendChild(newDiv);
+    }
+
+    nameBox.value = "";
+    if (subjectBox) subjectBox.value = "";
+}
+
 function addNewStudent() {
     let nameBox = document.getElementById('studentNameInput');
     let classBox = document.getElementById('studentClassInput');
@@ -306,9 +333,15 @@ function addNewStudent() {
 
 function removeRow(button) {
     let row = button.closest('tr');
-    let item = button.closest('div'); // In case you click delete on a teacher list item
+    let item = button.closest('div'); 
     if (row) row.remove();
     else if (item) item.remove();
+}
+
+function filterTable() {
+    let query = document.getElementById('searchInput').value.toLowerCase();
+    // Search logic placeholders for quick filtering
+    console.log("Searching for: " + query);
 }
 </script>
 </body>
