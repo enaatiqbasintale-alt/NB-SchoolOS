@@ -218,15 +218,21 @@
                         </table>
                     </div>
                 </section>
-                <!-- Fee Payment Tracker Card -->
+                 <!-- Fee Payment Tracker Card -->
 <div class="card" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-top: 20px;">
     <h3 style="margin-bottom: 15px; color: #333;">Fee Payment Tracker</h3>
     
-    <!-- Quick Add Fee Form -->
+    <!-- Flexible Add Fee Form -->
     <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
-        <input type="text" id="feeStudentName" placeholder="Student Name" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; flex: 1; min-width: 150px;">
+        <input list="studentOptions" id="feeStudentInput" placeholder="Select or type student name..." style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; flex: 1; min-width: 150px;">
+        <datalist id="studentOptions">
+            <option value="Abubakar Sadick">
+            <option value="Fatima Mensah">
+            <option value="Kwame Owusu">
+        </datalist>
+
         <input type="text" id="feeAmount" placeholder="Amount Paid (e.g. 50 cedis)" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; flex: 1; min-width: 150px;">
-        <button onclick="addFeeRecord()" style="background: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">Record Payment</button>
+        <button onclick="addFlexibleFeeRecord()" style="background: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">Record Payment</button>
     </div>
 
     <!-- Fees Table -->
@@ -251,12 +257,6 @@
         </table>
     </div>
 </div>
-                <!-- Settings Tab -->
-                <section id="settings" class="tab-section" style="display: none;">
-                    <div class="card">
-                        <h3>Settings</h3>
-                        <p>System configurations and preferences.</p>
-                    </div>
                 </section>
 
             </div>
@@ -405,3 +405,32 @@ function filterTable() {
 </script>
 </body>
 </html>
+function addFlexibleFeeRecord() {
+    let inputBox = document.getElementById('feeStudentInput');
+    let amountBox = document.getElementById('feeAmount');
+    let feeTableBody = document.getElementById('feeTableBody');
+
+    if (!inputBox || inputBox.value.trim() === "") {
+        alert("Please select or type a student name!");
+        return;
+    }
+
+    let studentName = inputBox.value.trim();
+    let amountPaid = amountBox && amountBox.value.trim() !== "" ? amountBox.value.trim() : "50 cedis";
+
+    if (feeTableBody) {
+        let newRow = document.createElement('tr');
+        newRow.style.borderBottom = "1px solid #eee";
+        newRow.innerHTML = `
+            <td style="padding: 8px;">${studentName}</td>
+            <td style="padding: 8px;">${amountPaid}</td>
+            <td style="padding: 8px; color: green; font-weight: bold;">Paid</td>
+            <td style="padding: 8px;"><button onclick="removeRow(this)" style="background: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;">Delete</button></td>
+        `;
+        feeTableBody.appendChild(newRow);
+    }
+
+    // Clear inputs
+    inputBox.value = "";
+    if (amountBox) amountBox.value = "";
+}
