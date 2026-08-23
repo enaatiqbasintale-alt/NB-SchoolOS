@@ -303,34 +303,61 @@ function addTeacher() {
     if (subjectBox) subjectBox.value = "";
 }
 
-function addNewStudent() {
+ function addNewStudent() {
     let nameBox = document.getElementById('studentNameInput');
     let classBox = document.getElementById('studentClassInput');
-    let tbody = document.getElementById('studentTableBody');
-
+    
     if (!nameBox || nameBox.value.trim() === "") {
         alert("Please enter a student name!");
         return;
     }
 
-    let newRow = document.createElement('tr');
-    newRow.style.borderBottom = "1px solid #eee";
-    
-    newRow.innerHTML = `
-        <td style="padding: 8px;">${nameBox.value}</td>
-        <td style="padding: 8px;">${classBox && classBox.value ? classBox.value : 'Form 1'}</td>
-        <td style="padding: 8px; color: green;">Active</td>
-        <td style="padding: 8px;"><button onclick="removeRow(this)" style="background: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px;">Delete</button></td>
-    `;
+    let studentName = nameBox.value.trim();
+    let studentClass = classBox && classBox.value ? classBox.value.trim() : 'Form 1';
 
-    if (tbody) {
-        tbody.appendChild(newRow);
+    // 1. Add to Main Students Table
+    let studentTableBody = document.getElementById('studentTableBody');
+    if (studentTableBody) {
+        let newRow = document.createElement('tr');
+        newRow.style.borderBottom = "1px solid #eee";
+        newRow.innerHTML = `
+            <td style="padding: 8px;">${studentName}</td>
+            <td style="padding: 8px;">${studentClass}</td>
+            <td style="padding: 8px; color: green;">Active</td>
+            <td style="padding: 8px;"><button onclick="removeRow(this)" style="background: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;">Delete</button></td>
+        `;
+        studentTableBody.appendChild(newRow);
     }
 
+    // 2. Add to Daily Attendance Tracker Table
+    let attendanceTable = document.querySelector('#students .card:nth-of-type(2) tbody');
+    if (attendanceTable) {
+        let attRow = document.createElement('tr');
+        attRow.style.borderBottom = "1px solid #eee";
+        attRow.innerHTML = `
+            <td style="padding: 8px;">${studentName}</td>
+            <td style="padding: 8px;"><input type="checkbox" checked> Present</td>
+        `;
+        attendanceTable.appendChild(attRow);
+    }
+
+    // 3. Add to Grade & Score Tracker Table
+    let gradeTable = document.querySelector('#students .card:nth-of-type(3) tbody');
+    if (gradeTable) {
+        let gradeRow = document.createElement('tr');
+        gradeRow.style.borderBottom = "1px solid #eee";
+        gradeRow.innerHTML = `
+            <td style="padding: 8px;">${studentName}</td>
+            <td style="padding: 8px;">--</td>
+            <td style="padding: 8px; font-weight: bold; color: #555;">Pending</td>
+        `;
+        gradeTable.appendChild(gradeRow);
+    }
+
+    // Clear input fields
     nameBox.value = "";
     if (classBox) classBox.value = "";
 }
-
 function removeRow(button) {
     let row = button.closest('tr');
     let item = button.closest('div'); 
