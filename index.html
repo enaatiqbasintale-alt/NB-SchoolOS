@@ -383,3 +383,12 @@ function handleLogin() {
     }
 }
 </script>
+function showSection(sectionId) {
+    let sections = document.querySelectorAll('.content-section');
+    sections.forEach(sec => sec.style.display = 'none');
+
+    let target = document.getElementById(sectionId);
+    if (target) {
+        target.style.display = 'block';
+    }
+}
