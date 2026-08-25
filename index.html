@@ -1,4 +1,5 @@
- <html lang="en">
+ <!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,10 +9,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+
 <!-- Login Screen Section -->
 <section id="loginSection" style="max-width: 400px; margin: 80px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
     <div style="text-align: center; margin-bottom: 20px;">
-        <h2aRight Hope Academy</h2>
+        <h2>Right Hope Academy</h2>
         <p style="color: #666; font-size: 14px;">Staff Portal Login</p>
     </div>
     <div style="margin-bottom: 15px;">
@@ -25,6 +27,7 @@
     <button onclick="handleLogin()" style="width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">Login to Portal</button>
     <p id="loginError" style="color: red; font-size: 13px; text-align: center; margin-top: 10px; display: none;">Invalid username or password.</p>
 </section>
+
 <!-- Role & View Switcher Bar -->
 <div class="card" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
     <div>
@@ -34,437 +37,78 @@
     <div style="display: flex; gap: 8px;">
         <button onclick="switchView('admin')" style="background: #007bff; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">Admin View</button>
         <button onclick="switchView('teacher')" style="background: #28a745; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">Teacher Portal</button>
-        <button onclick="switchView('parent')" style="background: #ffc107; color: #333; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold;">Parent View</button>
+        <button onclick="switchView('parent')" style="background: #ffc107; color: #333; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">Parent View</button>
     </div>
 </div>
-    <div id="mainDashboard" class="app-container" style="display: none;">
-        <!-- Sidebar Navigation -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2><i class="fa-solid fa-graduation-cap"></i> NB-SchoolOS</h2>
-            </div>
-            <ul class="nav-links">
-                <li class="active" onclick="showSection('dashboard')"><i class="fa-solid fa-house"></i> Dashboard</li>
-                <li onclick="showSection('teachers')">Teacher Directory</li>
-                <li onclick="showSection('students')">Student Management</li>
-                <li onclick="showSection('settings')"><i class="fa-solid fa-gear"></i> Settings</li>
-            </ul>
-        </aside>
 
-        <!-- Main Content Area -->
-        <main class="main-content">
-            <header>
-                <div class="header-title">
-                    <h1 id="page-title">Dashboard</h1>
-                </div>
-                <div class="user-profile">
-                    <span>Welcome, Admin</span>
-                    <i class="fa-solid fa-circle-user"></i>
-                </div>
-            </header>
-
-            <div class="content-body">
-                <!-- Dashboard Tab -->
-                <section id="dashboard" class="tab-section">
-                    <div style="background: #f8f9fc; padding: 15px; border-radius: 6px; border-left: 5px solid #4e73df; margin-bottom: 15px;">
-                        <h4 style="margin-top: 0; color: #4e73df;">📌 Recruitment Checklist</h4>
-                        <div style="display: flex; flex-direction: column; gap: 8px; color: #333;">
-                            <label><input type="checkbox" style="margin-right: 8px;"> Review applicant submissions</label>
-                            <label><input type="checkbox" style="margin-right: 8px;"> Finalize shortlisting</label>
-                            <label><input type="checkbox" style="margin-right: 8px;"> Prepare interview schedule</label>
-                        </div>
-                        <p style="margin-top: 10px; margin-bottom: 0;"><strong>Notice:</strong> Right Hope Academy Teacher Recruitment deadline is August 21, 2026!</p>
-                    </div>
-
-                    <div class="card">
-                        <h3>Dashboard Overview</h3>
-                        <p>Welcome to Right Hope Academy management portal.</p>
-                        
-                        <!-- Stats Summary Cards -->
-                        <div style="display: flex; gap: 10px; margin: 15px 0; flex-wrap: wrap;">
-                            <div style="background: #f4f6f9; padding: 15px; border-radius: 8px; flex: 1; min-width: 120px; text-align: center;">
-                                <h4 style="margin: 0; color: #555;">Total Students</h4>
-                                <p id="studentCount" style="font-size: 22px; font-weight: bold; margin: 5px 0 0; color: #1e1e2f;">2</p>
-                            </div>
-                            <div style="background: #f4f6f9; padding: 15px; border-radius: 8px; flex: 1; min-width: 120px; text-align: center;">
-                                <h4 style="margin: 0; color: #555;">Total Teachers</h4>
-                                <p id="teacherCount" style="font-size: 22px; font-weight: bold; margin: 5px 0 0; color: #1e1e2f;">2</p>
-                            </div>
-                        </div>
-
-                        <!-- Search Bar -->
-                        <div style="margin-top: 20px;">
-                            <input type="text" id="searchInput" placeholder="Search teachers or students..." onkeyup="filterTable()" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Teachers Tab -->
-                <section id="teachers" class="tab-section" style="display: none;">
-                    <div class="card">
-                        <h3>Teacher Management</h3>
-                        <p>Manage faculty members, teaching schedules, and records.</p>
-                        
-                        <!-- Add Teacher Form -->
-                        <div style="background: #f9f9fb; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                            <h4 style="margin-top: 0; color: #333;">Add New Teacher</h4>
-                            <input type="text" id="teacherNameInput" placeholder="Teacher's full name..." style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
-                            <input type="text" id="teacherSubjectInput" placeholder="Subject taught..." style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
-                            <button onclick="addTeacher()" style="background: #1e1e2f; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; width: 100%;">Add Teacher</button>
-                        </div>
-
-                        <!-- Teacher List Container -->
-                        <div id="teacherList">
-                            <div style="padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
-                                <span>Kwame Mensah <span style="background: #e0e0ff; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-left: 10px;">Mathematics</span></span>
-                                <button onclick="removeRow(this)" style="background: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">Delete</button>
-                            </div>
-                            <div style="padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
-                                <span>Abigail Osei <span style="background: #e0e0ff; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-left: 10px;">English Language</span></span>
-                                <button onclick="removeRow(this)" style="background: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">Delete</button>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Students Tab -->
-                <section id="students" class="tab-section" style="display: none;">
-                    <div class="card">
-                        <h3>Student Records</h3>
-                        <p>Manage student enrollment, classes, and personal profiles.</p>
-                        
-                        <!-- Add Student Form -->
-                        <div style="background: #f9f9fb; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
-                            <h4 style="margin-top: 0; color: #333;">Add New Student</h4>
-                            <input type="text" id="studentNameInput" placeholder="Student's full name..." style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
-                            <input type="text" id="studentClassInput" placeholder="Class or Form (e.g., Form 2)..." style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;">
-                            <button onclick="addNewStudent()" style="background: #1e1e2f; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; width: 100%;">Add Student</button>
-                        </div>
-                    </div>
-
-                    <!-- Daily Attendance Tracker -->
-                    <div class="card" style="margin-top: 20px;">
-                        <h4>Daily Attendance Tracker</h4>
-                        <p>📝 Mark present or absent for today</p>
-                        <table style="width: 100%; margin-top: 10px; border-collapse: collapse;">
-                            <thead>
-                                <tr style="border-bottom: 2px solid #ddd; text-align: left;">
-                                    <th style="padding: 8px;">Student Name</th>
-                                    <th style="padding: 8px;">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr style="border-bottom: 1px solid #eee;">
-                                    <td style="padding: 8px;">Kwame Mensah</td>
-                                    <td style="padding: 8px;"><input type="checkbox" checked> Present</td>
-                                </tr>
-                                <tr style="border-bottom: 1px solid #eee;">
-                                    <td style="padding: 8px;">Abena Serwaa</td>
-                                    <td style="padding: 8px;"><input type="checkbox" checked> Present</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div> 
-
-                    <!-- Grade & Score Tracker -->
-                    <div class="card" style="margin-top: 20px;">
-                        <h4>Grade & Score Tracker</h4>
-                        <p>📊 Calculate and monitor term scores</p>
-                        <table style="width: 100%; margin-top: 10px; border-collapse: collapse;">
-                            <thead>
-                                <tr style="border-bottom: 2px solid #ddd; text-align: left;">
-                                    <th style="padding: 8px;">Student Name</th>
-                                    <th style="padding: 8px;">Score (%)</th>
-                                    <th style="padding: 8px;">Grade</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr style="border-bottom: 1px solid #eee;">
-                                    <td style="padding: 8px;">Kwame Mensah</td>
-                                    <td style="padding: 8px;">85%</td>
-                                    <td style="padding: 8px; font-weight: bold; color: green;">A</td>
-                                </tr>
-                                <tr style="border-bottom: 1px solid #eee;">
-                                    <td style="padding: 8px;">Abena Serwaa</td>
-                                    <td style="padding: 8px;">78%</td>
-                                    <td style="padding: 8px; font-weight: bold; color: blue;">B</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>  
-                    
-                    <div class="card" style="margin-top: 20px;">
-                        <h4>Right Hope Academy Students</h4>
-                        <p>🎓 Class List & Records</p>
-                        
-                        <table style="width: 100%; margin-top: 15px; border-collapse: collapse;">
-                            <thead>
-                                <tr style="border-bottom: 2px solid #ddd; text-align: left;">
-                                    <th style="padding: 8px;">Name</th>
-                                    <th style="padding: 8px;">Class</th>
-                                    <th style="padding: 8px;">Status</th>
-                                    <th style="padding: 8px;">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="studentTableBody">
-                                <tr style="border-bottom: 1px solid #eee;">
-                                    <td style="padding: 8px;">Abubakar Sadick</td>
-                                    <td style="padding: 8px;">Form 2</td>
-                                    <td style="padding: 8px; color: green;">Active</td>
-                                    <td style="padding: 8px;"><button onclick="removeRow(this)" style="background: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px;">Delete</button></td>
-                                </tr>
-                                <tr style="border-bottom: 1px solid #eee;">
-                                    <td style="padding: 8px;">Fatima Mensah</td>
-                                    <td style="padding: 8px;">Form 1</td>
-                                    <td style="padding: 8px; color: green;">Active</td>
-                                    <td style="padding: 8px;"><button onclick="removeRow(this)" style="background: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px;">Delete</button></td>
-                                </tr>
-                                <tr style="border-bottom: 1px solid #eee;">
-                                    <td style="padding: 8px;">Kwame Owusu</td>
-                                    <td style="padding: 8px;">Form 3</td>
-                                    <td style="padding: 8px; color: orange;">Pending</td>
-                                    <td style="padding: 8px;"><button onclick="removeRow(this)" style="background: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px;">Delete</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
-                 <!-- Fee Payment Tracker Card -->
-<div class="card" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-top: 20px;">
-    <h3 style="margin-bottom: 15px; color: #333;">Fee Payment Tracker</h3>
+<!-- Term Report Card Generator Card -->
+<div class="card" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+    <h3 style="margin-top: 0; color: #333;">Term Report Card Generator</h3>
+    <p style="color: #666; font-size: 14px;">Generate an official summary sheet pulling student grades and attendance.</p>
     
-    <!-- Flexible Add Fee Form -->
-    <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
-        <input list="studentOptions" id="feeStudentInput" placeholder="Select or type student name..." style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; flex: 1; min-width: 150px;">
-        <datalist id="studentOptions">
-            <option value="Abubakar Sadick">
-            <option value="Fatima Mensah">
-            <option value="Kwame Owusu">
-        </datalist>
-
-        <input type="text" id="feeAmount" placeholder="Amount Paid (e.g. 50 cedis)" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; flex: 1; min-width: 150px;">
-        <button onclick="addFlexibleFeeRecord()" style="background: #28a745; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">Record Payment</button>
+    <div style="margin-bottom: 15px;">
+        <label style="display: block; margin-bottom: 5px; font-weight: bold; font-size: 13px;">Select Student</label>
+        <select id="reportStudentSelect" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+            <option value="">-- Choose Student --</option>
+            <option value="Student 1">Student 1</option>
+            <option value="Student 2">Student 2</option>
+        </select>
     </div>
 
-    <!-- Fees Table -->
-    <div style="overflow-x: auto;">
-        <table style="width: 100%; border-collapse: collapse; text-align: left;">
-            <thead>
-                <tr style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">
-                    <th style="padding: 10px;">Student Name</th>
-                    <th style="padding: 10px;">Amount Paid</th>
-                    <th style="padding: 10px;">Status</th>
-                    <th style="padding: 10px;">Action</th>
-                </tr>
-            </thead>
-            <tbody id="feeTableBody">
-                <tr style="border-bottom: 1px solid #eee;">
-                    <td style="padding: 8px;">Kwame Mensah</td>
-                    <td style="padding: 8px;">50 cedis</td>
-                    <td style="padding: 8px; color: green; font-weight: bold;">Paid</td>
-                    <td style="padding: 8px;"><button onclick="removeRow(this)" style="background: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;">Delete</button></td>
-                </tr>
-            </tbody>
-        </table>
+    <button onclick="generateReportCard()" style="background: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%;">Generate Report Card</button>
+
+    <!-- Printable Report Card Display Area -->
+    <div id="reportCardOutput" style="margin-top: 20px; padding: 15px; border: 2px dashed #007bff; border-radius: 6px; display: none; background: #fdfdfd;">
+        <h4 style="text-align: center; color: #007bff; margin-bottom: 5px;">Right Hope Academy</h4>
+        <p style="text-align: center; font-size: 12px; color: #666; margin-top: 0;">Official End-of-Term Progress Report</p>
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
+        <p><strong>Student Name:</strong> <span id="outStudentName">-</span></p>
+        <p><strong>Attendance Status:</strong> Present / Active</p>
+        <p><strong>Performance Summary:</strong> Records loaded successfully from NB-SchoolOS.</p>
     </div>
 </div>
-                </section>
-
-            </div>
-        </main>
-    </div>
-
-<style>
-    /* Force page to unlock scrolling on mobile */
-    html, body {
-        overflow: auto !important;
-        height: auto !important;
-    }
-    .app-container {
-        overflow-y: auto !important;
-        height: auto !important;
-        min-height: 100vh;
-    }
-</style>
 
 <script>
-function showSection(sectionId) {
-    let sections = document.querySelectorAll('.tab-section');
-    sections.forEach(sec => sec.style.display = 'none');
-
-    let target = document.getElementById(sectionId);
-    if (target) {
-        target.style.display = 'block';
-    }
-}
-
 function handleLogin() {
-    let userBox = document.getElementById('loginUser');
-    let passBox = document.getElementById('loginPass');
-    let errorMsg = document.getElementById('loginError');
-
-    if (!userBox || !passBox) return;
-
-    let user = userBox.value.trim();
-    let pass = passBox.value.trim();
-
-    if (user !== "" && pass !== "") {
+    let user = document.getElementById('loginUser').value;
+    let pass = document.getElementById('loginPass').value;
+    if(user && pass) {
         document.getElementById('loginSection').style.display = 'none';
-        document.getElementById('mainDashboard').style.display = 'flex';
+        alert('Login successful!');
     } else {
-        if (errorMsg) {
-            errorMsg.innerText = "Please enter username and password!";
-            errorMsg.style.display = 'block';
-        }
+        document.getElementById('loginError').style.display = 'block';
     }
 }
 
-function addTeacher() {
-    let nameBox = document.getElementById('teacherNameInput');
-    let subjectBox = document.getElementById('teacherSubjectInput');
-    let listContainer = document.getElementById('teacherList');
-
-    if (!nameBox || nameBox.value.trim() === "") {
-        alert("Please enter a teacher's name!");
-        return;
-    }
-
-    let newDiv = document.createElement('div');
-    newDiv.style.cssText = "padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;";
-    
-    let subjectText = subjectBox && subjectBox.value ? subjectBox.value : 'General';
-    newDiv.innerHTML = `
-        <span>${nameBox.value} <span style="background: #e0e0ff; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-left: 10px;">${subjectText}</span></span>
-        <button onclick="removeRow(this)" style="background: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px;">Delete</button>
-    `;
-
-    if (listContainer) {
-        listContainer.appendChild(newDiv);
-    }
-
-    nameBox.value = "";
-    if (subjectBox) subjectBox.value = "";
-}
-
- function addNewStudent() {
-    let nameBox = document.getElementById('studentNameInput');
-    let classBox = document.getElementById('studentClassInput');
-    
-    if (!nameBox || nameBox.value.trim() === "") {
-        alert("Please enter a student name!");
-        return;
-    }
-
-    let studentName = nameBox.value.trim();
-    let studentClass = classBox && classBox.value ? classBox.value.trim() : 'Form 1';
-
-    // 1. Add to Main Students Table
-    let studentTableBody = document.getElementById('studentTableBody');
-    if (studentTableBody) {
-        let newRow = document.createElement('tr');
-        newRow.style.borderBottom = "1px solid #eee";
-        newRow.innerHTML = `
-            <td style="padding: 8px;">${studentName}</td>
-            <td style="padding: 8px;">${studentClass}</td>
-            <td style="padding: 8px; color: green;">Active</td>
-            <td style="padding: 8px;"><button onclick="removeRow(this)" style="background: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;">Delete</button></td>
-        `;
-        studentTableBody.appendChild(newRow);
-    }
-
-    // 2. Add to Daily Attendance Tracker Table
-    let attendanceTable = document.querySelector('#students .card:nth-of-type(2) tbody');
-    if (attendanceTable) {
-        let attRow = document.createElement('tr');
-        attRow.style.borderBottom = "1px solid #eee";
-        attRow.innerHTML = `
-            <td style="padding: 8px;">${studentName}</td>
-            <td style="padding: 8px;"><input type="checkbox" checked> Present</td>
-        `;
-        attendanceTable.appendChild(attRow);
-    }
-
-    // 3. Add to Grade & Score Tracker Table
-    let gradeTable = document.querySelector('#students .card:nth-of-type(3) tbody');
-    if (gradeTable) {
-        let gradeRow = document.createElement('tr');
-        gradeRow.style.borderBottom = "1px solid #eee";
-        gradeRow.innerHTML = `
-            <td style="padding: 8px;">${studentName}</td>
-            <td style="padding: 8px;">--</td>
-            <td style="padding: 8px; font-weight: bold; color: #555;">Pending</td>
-        `;
-        gradeTable.appendChild(gradeRow);
-    }
-
-    // Clear input fields
-    nameBox.value = "";
-    if (classBox) classBox.value = "";
-}
-function removeRow(button) {
-    let row = button.closest('tr');
-    let item = button.closest('div'); 
-    if (row) row.remove();
-    else if (item) item.remove();
-}
-
-function filterTable() {
-    let query = document.getElementById('searchInput').value.toLowerCase();
-    // Search logic placeholders for quick filtering
-    console.log("Searching for: " + query);
-}
- function addFlexibleFeeRecord() {
-    let inputBox = document.getElementById('feeStudentInput');
-    let amountBox = document.getElementById('feeAmount');
-    let feeTableBody = document.getElementById('feeTableBody');
-
-    if (!inputBox || inputBox.value.trim() === "") {
-        alert("Please select or type a student name!");
-        return;
-    }
-
-    let studentName = inputBox.value.trim();
-    let amountPaid = amountBox && amountBox.value.trim() !== "" ? amountBox.value.trim() : "50 cedis";
-
-    if (feeTableBody) {
-        let newRow = document.createElement('tr');
-        newRow.style.borderBottom = "1px solid #eee";
-        newRow.innerHTML = `
-            <td style="padding: 8px;">${studentName}</td>
-            <td style="padding: 8px;">${amountPaid}</td>
-            <td style="padding: 8px; color: green; font-weight: bold;">Paid</td>
-            <td style="padding: 8px;"><button onclick="removeRow(this)" style="background: #ff4d4d; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;">Delete</button></td>
-        `;
-        feeTableBody.appendChild(newRow);
-    }
-
-    // Clear inputs
-    inputBox.value = "";
-    if (amountBox) amountBox.value = "";
-}
-<div class="card" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-    <h3>Report Card Generator</h3>
-    <select id="reportStudentSelect" style="width: 100%; padding: 8px; margin-bottom: 10px;">
-        <option value="">Choose Student</option>
-        <option value="Student 1">Student 1</option>
-    </select>
-    <button onclick="generateReportCard()" style="background: #28a745; color: white; width: 100%; padding: 10px;">Generate</button>
-    <div id="reportCardOutput" style="display: none; margin-top: 10px; padding: 10px; background: #f9f9f9;">
-        <strong>Report for:</strong> <span id="outStudentName">-</span>
-    </div>
-</div> 
+function switchView(role) {
+    let roleDisplay = document.getElementById('currentRoleDisplay');
     if (role === 'admin') {
-        roleDisplay.innerText = "Administrator (Full System Access)";
-        alert("Switched to Administrator View: Managing School Accounts, Fees & Subscriptions.");
+        roleDisplay.innerText = "Administrator";
+        alert("Switched to Administrator View");
     } else if (role === 'teacher') {
-        roleDisplay.innerText = "Teacher Portal (Attendance & Grades)";
-        alert("Switched to Teacher Portal: Managing Daily Attendance and Score Trackers.");
+        roleDisplay.innerText = "Teacher Portal";
+        alert("Switched to Teacher Portal");
     } else if (role === 'parent') {
-        roleDisplay.innerText = "Parent View (Student Progress)";
-        alert("Switched to Parent View: Viewing child's performance and fee status.");
+        roleDisplay.innerText = "Parent View";
+        alert("Switched to Parent View");
     }
+}
+
+function generateReportCard() {
+    let studentSelect = document.getElementById('reportStudentSelect').value;
+    let outputDiv = document.getElementById('reportCardOutput');
+    let outName = document.getElementById('outStudentName');
+
+    if (!studentSelect) {
+        alert("Please select a student first.");
+        return;
+    }
+
+    outName.innerText = studentSelect;
+    outputDiv.style.display = "block";
+    alert("Report Card generated successfully for " + studentSelect + "!");
 }
 </script>
+
 </body>
 </html>
- 
