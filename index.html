@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -28,44 +28,110 @@
     <p id="loginError" style="color: red; font-size: 13px; text-align: center; margin-top: 10px; display: none;">Invalid username or password.</p>
 </section>
 
-<!-- Role & View Switcher Bar -->
-<div class="card" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-    <div>
-        <strong style="color: #333;">Active Portal View:</strong>
-        <span id="currentRoleDisplay" style="color: #007bff; font-weight: bold;">Administrator</span>
-    </div>
-    <div style="display: flex; gap: 8px;">
-        <button onclick="switchView('admin')" style="background: #007bff; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">Admin View</button>
-        <button onclick="switchView('teacher')" style="background: #28a745; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">Teacher Portal</button>
-        <button onclick="switchView('parent')" style="background: #ffc107; color: #333; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">Parent View</button>
-    </div>
-</div>
+<!-- Main App Container (Hidden until login) -->
+<div id="mainAppContainer" style="display: none; padding: 20px; max-width: 1000px; margin: 0 auto;">
 
-<!-- Term Report Card Generator Card -->
-<div class="card" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-    <h3 style="margin-top: 0; color: #333;">Term Report Card Generator</h3>
-    <p style="color: #666; font-size: 14px;">Generate an official summary sheet pulling student grades and attendance.</p>
-    
-    <div style="margin-bottom: 15px;">
-        <label style="display: block; margin-bottom: 5px; font-weight: bold; font-size: 13px;">Select Student</label>
-        <select id="reportStudentSelect" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
-            <option value="">-- Choose Student --</option>
-            <option value="Student 1">Student 1</option>
-            <option value="Student 2">Student 2</option>
-        </select>
+    <!-- Role & View Switcher Bar -->
+    <div class="card" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div>
+            <strong style="color: #333;">Active Portal View:</strong>
+            <span id="currentRoleDisplay" style="color: #007bff; font-weight: bold;">Administrator</span>
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <button onclick="switchView('admin')" style="background: #007bff; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">Admin View</button>
+            <button onclick="switchView('teacher')" style="background: #28a745; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">Teacher Portal</button>
+            <button onclick="switchView('parent')" style="background: #ffc107; color: #333; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">Parent View</button>
+        </div>
     </div>
 
-    <button onclick="generateReportCard()" style="background: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%;">Generate Report Card</button>
+    <!-- Student Management Card -->
+    <div class="card" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        <h3 style="margin-top: 0; color: #333;"><i class="fa-solid fa-users"></i> Student Management & Registry</h3>
+        <p style="color: #666; font-size: 14px;">Add and track student records for Right Hope Academy.</p>
+        
+        <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+            <input type="text" id="newStudentName" placeholder="Enter student full name" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; min-width: 200px;">
+            <button onclick="addStudentRecord()" style="background: #007bff; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold;"><i class="fa-solid fa-user-plus"></i> Add Student</button>
+        </div>
 
-    <!-- Printable Report Card Display Area -->
-    <div id="reportCardOutput" style="margin-top: 20px; padding: 15px; border: 2px dashed #007bff; border-radius: 6px; display: none; background: #fdfdfd;">
-        <h4 style="text-align: center; color: #007bff; margin-bottom: 5px;">Right Hope Academy</h4>
-        <p style="text-align: center; font-size: 12px; color: #666; margin-top: 0;">Official End-of-Term Progress Report</p>
-        <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
-        <p><strong>Student Name:</strong> <span id="outStudentName">-</span></p>
-        <p><strong>Attendance Status:</strong> Present / Active</p>
-        <p><strong>Performance Summary:</strong> Records loaded successfully from NB-SchoolOS.</p>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                <thead>
+                    <tr style="background: #f1f1f1; text-align: left;">
+                        <th style="padding: 10px; border: 1px solid #ddd;">ID</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Student Name</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Status</th>
+                        <th style="padding: 10px; border: 1px solid #ddd;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="studentTableBody">
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd;">1</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">Student 1</td>
+                        <td style="padding: 8px; border: 1px solid #ddd; color: green;">Active</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;"><button onclick="removeStudent(this)" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer;">Delete</button></td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 8px; border: 1px solid #ddd;">2</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;">Student 2</td>
+                        <td style="padding: 8px; border: 1px solid #ddd; color: green;">Active</td>
+                        <td style="padding: 8px; border: 1px solid #ddd;"><button onclick="removeStudent(this)" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer;">Delete</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
+
+    <!-- Student Attendance & Performance Tracker Card -->
+    <div class="card" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        <h3 style="margin-top: 0; color: #333;"><i class="fa-solid fa-clipboard-user"></i> Student Attendance Tracker</h3>
+        <p style="color: #666; font-size: 14px;">Log daily presence and check metrics.</p>
+        
+        <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
+            <select id="trackerStudentSelect" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                <option value="Student 1">Student 1</option>
+                <option value="Student 2">Student 2</option>
+            </select>
+            <select id="attendanceStatusSelect" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                <option value="Present">Present</option>
+                <option value="Absent">Absent</option>
+                <option value="Late">Late</option>
+            </select>
+            <button onclick="logAttendance()" style="background: #17a2b8; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold;">Log Attendance</button>
+        </div>
+        
+        <div id="attendanceLogOutput" style="font-size: 13px; color: #555; background: #fdfdfd; padding: 10px; border: 1px solid #eee; border-radius: 4px;">
+            No attendance logged yet for today.
+        </div>
+    </div>
+
+    <!-- Term Report Card Generator Card -->
+    <div class="card" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        <h3 style="margin-top: 0; color: #333;"><i class="fa-solid fa-file-lines"></i> Term Report Card Generator</h3>
+        <p style="color: #666; font-size: 14px;">Generate an official summary sheet pulling student grades and attendance.</p>
+        
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold; font-size: 13px;">Select Student</label>
+            <select id="reportStudentSelect" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                <option value="">-- Choose Student --</option>
+                <option value="Student 1">Student 1</option>
+                <option value="Student 2">Student 2</option>
+            </select>
+        </div>
+
+        <button onclick="generateReportCard()" style="background: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%;">Generate Report Card</button>
+
+        <!-- Printable Report Card Display Area -->
+        <div id="reportCardOutput" style="margin-top: 20px; padding: 15px; border: 2px dashed #007bff; border-radius: 6px; display: none; background: #fdfdfd;">
+            <h4 style="text-align: center; color: #007bff; margin-bottom: 5px;">Right Hope Academy</h4>
+            <p style="text-align: center; font-size: 12px; color: #666; margin-top: 0;">Official End-of-Term Progress Report</p>
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
+            <p><strong>Student Name:</strong> <span id="outStudentName">-</span></p>
+            <p><strong>Attendance Status:</strong> <span id="outAttendanceStatus">Present / Active</span></p>
+            <p><strong>Performance Summary:</strong> Records loaded successfully from NB-SchoolOS.</p>
+        </div>
+    </div>
+
 </div>
 
 <script>
@@ -74,7 +140,7 @@ function handleLogin() {
     let pass = document.getElementById('loginPass').value;
     if(user && pass) {
         document.getElementById('loginSection').style.display = 'none';
-        alert('Login successful!');
+        document.getElementById('mainAppContainer').style.display = 'block';
     } else {
         document.getElementById('loginError').style.display = 'block';
     }
@@ -94,6 +160,55 @@ function switchView(role) {
     }
 }
 
+function addStudentRecord() {
+    let nameInput = document.getElementById('newStudentName');
+    let studentName = nameInput.value.trim();
+    if(!studentName) {
+        alert("Please enter a student name.");
+        return;
+    }
+    let tableBody = document.getElementById('studentTableBody');
+    let rowCount = tableBody.rows.length + 1;
+    
+    let newRow = tableBody.insertRow();
+    newRow.innerHTML = `
+        <td style="padding: 8px; border: 1px solid #ddd;">${rowCount}</td>
+        <td style="padding: 8px; border: 1px solid #ddd;">${studentName}</td>
+        <td style="padding: 8px; border: 1px solid #ddd; color: green;">Active</td>
+        <td style="padding: 8px; border: 1px solid #ddd;"><button onclick="removeStudent(this)" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer;">Delete</button></td>
+    `;
+    
+    // Also add to dropdowns dynamically
+    let reportSelect = document.getElementById('reportStudentSelect');
+    let trackerSelect = document.getElementById('trackerStudentSelect');
+    
+    let opt1 = document.createElement('option');
+    opt1.value = studentName;
+    opt1.innerText = studentName;
+    reportSelect.appendChild(opt1);
+
+    let opt2 = document.createElement('option');
+    opt2.value = studentName;
+    opt2.innerText = studentName;
+    trackerSelect.appendChild(opt2);
+
+    nameInput.value = "";
+    alert("Student " + studentName + " added successfully!");
+}
+
+function removeStudent(btn) {
+    let row = btn.parentNode.parentNode;
+    row.parentNode.removeChild(row);
+}
+
+function logAttendance() {
+    let student = document.getElementById('trackerStudentSelect').value;
+    let status = document.getElementById('attendanceStatusSelect').value;
+    let output = document.getElementById('attendanceLogOutput');
+    output.innerHTML = `<strong>Last Logged:</strong> ${student} is marked as <strong>${status}</strong> today.`;
+    alert("Attendance logged for " + student);
+}
+
 function generateReportCard() {
     let studentSelect = document.getElementById('reportStudentSelect').value;
     let outputDiv = document.getElementById('reportCardOutput');
@@ -111,4 +226,4 @@ function generateReportCard() {
 </script>
 
 </body>
-</html>
+</html> 
