@@ -442,32 +442,17 @@ function filterTable() {
     inputBox.value = "";
     if (amountBox) amountBox.value = "";
 }
-<!-- Term Report Card Generator Card -->
-<div class="card" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-    <h3 style="margin-top: 0; color: #333;">Term Report Card Generator</h3>
-    <p style="color: #666; font-size: 14px;">Generate an official summary sheet pulling student grades and attendance.</p>
-    
-    <div style="margin-bottom: 15px;">
-        <label style="display: block; margin-bottom: 5px; font-weight: bold; font-size: 13px;">Select Student</label>
-        <select id="reportStudentSelect" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
-            <option value="">-- Choose Student --</option>
-            <option value="Student 1">Student 1</option>
-            <option value="Student 2">Student 2</option>
-        </select>
-    </div>
-       <button onclick="generateReportCard()" style="background: #28a745; color: white; width: 100%; padding: 10px;">Generate Report Card</button>
-    <div id="reportCardOutput" style="margin-top: 20px; padding: 15px; border: 2px dashed #007bff; border-radius: 6px; display: none; background: #fdfdfd;">
-        <h4 style="text-align: center; color: #007bff; margin-bottom: 5px;">Right Hope Academy</h4>
-        <p style="text-align: center; font-size: 12px; color: #666; margin-top: 0;">Official End-of-Term Progress Report</p>
-        <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
-        <p><strong>Student Name:</strong> <span id="outStudentName">-</span></p>
-        <p><strong>Attendance Status:</strong> Present / Active</p>
-        <p><strong>Performance Summary:</strong> Records loaded successfully from NB-SchoolOS.</p>
+<div class="card" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+    <h3>Report Card Generator</h3>
+    <select id="reportStudentSelect" style="width: 100%; padding: 8px; margin-bottom: 10px;">
+        <option value="">Choose Student</option>
+        <option value="Student 1">Student 1</option>
+    </select>
+    <button onclick="generateReportCard()" style="background: #28a745; color: white; width: 100%; padding: 10px;">Generate</button>
+    <div id="reportCardOutput" style="display: none; margin-top: 10px; padding: 10px; background: #f9f9f9;">
+        <strong>Report for:</strong> <span id="outStudentName">-</span>
     </div>
 </div> 
-  function switchView(role) {
-    let roleDisplay = document.getElementById('currentRoleDisplay');
-    
     if (role === 'admin') {
         roleDisplay.innerText = "Administrator (Full System Access)";
         alert("Switched to Administrator View: Managing School Accounts, Fees & Subscriptions.");
