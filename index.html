@@ -25,7 +25,18 @@
     <button onclick="handleLogin()" style="width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">Login to Portal</button>
     <p id="loginError" style="color: red; font-size: 13px; text-align: center; margin-top: 10px; display: none;">Invalid username or password.</p>
 </section>
-
+<!-- Role & View Switcher Bar -->
+<div class="card" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+    <div>
+        <strong style="color: #333;">Active Portal View:</strong>
+        <span id="currentRoleDisplay" style="color: #007bff; font-weight: bold;">Administrator</span>
+    </div>
+    <div style="display: flex; gap: 8px;">
+        <button onclick="switchView('admin')" style="background: #007bff; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">Admin View</button>
+        <button onclick="switchView('teacher')" style="background: #28a745; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">Teacher Portal</button>
+        <button onclick="switchView('parent')" style="background: #ffc107; color: #333; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold;">Parent View</button>
+    </div>
+</div>
     <div id="mainDashboard" class="app-container" style="display: none;">
         <!-- Sidebar Navigation -->
         <aside class="sidebar">
@@ -430,6 +441,20 @@ function filterTable() {
     // Clear inputs
     inputBox.value = "";
     if (amountBox) amountBox.value = "";
+}
+ function switchView(role) {
+    let roleDisplay = document.getElementById('currentRoleDisplay');
+    
+    if (role === 'admin') {
+        roleDisplay.innerText = "Administrator (Full System Access)";
+        alert("Switched to Administrator View: Managing School Accounts, Fees & Subscriptions.");
+    } else if (role === 'teacher') {
+        roleDisplay.innerText = "Teacher Portal (Attendance & Grades)";
+        alert("Switched to Teacher Portal: Managing Daily Attendance and Score Trackers.");
+    } else if (role === 'parent') {
+        roleDisplay.innerText = "Parent View (Student Progress)";
+        alert("Switched to Parent View: Viewing child's performance and fee status.");
+    }
 }
 </script>
 </body>
