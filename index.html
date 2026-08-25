@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -100,7 +100,7 @@
                 <p style="color: #666; margin-top: 5px;">Welcome back to Right Hope Academy management portal. (Opportunity For All)</p>
             </div>
 
-            <!-- Student Records & Management Card -->
+            <!-- Student Records & Quick Add Card -->
             <div class="card">
                 <h3 style="margin-top: 0; color: #333;"><i class="fa-solid fa-user-graduate"></i> Student Records & Management</h3>
                 <p style="color: #666; font-size: 14px;">Manage student enrollment, classes, and personal profiles.</p>
@@ -240,18 +240,49 @@
             </div>
         </div>
 
-        <!-- 3. STUDENT MANAGEMENT SECTION -->
+        <!-- 3. STUDENT MANAGEMENT SECTION (FULL DIRECTORY WITH ADD/DELETE) -->
         <div id="view-students" class="section-view">
             <div style="margin-bottom: 20px;">
                 <h1 style="margin: 0; color: #1e1b4b; font-size: 24px;">Student Management</h1>
-                <p style="color: #666; margin-top: 5px;">Dedicated student registry and roster view.</p>
+                <p style="color: #666; margin-top: 5px;">Dedicated student registry and roster control.</p>
             </div>
+            
             <div class="card">
                 <h3 style="margin-top: 0; color: #333;"><i class="fa-solid fa-users"></i> Enrolled Students Directory</h3>
-                <p style="color: #666; font-size: 14px;">Full breakdown of active students in the system.</p>
-                <div id="dedicatedStudentList" style="font-size: 14px; color: #333; line-height: 1.6;">
-                    <p>• Student 1 (Active)</p>
-                    <p>• Student 2 (Active)</p>
+                <p style="color: #666; font-size: 14px;">Add new students or remove records directly from the roster table below.</p>
+                
+                <!-- Add Student Form Inside Student Section -->
+                <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+                    <input type="text" id="sectionStudentName" placeholder="Full Student Name" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; min-width: 200px;">
+                    <button onclick="addStudentFromSection()" style="background: #007bff; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold;"><i class="fa-solid fa-user-plus"></i> Enroll Student</button>
+                </div>
+
+                <!-- Dedicated Management Table -->
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                        <thead>
+                            <tr style="background: #f1f1f1; text-align: left;">
+                                <th style="padding: 10px; border: 1px solid #ddd;">ID</th>
+                                <th style="padding: 10px; border: 1px solid #ddd;">Student Name</th>
+                                <th style="padding: 10px; border: 1px solid #ddd;">Status</th>
+                                <th style="padding: 10px; border: 1px solid #ddd;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="managementStudentTableBody">
+                            <tr>
+                                <td style="padding: 8px; border: 1px solid #ddd;">1</td>
+                                <td style="padding: 8px; border: 1px solid #ddd;">Student 1</td>
+                                <td style="padding: 8px; border: 1px solid #ddd; color: green;">Active</td>
+                                <td style="padding: 8px; border: 1px solid #ddd;"><button onclick="removeManagementStudent(this)" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer;">Delete</button></td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px; border: 1px solid #ddd;">2</td>
+                                <td style="padding: 8px; border: 1px solid #ddd;">Student 2</td>
+                                <td style="padding: 8px; border: 1px solid #ddd; color: green;">Active</td>
+                                <td style="padding: 8px; border: 1px solid #ddd;"><button onclick="removeManagementStudent(this)" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer;">Delete</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -349,9 +380,10 @@ function addStudentRecord() {
         alert("Please enter a student name.");
         return;
     }
+    
+    // Add to Dashboard table
     let tableBody = document.getElementById('studentTableBody');
     let rowCount = tableBody.rows.length + 1;
-    
     let newRow = tableBody.insertRow();
     newRow.innerHTML = `
         <td style="padding: 8px; border: 1px solid #ddd;">${rowCount}</td>
@@ -359,12 +391,19 @@ function addStudentRecord() {
         <td style="padding: 8px; border: 1px solid #ddd; color: green;">Active</td>
         <td style="padding: 8px; border: 1px solid #ddd;"><button onclick="removeStudent(this)" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer;">Delete</button></td>
     `;
-    
-    let studentListDiv = document.getElementById('dedicatedStudentList');
-    let p = document.createElement('p');
-    p.innerText = "• " + studentName + " (Active)";
-    studentListDiv.appendChild(p);
 
+    // Also add to Student Management Section table automatically
+    let mgmtTable = document.getElementById('managementStudentTableBody');
+    let mgmtCount = mgmtTable.rows.length + 1;
+    let mgmtRow = mgmtTable.insertRow();
+    mgmtRow.innerHTML = `
+        <td style="padding: 8px; border: 1px solid #ddd;">${mgmtCount}</td>
+        <td style="padding: 8px; border: 1px solid #ddd;">${studentName}</td>
+        <td style="padding: 8px; border: 1px solid #ddd; color: green;">Active</td>
+        <td style="padding: 8px; border: 1px solid #ddd;"><button onclick="removeManagementStudent(this)" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer;">Delete</button></td>
+    `;
+
+    // Update dropdowns
     let reportSelect = document.getElementById('reportStudentSelect');
     let trackerSelect = document.getElementById('trackerStudentSelect');
     
@@ -382,7 +421,60 @@ function addStudentRecord() {
     alert("Student " + studentName + " added successfully!");
 }
 
+function addStudentFromSection() {
+    let nameInput = document.getElementById('sectionStudentName');
+    let studentName = nameInput.value.trim();
+    if(!studentName) {
+        alert("Please enter a student name.");
+        return;
+    }
+
+    // Add to Student Management Section table
+    let mgmtTable = document.getElementById('managementStudentTableBody');
+    let mgmtCount = mgmtTable.rows.length + 1;
+    let mgmtRow = mgmtTable.insertRow();
+    mgmtRow.innerHTML = `
+        <td style="padding: 8px; border: 1px solid #ddd;">${mgmtCount}</td>
+        <td style="padding: 8px; border: 1px solid #ddd;">${studentName}</td>
+        <td style="padding: 8px; border: 1px solid #ddd; color: green;">Active</td>
+        <td style="padding: 8px; border: 1px solid #ddd;"><button onclick="removeManagementStudent(this)" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer;">Delete</button></td>
+    `;
+
+    // Also add to Dashboard table
+    let tableBody = document.getElementById('studentTableBody');
+    let rowCount = tableBody.rows.length + 1;
+    let newRow = tableBody.insertRow();
+    newRow.innerHTML = `
+        <td style="padding: 8px; border: 1px solid #ddd;">${rowCount}</td>
+        <td style="padding: 8px; border: 1px solid #ddd;">${studentName}</td>
+        <td style="padding: 8px; border: 1px solid #ddd; color: green;">Active</td>
+        <td style="padding: 8px; border: 1px solid #ddd;"><button onclick="removeStudent(this)" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer;">Delete</button></td>
+    `;
+
+    // Update dropdowns
+    let reportSelect = document.getElementById('reportStudentSelect');
+    let trackerSelect = document.getElementById('trackerStudentSelect');
+    
+    let opt1 = document.createElement('option');
+    opt1.value = studentName;
+    opt1.innerText = studentName;
+    reportSelect.appendChild(opt1);
+
+    let opt2 = document.createElement('option');
+    opt2.value = studentName;
+    opt2.innerText = studentName;
+    trackerSelect.appendChild(opt2);
+
+    nameInput.value = "";
+    alert("Student " + studentName + " enrolled successfully!");
+}
+
 function removeStudent(btn) {
+    let row = btn.parentNode.parentNode;
+    row.parentNode.removeChild(row);
+}
+
+function removeManagementStudent(btn) {
     let row = btn.parentNode.parentNode;
     row.parentNode.removeChild(row);
 }
@@ -464,4 +556,4 @@ function generateReportCard() {
 </script>
 
 </body>
-</html> 
+</html>
