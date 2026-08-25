@@ -456,8 +456,17 @@ function filterTable() {
         </select>
     </div>
 
-    <button onclick="generateReportCard()" style="background: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%;">Generate Report Card</button>
+         <button onclick="generateReportCard()" style="background: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%;">Generate Report Card</button>
 
+    <!-- Printable Report Card Display Area -->
+    <div id="reportCardOutput" style="margin-top: 20px; padding: 15px; border: 2px dashed #007bff; border-radius: 6px; display: none; background: #fdfdfd;">
+        <h4 style="text-align: center; color: #007bff; margin-bottom: 5px;">Right Hope Academy</h4>
+        <p style="text-align: center; font-size: 12px; color: #666; margin-top: 0;">Official End-of-Term Progress Report</p>
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
+        <p><strong>Student Name:</strong> <span id="outStudentName">-</span></p>
+        <p><strong>Attendance Status:</strong> Present / Active</p>
+        <p><strong>Performance Summary:</strong> Records loaded successfully from NB-SchoolOS.</p>
+    </div>
     <!-- Printable Report Card Display Area -->
     <div id="reportCardOutput" style="margin-top: 20px; padding: 15px; border: 2px dashed #007bff; border-radius: 6px; display: none; background: #fdfdfd;">
         <h4 style="text-align: center; color: #007bff; margin-bottom: 5px;">Right Hope Academy</h4>
