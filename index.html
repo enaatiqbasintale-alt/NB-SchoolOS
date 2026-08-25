@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,35 +7,36 @@
     <link rel="stylesheet" href="style.css">
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { margin: 0; font-family: Arial, sans-serif; display: flex; background: #f4f6f9; }
+        .sidebar { width: 250px; background: #1e1b4b; color: white; min-height: 100vh; padding: 20px; box-sizing: border-box; }
+        .sidebar h2 { font-size: 20px; margin-bottom: 30px; display: flex; align-items: center; gap: 10px; }
+        .sidebar a { display: block; color: #cbd5e1; text-decoration: none; padding: 12px 15px; border-radius: 6px; margin-bottom: 8px; font-size: 15px; }
+        .sidebar a:hover, .sidebar a.active { background: #312e81; color: white; }
+        .main-content { flex: 1; padding: 20px; box-sizing: border-box; overflow-y: auto; }
+        .top-bar { background: white; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); flex-wrap: wrap; gap: 10px; }
+        .card { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    </style>
 </head>
 <body>
 
-<!-- Login Screen Section -->
-<section id="loginSection" style="max-width: 400px; margin: 80px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-    <div style="text-align: center; margin-bottom: 20px;">
-        <h2>Right Hope Academy</h2>
-        <p style="color: #666; font-size: 14px;">Staff Portal Login</p>
-    </div>
-    <div style="margin-bottom: 15px;">
-        <label style="display: block; margin-bottom: 5px; font-size: 14px;">Username</label>
-        <input type="text" id="loginUser" placeholder="Enter username" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
-    </div>
-    <div style="margin-bottom: 20px;">
-        <label style="display: block; margin-bottom: 5px; font-size: 14px;">Password</label>
-        <input type="password" id="loginPass" placeholder="Enter password" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
-    </div>
-    <button onclick="handleLogin()" style="width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">Login to Portal</button>
-    <p id="loginError" style="color: red; font-size: 13px; text-align: center; margin-top: 10px; display: none;">Invalid username or password.</p>
-</section>
+<!-- Sidebar Navigation -->
+<div class="sidebar">
+    <h2><i class="fa-solid fa-graduation-cap"></i> NB-SchoolOS</h2>
+    <a href="#" class="active"><i class="fa-solid fa-house"></i> Dashboard</a>
+    <a href="#"><i class="fa-solid fa-chalkboard-user"></i> Teacher Directory</a>
+    <a href="#"><i class="fa-solid fa-users"></i> Student Management</a>
+    <a href="#"><i class="fa-solid fa-gear"></i> Settings</a>
+</div>
 
-<!-- Main App Container (Hidden until login) -->
-<div id="mainAppContainer" style="display: none; padding: 20px; max-width: 1000px; margin: 0 auto;">
+<!-- Main Content Area -->
+<div class="main-content">
 
-    <!-- Role & View Switcher Bar -->
-    <div class="card" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+    <!-- Top View Switcher Bar -->
+    <div class="top-bar">
         <div>
             <strong style="color: #333;">Active Portal View:</strong>
-            <span id="currentRoleDisplay" style="color: #007bff; font-weight: bold;">Administrator</span>
+            <span id="currentRoleDisplay" style="color: #007bff; font-weight: bold;">Administrator (Full System Access)</span>
         </div>
         <div style="display: flex; gap: 8px;">
             <button onclick="switchView('admin')" style="background: #007bff; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">Admin View</button>
@@ -44,10 +45,16 @@
         </div>
     </div>
 
-    <!-- Student Management Card -->
-    <div class="card" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-        <h3 style="margin-top: 0; color: #333;"><i class="fa-solid fa-users"></i> Student Management & Registry</h3>
-        <p style="color: #666; font-size: 14px;">Add and track student records for Right Hope Academy.</p>
+    <!-- Dashboard Title -->
+    <div style="margin-bottom: 20px;">
+        <h1 style="margin: 0; color: #1e1b4b; font-size: 24px;">Dashboard</h1>
+        <p style="color: #666; margin-top: 5px;">Welcome back to Right Hope Academy management portal.</p>
+    </div>
+
+    <!-- Student Records & Management Card -->
+    <div class="card">
+        <h3 style="margin-top: 0; color: #333;"><i class="fa-solid fa-user-graduate"></i> Student Records & Management</h3>
+        <p style="color: #666; font-size: 14px;">Manage student enrollment, classes, and personal profiles.</p>
         
         <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
             <input type="text" id="newStudentName" placeholder="Enter student full name" style="flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; min-width: 200px;">
@@ -82,9 +89,9 @@
         </div>
     </div>
 
-    <!-- Student Attendance & Performance Tracker Card -->
-    <div class="card" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-        <h3 style="margin-top: 0; color: #333;"><i class="fa-solid fa-clipboard-user"></i> Student Attendance Tracker</h3>
+    <!-- Daily Attendance Tracker Card -->
+    <div class="card">
+        <h3 style="margin-top: 0; color: #333;"><i class="fa-solid fa-clipboard-user"></i> Daily Attendance Tracker</h3>
         <p style="color: #666; font-size: 14px;">Log daily presence and check metrics.</p>
         
         <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
@@ -105,51 +112,13 @@
         </div>
     </div>
 
-    <!-- Term Report Card Generator Card -->
-    <div class="card" style="background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-        <h3 style="margin-top: 0; color: #333;"><i class="fa-solid fa-file-lines"></i> Term Report Card Generator</h3>
-        <p style="color: #666; font-size: 14px;">Generate an official summary sheet pulling student grades and attendance.</p>
-        
-        <div style="margin-bottom: 15px;">
-            <label style="display: block; margin-bottom: 5px; font-weight: bold; font-size: 13px;">Select Student</label>
-            <select id="reportStudentSelect" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
-                <option value="">-- Choose Student --</option>
-                <option value="Student 1">Student 1</option>
-                <option value="Student 2">Student 2</option>
-            </select>
-        </div>
-
-        <button onclick="generateReportCard()" style="background: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%;">Generate Report Card</button>
-
-        <!-- Printable Report Card Display Area -->
-        <div id="reportCardOutput" style="margin-top: 20px; padding: 15px; border: 2px dashed #007bff; border-radius: 6px; display: none; background: #fdfdfd;">
-            <h4 style="text-align: center; color: #007bff; margin-bottom: 5px;">Right Hope Academy</h4>
-            <p style="text-align: center; font-size: 12px; color: #666; margin-top: 0;">Official End-of-Term Progress Report</p>
-            <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
-            <p><strong>Student Name:</strong> <span id="outStudentName">-</span></p>
-            <p><strong>Attendance Status:</strong> <span id="outAttendanceStatus">Present / Active</span></p>
-            <p><strong>Performance Summary:</strong> Records loaded successfully from NB-SchoolOS.</p>
-        </div>
-    </div>
-
 </div>
 
 <script>
-function handleLogin() {
-    let user = document.getElementById('loginUser').value;
-    let pass = document.getElementById('loginPass').value;
-    if(user && pass) {
-        document.getElementById('loginSection').style.display = 'none';
-        document.getElementById('mainAppContainer').style.display = 'block';
-    } else {
-        document.getElementById('loginError').style.display = 'block';
-    }
-}
-
 function switchView(role) {
     let roleDisplay = document.getElementById('currentRoleDisplay');
     if (role === 'admin') {
-        roleDisplay.innerText = "Administrator";
+        roleDisplay.innerText = "Administrator (Full System Access)";
         alert("Switched to Administrator View");
     } else if (role === 'teacher') {
         roleDisplay.innerText = "Teacher Portal";
@@ -178,18 +147,11 @@ function addStudentRecord() {
         <td style="padding: 8px; border: 1px solid #ddd;"><button onclick="removeStudent(this)" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer;">Delete</button></td>
     `;
     
-    let reportSelect = document.getElementById('reportStudentSelect');
     let trackerSelect = document.getElementById('trackerStudentSelect');
-    
-    let opt1 = document.createElement('option');
-    opt1.value = studentName;
-    opt1.innerText = studentName;
-    reportSelect.appendChild(opt1);
-
-    let opt2 = document.createElement('option');
-    opt2.value = studentName;
-    opt2.innerText = studentName;
-    trackerSelect.appendChild(opt2);
+    let opt = document.createElement('option');
+    opt.value = studentName;
+    opt.innerText = studentName;
+    trackerSelect.appendChild(opt);
 
     nameInput.value = "";
     alert("Student " + studentName + " added successfully!");
@@ -207,22 +169,7 @@ function logAttendance() {
     output.innerHTML = `<strong>Last Logged:</strong> ${student} is marked as <strong>${status}</strong> today.`;
     alert("Attendance logged for " + student);
 }
-
-function generateReportCard() {
-    let studentSelect = document.getElementById('reportStudentSelect').value;
-    let outputDiv = document.getElementById('reportCardOutput');
-    let outName = document.getElementById('outStudentName');
-
-    if (!studentSelect) {
-        alert("Please select a student first.");
-        return;
-    }
-
-    outName.innerText = studentSelect;
-    outputDiv.style.display = "block";
-    alert("Report Card generated successfully for " + studentSelect + "!");
-}
 </script>
 
 </body>
-</html> 
+</html>
