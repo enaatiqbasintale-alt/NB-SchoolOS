@@ -582,7 +582,15 @@ function recordFeePayment() {
     amountInput.value = "";
     alert("Fee payment recorded successfully!");
 }
+function showSection(sectionId) {
+    let sections = document.querySelectorAll('.section-view');
+    sections.forEach(sec => sec.classList.remove('active-view'));
 
+    let targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+        targetSection.classList.add('active-view');
+    }
+}
 function generateReportCard() {
     let studentSelect = document.getElementById('reportStudentSelect').value;
     let outputDiv = document.getElementById('reportCardOutput');
