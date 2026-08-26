@@ -62,7 +62,19 @@
         <p style="font-size: 11px; color: #999; margin-top: 15px;">Default: admin / password</p>
     </div>
 </div>
+<!-- PARENT LOOKUP PORTAL -->
+<div id="parent-portal" style="padding: 20px; max-width: 500px; margin: 20px auto; background: white; border-radius: 8px;">
+    <h3>Parent Portal - View Ward Results</h3>
+    <p style="color: #666; font-size: 13px;">Enter your child's full name to check their scores:</p>
+    
+    <input type="text" id="parentSearchInput" placeholder="Enter Student Name" style="width: 100%; padding: 8px; margin-bottom: 10px;">
+    <button onclick="searchChildRecord()" style="width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">Search Record</button>
 
+    <div id="childResultBox" style="margin-top: 20px; padding: 15px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px; display: none;">
+        <h4>Student Details & Scores</h4>
+        <p id="resultDetails"></p>
+    </div>
+</div>
 <!-- MAIN APP CONTAINER -->
 <div id="app-container">
 
