@@ -337,12 +337,12 @@
 function handleLogin() {
     let user = document.getElementById('loginUser').value.trim();
     let pass = document.getElementById('loginPass').value.trim();
-    
+
     if (user === "admin" && pass === "password") {
         document.getElementById('login-container').style.display = 'none';
         document.getElementById('app-container').style.display = 'flex';
     } else {
-        alert("Invalid username or password. Try 'admin' and 'password'.");
+        alert("Invalid username or password");
     }
 }
 
