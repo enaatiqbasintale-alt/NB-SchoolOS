@@ -562,8 +562,14 @@ function generateReportCard() {
     outName.innerText = studentSelect;
     outputDiv.style.display = "block";
     alert("Report Card generated successfully for " + studentSelect + "!");
+      }
 }
-</script>
 
+function switchSchool() {
+    const selectedSchool = document.getElementById('activeSchoolSelect').value;
+    alert("Switched active school to: " + selectedSchool);
+}
+
+</script>
 </body>
 </html>
