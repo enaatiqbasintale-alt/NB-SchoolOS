@@ -81,15 +81,25 @@
     <div class="main-content">
 
         <!-- Top Role View Switcher Bar -->
+                <!-- Top Role View & School Switcher Bar -->
         <div class="top-bar">
-            <div>
-                <strong style="color: #333;">Active Portal View:</strong>
-                <span id="currentRoleDisplay" style="color: #007bff; font-weight: bold;">Administrator (Full System Access)</span>
+            <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+                <div>
+                    <strong style="color: #333;">School:</strong>
+                    <select id="activeSchoolSelect" onchange="switchSchool()" style="padding: 5px; border-radius: 4px; border: 1px solid #ccc; font-weight: bold; color: #1e1b4b;">
+                        <option value="Right Hope Academy">Right Hope Academy</option>
+                        <option value="New School Academy">New School Academy</option>
+                    </select>
+                </div>
+                <div>
+                    <strong style="color: #333;">Role:</strong>
+                    <span id="currentRoleDisplay" style="color: #007bff; font-weight: bold;">Administrator</span>
+                </div>
             </div>
             <div style="display: flex; gap: 8px;">
-                <button onclick="switchView('admin')" style="background: #007bff; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">Admin View</button>
-                <button onclick="switchView('teacher')" style="background: #28a745; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">Teacher Portal</button>
-                <button onclick="switchView('parent')" style="background: #ffc107; color: #333; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">Parent View</button>
+                <button onclick="switchView('admin')" style="background: #007bff; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">Admin</button>
+                <button onclick="switchView('teacher')" style="background: #28a745; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">Teacher</button>
+                <button onclick="switchView('parent')" style="background: #ffc107; color: #333; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px;">Parent</button>
             </div>
         </div>
 
