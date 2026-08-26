@@ -334,10 +334,11 @@
 </div>
 
 <script>
-function handleLogin() {
+ function handleLogin() {
     let user = document.getElementById('loginUser').value.trim();
     let pass = document.getElementById('loginPass').value.trim();
 
+    if (user === "admin" && pass === "password") {
     if (user === "admin" && pass === "password") {
         document.getElementById('login-container').style.display = 'none';
         document.getElementById('app-container').style.display = 'flex';
