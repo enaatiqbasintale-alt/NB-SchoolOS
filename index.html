@@ -582,7 +582,28 @@ function switchSchool() {
     const selectedSchool = document.getElementById('activeSchoolSelect').value;
     alert("Switched active school to: " + selectedSchool);
 }
+function searchChildRecord() {
+    let inputVal = document.getElementById('parentSearchInput').value.trim().toLowerCase();
+    let resultBox = document.getElementById('childResultBox');
+    let resultDetails = document.getElementById('resultDetails');
 
+    if (!inputVal) {
+        alert("Please enter a student name.");
+        return;
+    }
+
+    let foundStudent = students ? students.find(s => s.name.toLowerCase().includes(inputVal)) : null;
+
+    if (foundStudent) {
+        resultBox.style.display = "block";
+        resultDetails.innerHTML = `<strong>Name:</strong> ${foundStudent.name} <br>
+                                   <strong>Class:</strong> ${foundStudent.class || 'N/A'} <br>
+                                   <strong>Score:</strong> ${foundStudent.score || 'N/A'}`;
+    } else {
+        resultBox.style.display = "block";
+        resultDetails.innerHTML = "<span style='color: red;'>No record found for this name. Please check spelling.</span>";
+    }
+}
 </script>
 </body>
 </html>
