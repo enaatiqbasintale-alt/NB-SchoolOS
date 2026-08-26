@@ -596,6 +596,15 @@ function generateReportCard() {
     outName.innerText = studentSelect;
     outputDiv.style.display = "block";
     alert("Report Card generated successfully for " + studentSelect + "!");
+ function handleLogin() {
+    let loginContainer = document.getElementById('login-container');
+    let appContainer = document.getElementById('app-container');
+    let parentPortalScreen = document.getElementById('parent-portal-screen');
+
+    if (loginContainer) loginContainer.style.display = 'none';
+    if (parentPortalScreen) parentPortalScreen.style.display = 'none';
+    if (appContainer) appContainer.style.display = 'block';
+}
       }
 }
 
