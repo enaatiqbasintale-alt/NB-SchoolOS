@@ -828,9 +828,7 @@ function toggleSchoolLevel() {
         title.innerText = "Select a school level to begin";
         return;
     }
-
-    title.innerText = (level === "primary" ? "Primary School Subjects" : "Junior High School Subjects");
-
+ title.innerText = (level === "primary") ? "Primary School Subjects" : "Junior High School Subjects";
     subjects.forEach(function(sub, index) {
         var row = `<tr>
             <td style="padding: 8px;">${sub}</td>
