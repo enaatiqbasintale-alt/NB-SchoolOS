@@ -20,16 +20,20 @@
             color: white;
             height: 100vh;
             position: fixed;
+            overflow-y: auto;
         }
         .sidebar h2 {
-            font-size: 20px;
+            font-size: 18px;
             padding: 20px;
+            margin: 0;
+            border-bottom: 1px solid #312e81;
         }
         .sidebar a {
             display: block;
             color: white;
             padding: 12px 20px;
             text-decoration: none;
+            font-size: 14px;
         }
         .sidebar a:hover, .sidebar a.active {
             background: #312e81;
@@ -45,6 +49,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-radius: 6px;
         }
         .card {
             background: white;
@@ -58,6 +63,42 @@
         }
         .section-view.active-view {
             display: block;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        table, th, td {
+            border: 1px solid #e2e8f0;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            font-size: 14px;
+        }
+        th {
+            background-color: #f8fafc;
+            color: #1e1b4b;
+        }
+        input[type="text"], input[type="number"], select {
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 8px 12px;
+            background: #1e1b4b;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #312e81;
         }
     </style>
 </head>
@@ -102,35 +143,130 @@
 <div id="app-container">
     <div class="sidebar">
         <h2>Right Hope Academy</h2>
-        <a href="#" class="active" onclick="switchTab('dashboard', this)">Dashboard</a>
-        <a href="#" onclick="switchTab('students', this)">Students</a>
+        <a href="#" class="active" onclick="switchTab('dashboard', this)">Dashboard Overview</a>
+        <a href="#" onclick="switchTab('students', this)">Student Management</a>
+        <a href="#" onclick="switchTab('teachers', this)">Teacher Directory</a>
+        <a href="#" onclick="switchTab('attendance', this)">Attendance Tracker</a>
         <a href="#" onclick="switchTab('fees', this)">Fees & Finance</a>
+        <a href="#" onclick="switchTab('reports', this)">Report Card Generator</a>
         <a href="#" onclick="switchTab('logout', this)">Logout</a>
     </div>
+    
     <div class="main-content">
         <div class="top-bar">
-            <span>Welcome, Staff</span>
+            <span>Welcome, Staff Administrator</span>
             <span id="current-date"></span>
         </div>
         
+        <!-- Dashboard View -->
         <div id="dashboard" class="section-view active-view">
             <div class="card">
                 <h3>Dashboard Overview</h3>
-                <p>Welcome to the administrative dashboard for Right Hope Academy. Use the sidebar to navigate through student management and financial logs.</p>
+                <p>Welcome back to the administrative portal for Right Hope Academy. Use the sidebar sections to manage student admissions, track daily attendance, maintain the teacher directory, process fee payments, and generate term report cards.</p>
             </div>
         </div>
 
+        <!-- Student Management View -->
         <div id="students" class="section-view">
             <div class="card">
-                <h3>Student Records</h3>
-                <p>Manage student admissions, profiles, and academic performance entries here.</p>
+                <h3>Student Management</h3>
+                <p>Register new student profiles and review enrolled school records.</p>
+                <div style="margin-top: 15px;">
+                    <input type="text" id="newStudentName" placeholder="Student Full Name">
+                    <input type="text" id="newStudentClass" placeholder="Class (e.g. Basic 5)">
+                    <button onclick="addStudent()">Add Student</button>
+                </div>
+                <table id="studentTable">
+                    <thead>
+                        <tr><th>ID</th><th>Name</th><th>Class</th><th>Status</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>RHA-001</td><td>John Doe</td><td>Basic 5</td><td>Active</td></tr>
+                        <tr><td>RHA-002</td><td>Abigail Mensah</td><td>Basic 4</td><td>Active</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
+        <!-- Teacher Directory View -->
+        <div id="teachers" class="section-view">
+            <div class="card">
+                <h3>Teacher Directory</h3>
+                <p>Manage staff postings, subjects taught, and contact details.</p>
+                <div style="margin-top: 15px;">
+                    <input type="text" id="newTeacherName" placeholder="Teacher Name">
+                    <input type="text" id="newTeacherSubject" placeholder="Subject Assigned">
+                    <button onclick="addTeacher()">Add Teacher</button>
+                </div>
+                <table id="teacherTable">
+                    <thead>
+                        <tr><th>Staff ID</th><th>Name</th><th>Subject Specialty</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>TCH-101</td><td>Mr. Kwaku Mensah</td><td>Core Mathematics</td></tr>
+                        <tr><td>TCH-102</td><td>Madam Akosua Serwaa</td><td>English Language</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Attendance Tracker View -->
+        <div id="attendance" class="section-view">
+            <div class="card">
+                <h3>Attendance Tracker</h3>
+                <p>Record and monitor daily student attendance status.</p>
+                <table>
+                    <thead>
+                        <tr><th>Student Name</th><th>Class</th><th>Attendance Status</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>John Doe</td><td>Basic 5</td><td><select><option>Present</option><option>Absent</option><option>Excused</option></select></td></tr>
+                        <tr><td>Abigail Mensah</td><td>Basic 4</td><td><select><option>Present</option><option>Absent</option><option>Excused</option></select></td></tr>
+                    </tbody>
+                </table>
+                <button style="margin-top: 15px;" onclick="alert('Attendance saved successfully!')">Save Attendance</button>
+            </div>
+        </div>
+
+        <!-- Fees & Finance View -->
         <div id="fees" class="section-view">
             <div class="card">
                 <h3>Fees & Finance</h3>
-                <p>Track school fee payments, balances, and financial summaries.</p>
+                <p>Track school fee payments, balances, and financial collection records.</p>
+                <table>
+                    <thead>
+                        <tr><th>Student Name</th><th>Total Fees</th><th>Amount Paid</th><th>Balance</th><th>Action</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>John Doe</td><td>GHS 500</td><td>GHS 500</td><td>GHS 0</td><td><span style="color: green; font-weight: bold;">Fully Paid</span></td></tr>
+                        <tr><td>Abigail Mensah</td><td>GHS 500</td><td>GHS 300</td><td>GHS 200</td><td><button onclick="alert('Payment receipt prompt opened')">Record Payment</button></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Report Card Generator View -->
+        <div id="reports" class="section-view">
+            <div class="card">
+                <h3>Report Card Generator</h3>
+                <p>Generate and preview term-end academic performance reports for students.</p>
+                <div style="margin-top: 15px;">
+                    <select id="reportStudentSelect">
+                        <option>John Doe (Basic 5)</option>
+                        <option>Abigail Mensah (Basic 4)</option>
+                    </select>
+                    <button onclick="generateReport()">Generate Terminal Report</button>
+                </div>
+                <div id="reportPreviewArea" style="margin-top: 20px; padding: 15px; border: 1px dashed #cbd5e1; background: #f8fafc; display: none;">
+                    <h4 style="color: #1e1b4b; text-align: center; margin-top:0;">RIGHT HOPE ACADEMY - TERMINAL REPORT CARD</h4>
+                    <p><strong>Student:</strong> <span id="repName">John Doe</span></p>
+                    <p><strong>Class:</strong> Basic 5 | <strong>Motto:</strong> Opportunity For All</p>
+                    <hr>
+                    <p><strong>Core Mathematics:</strong> A (85%)</p>
+                    <p><strong>English Language:</strong> B+ (78%)</p>
+                    <p><strong>Integrated Science:</strong> A (90%)</p>
+                    <p><strong>Class Teacher Remarks:</strong> Excellent performance and active participation throughout the term.</p>
+                </div>
             </div>
         </div>
     </div>
@@ -199,6 +335,42 @@
 
         document.getElementById(tabId).classList.add('active-view');
         element.classList.add('active');
+    }
+
+    function addStudent() {
+        var name = document.getElementById("newStudentName").value;
+        var cls = document.getElementById("newStudentClass").value;
+        if(name && cls) {
+            var table = document.getElementById("studentTable").getElementsByTagName('tbody')[0];
+            var newRow = table.insertRow();
+            newRow.innerHTML = "<td>RHA-00" + (table.rows.length + 1) + "</td><td>" + name + "</td><td>" + cls + "</td><td>Active</td>";
+            document.getElementById("newStudentName").value = "";
+            document.getElementById("newStudentClass").value = "";
+            alert("Student added successfully!");
+        } else {
+            alert("Please fill in both student name and class.");
+        }
+    }
+
+    function addTeacher() {
+        var name = document.getElementById("newTeacherName").value;
+        var sub = document.getElementById("newTeacherSubject").value;
+        if(name && sub) {
+            var table = document.getElementById("teacherTable").getElementsByTagName('tbody')[0];
+            var newRow = table.insertRow();
+            newRow.innerHTML = "<td>TCH-10" + (table.rows.length + 1) + "</td><td>" + name + "</td><td>" + sub + "</td>";
+            document.getElementById("newTeacherName").value = "";
+            document.getElementById("newTeacherSubject").value = "";
+            alert("Teacher added successfully!");
+        } else {
+            alert("Please fill in both teacher name and subject specialty.");
+        }
+    }
+
+    function generateReport() {
+        var select = document.getElementById("reportStudentSelect").value;
+        document.getElementById("repName").innerText = select.split('(')[0].trim();
+        document.getElementById("reportPreviewArea").style.display = "block";
     }
 </script>
 
