@@ -217,6 +217,14 @@
                         <option value="Student 2">Student 2</option>
                     </select>
                 </div>
+             <div style="margin-bottom: 15px;">
+    <label style="display: block; font-weight: bold; margin-bottom: 5px;">Select School Level:</label>
+    <select id="schoolLevelSelect" onchange="toggleSchoolLevel()" style="width: 100%; padding: 8px;">
+        <option value="">-- Choose Level --</option>
+        <option value="primary">Primary School</option>
+        <option value="jhs">Junior High School (JHS)</option>
+    </select>
+</div>
       <!-- The Generate Button -->
         <button onclick="generateReportCard()">Generate Report Card</button>
 
