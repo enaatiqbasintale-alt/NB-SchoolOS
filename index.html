@@ -217,22 +217,31 @@
                         <option value="Student 2">Student 2</option>
                     </select>
                 </div>
-<table border="1" style="width: 100%; border-collapse: collapse; margin-top: 15px; text-align: left;">
-    <thead>
-        <tr style="background-color: #f2f2f2;">
-            <th style="padding: 8px;">Subject</th>
-            <th style="padding: 8px;">Score / Grade Remarks</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr><td style="padding: 8px;">English Language</td><td style="padding: 8px;"></td></tr>
-        <tr><td style="padding: 8px;">Mathematics</td><td style="padding: 8px;"></td></tr>
-        <tr><td style="padding: 8px;">Natural Science</td><td style="padding: 8px;"></td></tr>
-        <tr><td style="padding: 8px;">Our World Our People (OWOP)</td><td style="padding: 8px;"></td></tr>
-        <tr><td style="padding: 8px;">Religious and Moral Education (RME)</td><td style="padding: 8px;"></td></tr>
-        <tr><td style="padding: 8px;">Creative Arts</td><td style="padding: 8px;"></td></tr>
-        <tr><td style="padding: 8px;">History</td><td style="padding: 8px;"></td></tr>
-        <tr><td style="padding: 8px;">Ghanaian Language (Dagbani)</td><td style="padding: 8px;"></td></tr>
+      <!-- The Generate Button -->
+        <button onclick="generateReportCard()">Generate Report Card</button>
+
+        <!-- The Hidden Output Container where the table will appear -->
+        <div id="reportCardOutput" style="margin-top: 20px; display: none;">
+            <h4>Report Card Results</h4>
+            <table border="1" style="width: 100%; border-collapse: collapse; margin-top: 15px; text-align: left;">
+                <thead>
+                    <tr style="background-color: #f2f2f2;">
+                        <th style="padding: 8px;">Subject</th>
+                        <th style="padding: 8px;">Score / Grade Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td style="padding: 8px;">English Language</td><td style="padding: 8px;"></td></tr>
+                    <tr><td style="padding: 8px;">Mathematics</td><td style="padding: 8px;"></td></tr>
+                    <tr><td style="padding: 8px;">Natural Science</td><td style="padding: 8px;"></td></tr>
+                    <tr><td style="padding: 8px;">Our World Our People (OWOP)</td><td style="padding: 8px;"></td></tr>
+                    <tr><td style="padding: 8px;">Religious and Moral Education (RME)</td><td style="padding: 8px;"></td></tr>
+                    <tr><td style="padding: 8px;">Creative Arts</td><td style="padding: 8px;"></td></tr>
+                    <tr><td style="padding: 8px;">History</td><td style="padding: 8px;"></td></tr>
+                    <tr><td style="padding: 8px;">Ghanaian Language (Dagbani)</td><td style="padding: 8px;"></td></tr>
+                </tbody>
+            </table>
+        </div>
     </tbody>
 </table>
                 <button onclick="generateReportCard()" style="background: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%;">Generate Report Card</button>
