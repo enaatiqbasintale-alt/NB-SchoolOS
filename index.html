@@ -816,8 +816,8 @@ const jhsSubjects = [
     "Ghanaian Language (Dagbani)", "French"
 ];
 
-function toggleSchoolLevel() {
-     var level = document.getElementById("schoolLevelSelect").value;
+ function toggleSchoolLevel() {
+    var level = document.getElementById("schoolLevelSelect").value;
     var title = document.getElementById("tableTitle");
     var tbody = document.getElementById("subjectTableBody");
     tbody.innerHTML = "";
@@ -828,7 +828,9 @@ function toggleSchoolLevel() {
         title.innerText = "Select a school level to begin";
         return;
     }
- title.innerText = (level === "primary") ? "Primary School Subjects" : "Junior High School Subjects";
+
+    title.innerText = (level === "primary") ? "Primary School Subjects" : "Junior High School Subjects";
+
     subjects.forEach(function(sub, index) {
         var row = `<tr>
             <td style="padding: 8px;">${sub}</td>
@@ -855,7 +857,4 @@ function calculateTotal(inputElement) {
         totalCell.innerText = (classVal + examVal).toFixed(1);
     }
 }
-</script>
-
-</body>
 </html>
