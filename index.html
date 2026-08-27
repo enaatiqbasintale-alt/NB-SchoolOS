@@ -359,16 +359,22 @@
 
                 <!-- Printable Report Card Display Area -->
                 <div id="reportCardOutput" style="margin-top: 20px; padding: 15px; border: 2px dashed #007bff; border-radius: 6px; display: none; background: #fdfdfd;">
-                    <h4 style="text-align: center; color: #007bff; margin-bottom: 5px;">Right Hope Academy</h4>
-                    <p style="text-align: center; font-size: 11px; color: #555; margin: 0 0 5px 0; font-style: italic;">"Opportunity For All"</p>
-                    <p style="text-align: center; font-size: 12px; color: #666; margin-top: 0;">Official End-of-Term Progress Report</p>
-                    <hr style="border: 0; border-top: 1px solid #eee; margin: 10px 0;">
-                    <p><strong>Student Name:</strong> <span id="outStudentName">-</span></p>
-                    <p><strong>Attendance Status:</strong> Present / Active</p>
-                    <p><strong>Performance Summary:</strong> Records loaded successfully from NB-SchoolOS.</p>
-                </div>
-            </div>
-        </div>
+                     <div id="reportCardOutput" style="margin-top: 15px;">
+    <h4 id="tableTitle" style="color: #444; margin-bottom: 5px;">Select a school level to begin</h4>
+    <table border="1" style="width: 100%; border-collapse: collapse; text-align: left;">
+        <thead>
+            <tr style="background-color: #f2f2f2;">
+                <th style="padding: 8px;">Subject</th>
+                <th style="padding: 8px; width: 120px;">Class Score (50%)</th>
+                <th style="padding: 8px; width: 120px;">Exam Score (50%)</th>
+                <th style="padding: 8px; width: 100px; text-align: center;">Total</th>
+            </tr>
+        </thead>
+        <tbody id="subjectTableBody">
+            <!-- Subjects will load here automatically -->
+        </tbody>
+    </table>
+</div>
 
         <!-- 2. TEACHER DIRECTORY SECTION -->
         <div id="view-teachers" class="section-view">
@@ -796,6 +802,62 @@ function backToLogin() {
     if (parentPortalScreen) parentPortalScreen.style.display = 'none';
     if (loginContainer) loginContainer.style.display = 'block';
 } 
+ <script>
+const primarySubjects = [
+    "English Language", "Mathematics", "Natural Science", 
+    "Our World Our People (OWOP)", "Religious and Moral Education (RME)", 
+    "Creative Arts", "History", "Ghanaian Language (Dagbani)"
+];
+
+const jhsSubjects = [
+    "English Language", "Mathematics", "Integrated Science", "Social Studies", 
+    "Religious and Moral Education (RME)", "Creative Arts and Design", 
+    "Information and Communication Technology (ICT)", "Career Technology", 
+    "Ghanaian Language (Dagbani)", "French"
+];
+
+function toggleSchoolLevel() {
+    var level = document.getElementById("schoolLevelSelect").value;
+    var title = document.getElementById("tableTitle");
+    var tbody = document.getElementById("subjectTableBody");
+    tbody.innerHTML = "";
+
+    var subjects = (level === "primary") ? primarySubjects : (level === "jhs" ? jhsSubjects : []);
+
+    if (subjects.length === 0) {
+        title.innerText = "Select a school level to begin";
+        return;
+    }
+
+    title.innerText = (level === "primary" ? "Primary School Subjects" : "Junior High School Subjects");
+
+    subjects.forEach(function(sub, index) {
+        var row = `<tr>
+            <td style="padding: 8px;">${sub}</td>
+            <td style="padding: 8px;"><input type="number" class="score-input class-score" placeholder="0-50" style="width: 100%; padding: 4px;" oninput="calculateTotal(this)"></td>
+            <td style="padding: 8px;"><input type="number" class="score-input exam-score" placeholder="0-50" style="width: 100%; padding: 4px;" oninput="calculateTotal(this)"></td>
+            <td style="padding: 8px; text-align: center;" class="row-total">-</td>
+        </tr>`;
+        tbody.innerHTML += row;
+    });
+}
+
+function calculateTotal(inputElement) {
+    var row = inputElement.closest('tr');
+    var classVal = parseFloat(row.querySelector('.class-score').value) || 0;
+    var examVal = parseFloat(row.querySelector('.exam-score').value) || 0;
+    var totalCell = row.querySelector('.row-total');
+    
+    var classInputStr = row.querySelector('.class-score').value;
+    var examInputStr = row.querySelector('.exam-score').value;
+
+    if (classInputStr === '' && examInputStr === '') {
+        totalCell.innerText = '-';
+    } else {
+        totalCell.innerText = (classVal + examVal).toFixed(1);
+    }
+}
+</script>
 </script>
 </body>
 </html>
