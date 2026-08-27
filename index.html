@@ -829,8 +829,7 @@ const jhsSubjects = [
         return;
     }
 
-    title.innerText = (level === "primary") ? "Primary School Subjects" : "Junior High School Subjects";
-
+     title.innerText = (level === "primary"
     subjects.forEach(function(sub, index) {
         var row = `<tr>
             <td style="padding: 8px;">${sub}</td>
