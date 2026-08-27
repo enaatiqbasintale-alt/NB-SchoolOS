@@ -828,8 +828,35 @@ const jhsSubjects = [
         title.innerText = "Select a school level to begin";
         return;
     }
+<script>
+const primarySubjects = [
+    "English Language", "Mathematics", "Natural Science", 
+    "Our World Our People (OWOP)", "Religious and Moral Education (RME)", 
+    "Creative Arts", "History", "Ghanaian Language (Dagbani)"
+];
 
-     title.innerText = (level === "primary"
+const jhsSubjects = [
+    "English Language", "Mathematics", "Integrated Science", "Social Studies", 
+    "Religious and Moral Education (RME)", "Creative Arts and Design", 
+    "Information and Communication Technology (ICT)", "Career Technology", 
+    "Ghanaian Language (Dagbani)", "French"
+];
+
+function toggleSchoolLevel() {
+    var level = document.getElementById("schoolLevelSelect").value;
+    var title = document.getElementById("tableTitle");
+    var tbody = document.getElementById("subjectTableBody");
+    tbody.innerHTML = "";
+
+    var subjects = (level === "primary") ? primarySubjects : (level === "jhs" ? jhsSubjects : []);
+
+    if (subjects.length === 0) {
+        title.innerText = "Select a school level to begin";
+        return;
+    }
+
+    title.innerText = (level === "primary") ? "Primary School Subjects" : "Junior High School Subjects";
+
     subjects.forEach(function(sub, index) {
         var row = `<tr>
             <td style="padding: 8px;">${sub}</td>
@@ -856,4 +883,5 @@ function calculateTotal(inputElement) {
         totalCell.innerText = (classVal + examVal).toFixed(1);
     }
 }
-</html>
+</script>
+      
