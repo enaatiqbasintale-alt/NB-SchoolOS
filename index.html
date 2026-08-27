@@ -72,14 +72,15 @@
     <button onclick="showParentPortal()" style="background: none; border: none; color: #28a745; cursor: pointer; font-size: 13px; text-decoration: underline;">Are you a parent? Check ward results here</button>
 </div>
    <!-- STANDALONE PARENT PORTAL SCREEN -->
-<div id="login-container" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #1e1b4b; display: flex; justify-content: center; align-items: center; z-index: 9999;">
-            <h4>Student Details & Scores</h4>
-            <p id="resultDetails"></p>
-        </div>
-        
-        <div style="margin-top: 20px; text-align: center;">
-            <a href="#" onclick="backToLogin()" style="color: #007bff; font-size: 13px; text-decoration: none;">Staff/Admin Login</a>
-        </div>
+ <div id="login-container" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #1e1b4b; display: flex; justify-content: center; align-items: center; z-index: 9999;">
+    <div class="login-card" style="background: white; padding: 40px; border-radius: 10px; width: 90%; max-width: 400px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); text-align: center;">
+        <h2 style="color: #1e1b4b; margin-bottom: 10px;">Right Hope Academy</h2>
+        <p style="color: #666; font-size: 14px; margin-bottom: 20px;">NB-SchoolOS Portal</p>
+        <input type="text" id="username" placeholder="Enter Username" style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box;">
+        <input type="password" id="password" placeholder="Enter Password" style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box;">
+        <button onclick="handleLogin()" style="width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px;">Login to Portal</button>
+    </div>
+</div>
     </div>
 </div> 
         <p id="resultDetails"></p>
