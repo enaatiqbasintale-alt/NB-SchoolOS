@@ -1,241 +1,374 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NB-SchoolOS | Right Hope Academy</title>
     <style>
+        :root {
+            --primary: #1e1b4b;
+            --primary-hover: #312e81;
+            --bg-color: #f4f6f9;
+            --text-main: #1f2937;
+            --sidebar-width: 250px;
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f6f9;
+            background-color: var(--bg-color);
+            color: var(--text-main);
         }
+
+        /* LAYOUT CONTAINER */
         #app-container {
-            display: none;
+            display: flex;
+            min-height: 100vh;
         }
+
+        /* SIDEBAR STYLING MATCHING YOUR SCREENSHOT */
         .sidebar {
-            width: 250px;
-            background: #1e1b4b;
+            width: var(--sidebar-width);
+            background: var(--primary);
             color: white;
             height: 100vh;
             position: fixed;
+            top: 0;
+            left: 0;
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
+
+        .sidebar-top {
+            padding-bottom: 20px;
+        }
+
         .sidebar h2 {
-            font-size: 18px;
-            padding: 20px;
+            font-size: 19px;
+            padding: 22px 20px;
             margin: 0;
-            border-bottom: 1px solid #312e81;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
         }
+
         .sidebar a {
-            display: block;
-            color: white;
-            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255, 255, 255, 0.85);
+            padding: 14px 20px;
             text-decoration: none;
             font-size: 14px;
+            transition: background 0.2s;
         }
+
         .sidebar a:hover, .sidebar a.active {
-            background: #312e81;
+            background: var(--primary-hover);
+            color: white;
         }
-        .main-content {
-            margin-left: 250px;
+
+        .sidebar-footer {
             padding: 20px;
+            border-top: 1px solid rgba(255,255,255,0.08);
         }
+
+        .logout-btn {
+            color: #fca5a5 !important;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logout-btn:hover {
+            color: #f87171 !important;
+            background: transparent !important;
+        }
+
+        /* MAIN CONTENT AREA */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 25px;
+            box-sizing: border-box;
+        }
+
         .top-bar {
             background: white;
-            padding: 15px 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            padding: 15px 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-radius: 6px;
+            border-radius: 8px;
+            margin-bottom: 25px;
         }
+
+        /* ROLE SWITCHER CARD MATCHING SCREENSHOT */
+        .role-switcher-card {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .role-badge {
+            padding: 6px 14px;
+            border-radius: 4px;
+            color: white;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .badge-admin { background: #007bff; }
+        .badge-teacher { background: #10b981; }
+
         .card {
             background: white;
-            padding: 20px;
+            padding: 25px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            margin-top: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            margin-bottom: 20px;
         }
+
         .section-view {
             display: none;
         }
+
         .section-view.active-view {
             display: block;
         }
+
+        /* TABLES & FORMS */
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 15px;
         }
+
         table, th, td {
             border: 1px solid #e2e8f0;
         }
+
         th, td {
-            padding: 10px;
+            padding: 12px;
             text-align: left;
             font-size: 14px;
         }
+
         th {
             background-color: #f8fafc;
-            color: #1e1b4b;
+            color: var(--primary);
         }
-        input[type="text"], input[type="number"], select {
-            padding: 8px;
-            margin: 5px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+
+        input[type="text"], input[type="password"], select {
+            padding: 10px;
+            margin: 6px 0;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
             box-sizing: border-box;
+            width: 100%;
+            max-width: 300px;
         }
+
         button {
-            padding: 8px 12px;
-            background: #1e1b4b;
+            padding: 10px 16px;
+            background: var(--primary);
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
+            font-size: 14px;
         }
+
         button:hover {
-            background: #312e81;
+            background: var(--primary-hover);
+        }
+
+        .btn-danger {
+            background: #dc2626;
+        }
+
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+
+        /* LOGIN SCREEN OVERLAY */
+        #login-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .login-card {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
 <!-- STANDALONE PARENT PORTAL SCREEN -->
-<div id="parent-portal-screen" style="display: none; padding: 20px; max-width: 600px; margin: 40px auto; background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-    <div style="text-align: center; margin-bottom: 20px;">
-        <h2 style="color: #1e1b4b; margin-bottom: 5px;">Right Hope Academy</h2>
+<div id="parent-portal-screen" style="display: none; padding: 30px; max-width: 650px; margin: 40px auto; background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+    <div style="text-align: center; margin-bottom: 25px;">
+        <h2 style="color: var(--primary); margin-bottom: 5px;">Right Hope Academy</h2>
         <h3 style="color: #555; font-size: 16px;">Parent Portal - View Ward Results</h3>
-        <p style="color: #666; font-size: 14px;">Enter your ward's student ID or name to check scores and details.</p>
+        <p style="color: #666; font-size: 14px;">Enter your ward's student ID or name to check scores and details (Motto: Opportunity For All).</p>
     </div>
 
-    <input type="text" id="parentSearchInput" placeholder="Enter Student Name or ID..." style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box;">
-    <button onclick="searchChildRecord()" style="width: 100%; padding: 12px; background: #1e1b4b; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Search Records</button>
+    <input type="text" id="parentSearchInput" placeholder="Enter Student Name or ID (e.g. John Doe)..." style="max-width: 100%; padding: 12px; margin-bottom: 15px;">
+    <button onclick="searchChildRecord()" style="width: 100%; padding: 12px;">Search Records</button>
 
-    <div id="childResultBox" style="margin-top: 20px; padding: 15px; background: #f8fafc; border-radius: 6px; display: none;">
-        <h4 style="color: #1e1b4b; margin-top: 0;">Student Details & Scores</h4>
-        <p id="resultDetails" style="color: #333; line-height: 1.5;"></p>
+    <div id="childResultBox" style="margin-top: 20px; padding: 20px; background: #f8fafc; border-radius: 6px; display: none; border: 1px solid #e2e8f0;">
+        <h4 style="color: var(--primary); margin-top: 0;">Student Details & Performance</h4>
+        <p id="resultDetails" style="color: #333; line-height: 1.6;"></p>
     </div>
 
-    <div style="margin-top: 20px; text-align: center;">
-        <a href="#" onclick="backToLogin()" style="color: #1e1b4b; text-decoration: none; font-weight: bold;">&larr; Back to Staff Login</a>
+    <div style="margin-top: 25px; text-align: center;">
+        <a href="#" onclick="backToLogin()" style="color: var(--primary); text-decoration: none; font-weight: bold;">&larr; Back to Staff Login</a>
     </div>
 </div>
 
-<!-- LOGIN SCREEN -->
-<div id="login-container" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #1e1b4b; display: flex; justify-content: center; align-items: center; z-index: 9999;">
-    <div class="login-card" style="background: white; padding: 40px; border-radius: 10px; width: 90%; max-width: 400px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); text-align: center;">
-        <h2 style="color: #1e1b4b; margin-bottom: 10px;">Right Hope Academy</h2>
-        <p style="color: #666; font-size: 14px; margin-bottom: 20px;">NB-SchoolOS Portal</p>
-        <input type="text" id="username" placeholder="Enter Username" style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box;">
-        <input type="password" id="password" placeholder="Enter Password" style="width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box;">
-        <button onclick="handleLogin()" style="width: 100%; padding: 12px; background: #1e1b4b; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px;">Login to Portal</button>
-        <div style="margin-top: 15px;">
-            <a href="#" onclick="showParentPortal()" style="color: #4f46e5; text-decoration: none; font-size: 14px;">Parent Portal (Check Ward Results)</a>
+<!-- STAFF LOGIN SCREEN -->
+<div id="login-container">
+    <div class="login-card">
+        <h2 style="color: var(--primary); margin-bottom: 5px;">Right Hope Academy</h2>
+        <p style="color: #666; font-size: 14px; margin-bottom: 25px;">NB-SchoolOS Portal</p>
+        <div style="text-align: left; margin-bottom: 8px; font-size: 13px; font-weight: bold; color: #4b5563;">Username</div>
+        <input type="text" id="username" placeholder="Enter Username">
+        <div style="text-align: left; margin-top: 10px; margin-bottom: 8px; font-size: 13px; font-weight: bold; color: #4b5563;">Password</div>
+        <input type="password" id="password" placeholder="Enter Password">
+        <button onclick="handleLogin()" style="width: 100%; margin-top: 20px; padding: 12px;">Login to Portal</button>
+        <div style="margin-top: 20px;">
+            <a href="#" onclick="showParentPortal()" style="color: #4f46e5; text-decoration: none; font-size: 14px; font-weight: bold;">Parent Portal (Check Ward Results)</a>
         </div>
     </div>
 </div>
 
-<!-- MAIN APP CONTAINER -->
-<div id="app-container">
-    <div class="sidebar">
-        <h2>Right Hope Academy</h2>
-        <a href="#" class="active" onclick="switchTab('dashboard', this)">Dashboard Overview</a>
-        <a href="#" onclick="switchTab('students', this)">Student Management</a>
-        <a href="#" onclick="switchTab('teachers', this)">Teacher Directory</a>
-        <a href="#" onclick="switchTab('attendance', this)">Attendance Tracker</a>
-        <a href="#" onclick="switchTab('fees', this)">Fees & Finance</a>
-        <a href="#" onclick="switchTab('reports', this)">Report Card Generator</a>
-        <a href="#" onclick="switchTab('logout', this)">Logout</a>
-    </div>
+<!-- MAIN DASHBOARD CONTAINER -->
+<div id="app-container" style="display: none;">
     
+    <!-- SIDEBAR MATCHING SCREENSHOT -->
+    <div class="sidebar">
+        <div class="sidebar-top">
+            <h2>🎓 NB-SchoolOS</h2>
+            <a href="#" class="active" onclick="switchTab('dashboard', this)">🏠 Dashboard</a>
+            <a href="#" onclick="switchTab('teachers', this)">👨‍🏫 Teacher Directory</a>
+            <a href="#" onclick="switchTab('students', this)">👥 Student Management</a>
+            <a href="#" onclick="switchTab('fees', this)">💳 Fee Payments</a>
+            <a href="#" onclick="switchTab('attendance', this)">📋 Attendance Tracker</a>
+            <a href="#" onclick="switchTab('reports', this)">📊 Report Card Generator</a>
+            <a href="#" onclick="switchTab('settings', this)">⚙️ Settings</a>
+        </div>
+        <div class="sidebar-footer">
+            <a href="#" class="logout-btn" onclick="switchTab('logout', this)">🚪 Logout</a>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT VIEW -->
     <div class="main-content">
         <div class="top-bar">
-            <span>Welcome, Staff Administrator</span>
-            <span id="current-date"></span>
+            <span><strong>Right Hope Academy</strong> — Administrative Portal</span>
+            <span id="current-date" style="color: #666; font-size: 14px;"></span>
         </div>
         
-        <!-- Dashboard View -->
+        <!-- Role Indicator Card matching screenshot -->
+        <div class="role-switcher-card">
+            <div><strong>School:</strong> Right Hope Academy</div>
+            <div><strong>Role:</strong> <span style="color: #007bff;">Administrator</span></div>
+            <div>
+                <span class="role-badge badge-admin" onclick="alert('Current Role: Admin')">Admin</span>
+                <span class="role-badge badge-teacher" onclick="alert('Switched view context to Teacher mode')">Teacher</span>
+            </div>
+        </div>
+
+        <!-- 1. DASHBOARD OVERVIEW -->
         <div id="dashboard" class="section-view active-view">
             <div class="card">
                 <h3>Dashboard Overview</h3>
-                <p>Welcome back to the administrative portal for Right Hope Academy. Use the sidebar sections to manage student admissions, track daily attendance, maintain the teacher directory, process fee payments, and generate term report cards.</p>
+                <p>Welcome back to Right Hope Academy management portal. (Opportunity For All)</p>
+                <p style="color: #555; margin-top: 10px;">Use the sidebar navigation to control student enrollment, manage fee histories, review teacher directories, and process terminal reports seamlessly.</p>
             </div>
         </div>
 
-        <!-- Student Management View -->
-        <div id="students" class="section-view">
-            <div class="card">
-                <h3>Student Management</h3>
-                <p>Register new student profiles and review enrolled school records.</p>
-                <div style="margin-top: 15px;">
-                    <input type="text" id="newStudentName" placeholder="Student Full Name">
-                    <input type="text" id="newStudentClass" placeholder="Class (e.g. Basic 5)">
-                    <button onclick="addStudent()">Add Student</button>
-                </div>
-                <table id="studentTable">
-                    <thead>
-                        <tr><th>ID</th><th>Name</th><th>Class</th><th>Status</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>RHA-001</td><td>John Doe</td><td>Basic 5</td><td>Active</td></tr>
-                        <tr><td>RHA-002</td><td>Abigail Mensah</td><td>Basic 4</td><td>Active</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Teacher Directory View -->
+        <!-- 2. TEACHER DIRECTORY -->
         <div id="teachers" class="section-view">
             <div class="card">
                 <h3>Teacher Directory</h3>
-                <p>Manage staff postings, subjects taught, and contact details.</p>
-                <div style="margin-top: 15px;">
-                    <input type="text" id="newTeacherName" placeholder="Teacher Name">
-                    <input type="text" id="newTeacherSubject" placeholder="Subject Assigned">
+                <p>Manage staff postings, subjects taught, and credentials.</p>
+                <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <input type="text" id="newTeacherName" placeholder="Teacher Full Name">
+                    <input type="text" id="newTeacherSubject" placeholder="Assigned Subject">
                     <button onclick="addTeacher()">Add Teacher</button>
                 </div>
                 <table id="teacherTable">
                     <thead>
-                        <tr><th>Staff ID</th><th>Name</th><th>Subject Specialty</th></tr>
+                        <tr><th>Staff ID</th><th>Name</th><th>Subject Specialty</th><th>Actions</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td>TCH-101</td><td>Mr. Kwaku Mensah</td><td>Core Mathematics</td></tr>
-                        <tr><td>TCH-102</td><td>Madam Akosua Serwaa</td><td>English Language</td></tr>
+                        <tr><td>TCH-101</td><td>Mr. Kwaku Mensah</td><td>Core Mathematics</td><td><button class="btn-danger" onclick="deleteTeacher(this)">Delete</button></td></tr>
+                        <tr><td>TCH-102</td><td>Madam Akosua Serwaa</td><td>English Language</td><td><button class="btn-danger" onclick="deleteTeacher(this)">Delete</button></td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- Attendance Tracker View -->
-        <div id="attendance" class="section-view">
+        <!-- 3. STUDENT MANAGEMENT -->
+        <div id="students" class="section-view">
             <div class="card">
-                <h3>Attendance Tracker</h3>
-                <p>Record and monitor daily student attendance status.</p>
-                <table>
+                <h3>Student Records & Management</h3>
+                <p>Manage student enrollment, classes, and personal profiles.</p>
+                <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <input type="text" id="newStudentName" placeholder="Student Full Name">
+                    <input type="text" id="newStudentClass" placeholder="Class (e.g. Basic 5)">
+                    <button onclick="addStudent()">Register Student</button>
+                </div>
+                <table id="studentTable">
                     <thead>
-                        <tr><th>Student Name</th><th>Class</th><th>Attendance Status</th></tr>
+                        <tr><th>ID</th><th>Name</th><th>Class</th><th>Status</th><th>Actions</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td>John Doe</td><td>Basic 5</td><td><select><option>Present</option><option>Absent</option><option>Excused</option></select></td></tr>
-                        <tr><td>Abigail Mensah</td><td>Basic 4</td><td><select><option>Present</option><option>Absent</option><option>Excused</option></select></td></tr>
+                        <tr><td>RHA-001</td><td>John Doe</td><td>Basic 5</td><td>Active</td><td><button class="btn-danger" onclick="deleteStudent(this)">Delete</button></td></tr>
+                        <tr><td>RHA-002</td><td>Abigail Mensah</td><td>Basic 4</td><td>Active</td><td><button class="btn-danger" onclick="deleteStudent(this)">Delete</button></td></tr>
                     </tbody>
                 </table>
-                <button style="margin-top: 15px;" onclick="alert('Attendance saved successfully!')">Save Attendance</button>
             </div>
         </div>
 
-        <!-- Fees & Finance View -->
+        <!-- 4. FEE PAYMENTS -->
         <div id="fees" class="section-view">
             <div class="card">
-                <h3>Fees & Finance</h3>
-                <p>Track school fee payments, balances, and financial collection records.</p>
+                <h3>Fee Payments & Financial Tracking</h3>
+                <p>Monitor school fee balances, payments, and financial statuses for enrolled wards.</p>
                 <table>
                     <thead>
-                        <tr><th>Student Name</th><th>Total Fees</th><th>Amount Paid</th><th>Balance</th><th>Action</th></tr>
+                        <tr><th>Student Name</th><th>Total Fees</th><th>Amount Paid</th><th>Balance</th><th>Status / Action</th></tr>
                     </thead>
                     <tbody>
                         <tr><td>John Doe</td><td>GHS 500</td><td>GHS 500</td><td>GHS 0</td><td><span style="color: green; font-weight: bold;">Fully Paid</span></td></tr>
@@ -245,30 +378,71 @@
             </div>
         </div>
 
-        <!-- Report Card Generator View -->
+        <!-- 5. ATTENDANCE TRACKER -->
+        <div id="attendance" class="section-view">
+            <div class="card">
+                <h3>Attendance Tracker</h3>
+                <p>Record and monitor daily student attendance status across classes.</p>
+                <table>
+                    <thead>
+                        <tr><th>Student Name</th><th>Class</th><th>Attendance Status</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>John Doe</td><td>Basic 5</td><td><select><option>Present</option><option>Absent</option><option>Excused</option></select></td></tr>
+                        <tr><td>Abigail Mensah</td><td>Basic 4</td><td><select><option>Present</option><option>Absent</option><option>Excused</option></select></td></tr>
+                    </tbody>
+                </table>
+                <button style="margin-top: 15px;" onclick="alert('Attendance records saved successfully!')">Save Attendance</button>
+            </div>
+        </div>
+
+        <!-- 6. REPORT CARD GENERATOR -->
         <div id="reports" class="section-view">
             <div class="card">
                 <h3>Report Card Generator</h3>
-                <p>Generate and preview term-end academic performance reports for students.</p>
-                <div style="margin-top: 15px;">
-                    <select id="reportStudentSelect">
+                <p>Generate and preview term-end academic performance sheets.</p>
+                <div style="margin-top: 15px; display: flex; gap: 10px;">
+                    <select id="reportStudentSelect" style="max-width: 300px;">
                         <option>John Doe (Basic 5)</option>
                         <option>Abigail Mensah (Basic 4)</option>
                     </select>
                     <button onclick="generateReport()">Generate Terminal Report</button>
                 </div>
-                <div id="reportPreviewArea" style="margin-top: 20px; padding: 15px; border: 1px dashed #cbd5e1; background: #f8fafc; display: none;">
-                    <h4 style="color: #1e1b4b; text-align: center; margin-top:0;">RIGHT HOPE ACADEMY - TERMINAL REPORT CARD</h4>
-                    <p><strong>Student:</strong> <span id="repName">John Doe</span></p>
-                    <p><strong>Class:</strong> Basic 5 | <strong>Motto:</strong> Opportunity For All</p>
-                    <hr>
-                    <p><strong>Core Mathematics:</strong> A (85%)</p>
-                    <p><strong>English Language:</strong> B+ (78%)</p>
-                    <p><strong>Integrated Science:</strong> A (90%)</p>
-                    <p><strong>Class Teacher Remarks:</strong> Excellent performance and active participation throughout the term.</p>
+                <div id="reportPreviewArea" style="margin-top: 25px; padding: 20px; border: 2px dashed #cbd5e1; background: #f8fafc; display: none; border-radius: 6px;">
+                    <h4 style="color: var(--primary); text-align: center; margin-top:0;">RIGHT HOPE ACADEMY - TERMINAL REPORT CARD</h4>
+                    <p style="text-align: center; font-style: italic; color: #555; margin-bottom: 15px;">Motto: Opportunity For All</p>
+                    <p><strong>Student Name:</strong> <span id="repName">John Doe</span></p>
+                    <hr style="border: 0; border-top: 1px solid #cbd5e1;">
+                    <table style="margin-top: 10px;">
+                        <thead><tr><th>Subject</th><th>Score</th><th>Grade</th><th>Remarks</th></tr></thead>
+                        <tbody>
+                            <tr><td>Core Mathematics</td><td>85%</td><td>A</td><td>Excellent</td></tr>
+                            <tr><td>English Language</td><td>78%</td><td>B+</td><td>Very Good</td></tr>
+                            <tr><td>Integrated Science</td><td>90%</td><td>A</td><td>Outstanding</td></tr>
+                        </tbody>
+                    </table>
+                    <p style="margin-top: 15px;"><strong>Class Teacher Remarks:</strong> Outstanding performance and active participation throughout the academic term.</p>
                 </div>
             </div>
         </div>
+
+        <!-- 7. SETTINGS -->
+        <div id="settings" class="section-view">
+            <div class="card">
+                <h3>System Settings</h3>
+                <p>Configure institution parameters, academic year structures, and system preferences for Right Hope Academy.</p>
+                <div style="margin-top: 15px;">
+                    <label style="display: block; font-weight: bold; font-size: 13px; margin-bottom: 5px;">Institution Name</label>
+                    <input type="text" value="Right Hope Academy" style="margin-bottom: 15px;">
+                    
+                    <label style="display: block; font-weight: bold; font-size: 13px; margin-bottom: 5px;">School Motto</label>
+                    <input type="text" value="Opportunity For All" style="margin-bottom: 15px;">
+
+                    <button onclick="alert('Settings updated successfully!')">Save Changes</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -280,7 +454,7 @@
         var pass = document.getElementById("password").value;
         if (user.trim() !== "" && pass.trim() !== "") {
             document.getElementById("login-container").style.display = "none";
-            document.getElementById("app-container").style.display = "block";
+            document.getElementById("app-container").style.display = "flex";
         } else {
             alert("Please enter both username and password!");
         }
@@ -308,9 +482,9 @@
 
         resultBox.style.display = "block";
         if (query.includes("john") || query.includes("student")) {
-            resultDetails.innerHTML = "<strong>Name:</strong> John Doe<br><strong>Class:</strong> Basic 5<br><strong>Attendance:</strong> 98%<br><strong>Performance:</strong> Math: A, English: B+, Science: A<br><strong>Fee Status:</strong> Fully Paid";
+            resultDetails.innerHTML = "<strong>Name:</strong> John Doe<br><strong>Class:</strong> Basic 5<br><strong>Attendance:</strong> 98%<br><strong>Performance Summary:</strong> Math: A, English: B+, Science: A<br><strong>Fee Status:</strong> Fully Paid";
         } else {
-            resultDetails.innerHTML = "No records found matching '<strong>" + query + "</strong>'. Please verify the student name/ID with school administration.";
+            resultDetails.innerHTML = "No records found matching '<strong>" + query + "</strong>'. Please verify the student name or ID with school administration.";
         }
     }
 
@@ -334,7 +508,7 @@
         });
 
         document.getElementById(tabId).classList.add('active-view');
-        element.classList.add('active');
+        if(element) element.classList.add('active');
     }
 
     function addStudent() {
@@ -343,13 +517,18 @@
         if(name && cls) {
             var table = document.getElementById("studentTable").getElementsByTagName('tbody')[0];
             var newRow = table.insertRow();
-            newRow.innerHTML = "<td>RHA-00" + (table.rows.length + 1) + "</td><td>" + name + "</td><td>" + cls + "</td><td>Active</td>";
+            newRow.innerHTML = "<td>RHA-00" + (table.rows.length + 1) + "</td><td>" + name + "</td><td>" + cls + "</td><td>Active</td><td><button class='btn-danger' onclick='deleteStudent(this)'>Delete</button></td>";
             document.getElementById("newStudentName").value = "";
             document.getElementById("newStudentClass").value = "";
-            alert("Student added successfully!");
+            alert("Student enrolled successfully!");
         } else {
             alert("Please fill in both student name and class.");
         }
+    }
+
+    function deleteStudent(btn) {
+        var row = btn.parentNode.parentNode;
+        row.parentNode.removeChild(row);
     }
 
     function addTeacher() {
@@ -358,13 +537,18 @@
         if(name && sub) {
             var table = document.getElementById("teacherTable").getElementsByTagName('tbody')[0];
             var newRow = table.insertRow();
-            newRow.innerHTML = "<td>TCH-10" + (table.rows.length + 1) + "</td><td>" + name + "</td><td>" + sub + "</td>";
+            newRow.innerHTML = "<td>TCH-10" + (table.rows.length + 1) + "</td><td>" + name + "</td><td>" + sub + "</td><td><button class='btn-danger' onclick='deleteTeacher(this)'>Delete</button></td>";
             document.getElementById("newTeacherName").value = "";
             document.getElementById("newTeacherSubject").value = "";
             alert("Teacher added successfully!");
         } else {
             alert("Please fill in both teacher name and subject specialty.");
         }
+    }
+
+    function deleteTeacher(btn) {
+        var row = btn.parentNode.parentNode;
+        row.parentNode.removeChild(row);
     }
 
     function generateReport() {
@@ -375,4 +559,4 @@
 </script>
 
 </body>
-</html>
+</html> 
