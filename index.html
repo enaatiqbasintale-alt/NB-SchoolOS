@@ -357,7 +357,7 @@
         <div id="reports" class="section-view">
             <div class="card">
                 <h3>Terminal Assessment & Automated Report Card Generator</h3>
-                <p>Select educational level to load curriculum subjects. Enter Class Score (out of 30) and Exam Score (out of 70) to instantly calculate Totals, Grades, and Remarks.</p>
+                <p>Select educational level to load curriculum subjects and choose a student to manage their unique report card. Enter Class Score (out of 30) and Exam Score (out of 70) to instantly calculate Totals, Grades, and Remarks.</p>
                 
                 <div style="margin: 15px 0; display: flex; gap: 15px; flex-wrap: wrap;">
                     <div>
@@ -368,8 +368,11 @@
                         </select>
                     </div>
                     <div>
-                        <label style="font-size: 12px; font-weight: bold;">Student Name:</label>
-                        <input type="text" id="reportStudentName" value="John Doe" style="width: 220px;">
+                        <label style="font-size: 12px; font-weight: bold;">Select Student:</label>
+                        <select id="reportStudentSelect" onchange="onStudentSelectChange()" style="width: 220px;">
+                            <option value="john doe">John Doe (Basic 5)</option>
+                            <option value="abigail mensah">Abigail Mensah (JHS Form 2)</option>
+                        </select>
                     </div>
                 </div>
 
@@ -423,7 +426,7 @@
         "Social Studies", "Information & Comm. Tech (ICT)", "Religious & Moral Education", "Career Tech", "Ghanaian Language", "Creative Arts"
     ];
 
-    // Storage for generated student reports accessible by parents
+    // Storage for generated student reports accessible by parents and loaded per student
     const studentReports = {
         "john doe": {
             level: "primary",
@@ -545,21 +548,60 @@
 
     function deleteRow(btn) {
         var row = btn.parentNode.parentNode;
+        var studentNameCell = row.cells[1] ? row.cells[1].innerText.toLowerCase() : "";
         row.parentNode.removeChild(row);
+        
+        // Remove from student dropdown and reports if it was a student table row
+        if (studentNameCell && studentReports[studentNameCell]) {
+            delete studentReports[studentNameCell];
+            refreshStudentDropdown();
+        }
     }
 
     function addStudent() {
-        var name = document.getElementById("newStudentName").value;
-        var cls = document.getElementById("newStudentClass").value;
+        var name = document.getElementById("newStudentName").value.trim();
+        var cls = document.getElementById("newStudentClass").value.trim();
         if(name && cls) {
             var table = document.getElementById("studentTable").getElementsByTagName('tbody')[0];
             var newRow = table.insertRow();
-            newRow.innerHTML = "<td>RHA-00" + (table.rows.length + 1) + "</td><td>" + name + "</td><td>" + cls + "</td><td>Active</td><td><button class='btn-danger' onclick='deleteRow(this)'>Delete</button></td>";
+            var newId = "RHA-00" + (table.rows.length);
+            newRow.innerHTML = "<td>" + newId + "</td><td>" + name + "</td><td>" + cls + "</td><td>Active</td><td><button class='btn-danger' onclick='deleteRow(this)'>Delete</button></td>";
+            
+            // Initialize default report structure for the new student
+            let defaultLevel = cls.toLowerCase().includes('jhs') ? 'jhs' : 'primary';
+            let activeSubjects = defaultLevel === 'primary' ? primarySubjects : jhsSubjects;
+            let initialSubjects = activeSubjects.map(sub => ({
+                name: sub, classScore: 20, examScore: 50, total: 70, grade: "B+", remark: "Very Good"
+            }));
+
+            studentReports[name.toLowerCase()] = {
+                level: defaultLevel,
+                className: cls,
+                feeStatus: "Active Status",
+                subjects: initialSubjects
+            };
+
+            refreshStudentDropdown();
             document.getElementById("newStudentName").value = "";
             document.getElementById("newStudentClass").value = "";
             alert("Student registered successfully!");
         } else {
             alert("Please provide both student name and class.");
+        }
+    }
+
+    function refreshStudentDropdown() {
+        let select = document.getElementById("reportStudentSelect");
+        let currentVal = select.value;
+        select.innerHTML = "";
+        Object.keys(studentReports).forEach(key => {
+            let opt = document.createElement("option");
+            opt.value = key;
+            opt.textContent = key.toUpperCase() + " (" + studentReports[key].className + ")";
+            select.appendChild(opt);
+        });
+        if (studentReports[currentVal]) {
+            select.value = currentVal;
         }
     }
 
@@ -591,6 +633,12 @@
             var actionHtml = balance <= 0 ? '<span style="color: green; font-weight: bold;">Fully Paid</span>' : '<button onclick="recordMorePayment(this)">Record Payment</button>';
             newRow.innerHTML = "<td>" + name + "</td><td>GHS " + total + "</td><td>GHS " + paid + "</td><td>GHS " + balance + "</td><td>" + actionHtml + "</td>";
             
+            // Update student report fee status if exists
+            let key = name.toLowerCase();
+            if (studentReports[key]) {
+                studentReports[key].feeStatus = balance <= 0 ? "Fully Paid (GHS 0 Balance)" : `GHS ${balance} Balance Remaining`;
+            }
+
             document.getElementById("feeStudentName").value = "";
             document.getElementById("feeTotal").value = "";
             document.getElementById("feePaid").value = "";
@@ -616,6 +664,11 @@
             if(newBalance <= 0) {
                 row.cells[4].innerHTML = '<span style="color: green; font-weight: bold;">Fully Paid</span>';
             }
+
+            let key = name.toLowerCase();
+            if (studentReports[key]) {
+                studentReports[key].feeStatus = newBalance <= 0 ? "Fully Paid (GHS 0 Balance)" : `GHS ${newBalance} Balance Remaining`;
+            }
             alert("Payment updated!");
         }
     }
@@ -638,7 +691,51 @@
                 <td><span class="row-remark" style="font-style: italic; color: #555;">Excellent</span></td>
             `;
         });
-        document.querySelectorAll('.class-score').forEach(input => calculateRow(input));
+        
+        // Load selected student's existing scores if available
+        onStudentSelectChange();
+    }
+
+    function onStudentSelectChange() {
+        let selectedStudent = document.getElementById("reportStudentSelect").value;
+        if (studentReports[selectedStudent]) {
+            let record = studentReports[selectedStudent];
+            document.getElementById("educationLevel").value = record.level;
+            
+            // Re-render table for level if needed
+            let tbody = document.getElementById("assessmentBody");
+            let subjects = record.level === 'primary' ? primarySubjects : jhsSubjects;
+            
+            if (tbody.rows.length !== subjects.length) {
+                tbody.innerHTML = "";
+                subjects.forEach((subject) => {
+                    let row = tbody.insertRow();
+                    row.innerHTML = `
+                        <td><strong>${subject}</strong></td>
+                        <td><input type="number" min="0" max="30" value="20" class="class-score" oninput="calculateRow(this)"></td>
+                        <td><input type="number" min="0" max="70" value="50" class="exam-score" oninput="calculateRow(this)"></td>
+                        <td><span class="row-total" style="font-weight: bold; color: var(--primary);">70</span></td>
+                        <td><span class="row-grade" style="font-weight: bold; color: #0284c7;">B+</span></td>
+                        <td><span class="row-remark" style="font-style: italic; color: #555;">Very Good</span></td>
+                    `;
+                });
+            }
+
+            // Populate input values from stored record
+            let rows = tbody.querySelectorAll("tr");
+            rows.forEach((row, index) => {
+                let subName = row.cells[0].innerText;
+                let foundSub = record.subjects.find(s => s.name === subName);
+                if (foundSub) {
+                    row.querySelector('.class-score').value = foundSub.classScore;
+                    row.querySelector('.exam-score').value = foundSub.examScore;
+                } else {
+                    row.querySelector('.class-score').value = 20;
+                    row.querySelector('.exam-score').value = 50;
+                }
+                calculateRow(row.querySelector('.class-score'));
+            });
+        }
     }
 
     function calculateRow(element) {
@@ -665,11 +762,11 @@
     }
 
     function saveTerminalReport() {
-        let studentName = document.getElementById("reportStudentName").value.trim().toLowerCase();
+        let studentKey = document.getElementById("reportStudentSelect").value;
         let level = document.getElementById("educationLevel").value;
         
-        if (!studentName) {
-            alert("Please enter a student name!");
+        if (!studentKey) {
+            alert("Please select a student!");
             return;
         }
 
@@ -694,15 +791,19 @@
             });
         });
 
-        studentReports[studentName] = {
-            level: level,
-            className: level === 'primary' ? 'Basic Level' : 'JHS Level',
-            feeStatus: 'Active Status',
-            subjects: subjectsList
-        };
+        if (!studentReports[studentKey]) {
+            studentReports[studentKey] = { feeStatus: "Active Status" };
+        }
 
-        alert("Terminal Report successfully finalized and saved for " + document.getElementById("reportStudentName").value + "! Parents can now view this in the Parent Portal.");
+        studentReports[studentKey].level = level;
+        studentReports[studentKey].className = level === 'primary' ? 'Primary Level' : 'JHS Level';
+        studentReports[studentKey].subjects = subjectsList;
+
+        alert("Terminal Report successfully finalized and saved for " + studentKey.toUpperCase() + "! Parents can now view this in the Parent Portal.");
     }
+
+    // Initialize student dropdown choices on startup
+    refreshStudentDropdown();
 </script>
 
 </body>
