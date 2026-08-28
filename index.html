@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -706,10 +706,9 @@
         
         if (studentReports[typedName]) {
             let record = studentReports[typedName];
-            document.getElementById("educationLevel").value = record.level;
-            
             let tbody = document.getElementById("assessmentBody");
-            let subjects = record.level === 'primary' ? primarySubjects : jhsSubjects;
+            let currentLevel = document.getElementById("educationLevel").value;
+            let subjects = currentLevel === 'primary' ? primarySubjects : jhsSubjects;
             
             if (tbody.rows.length !== subjects.length) {
                 tbody.innerHTML = "";
@@ -729,7 +728,7 @@
             let rows = tbody.querySelectorAll("tr");
             rows.forEach((row) => {
                 let subName = row.cells[0].innerText;
-                let foundSub = record.subjects.find(s => s.name === subName);
+                let foundSub = record.subjects ? record.subjects.find(s => s.name === subName) : null;
                 if (foundSub) {
                     row.querySelector('.class-score').value = foundSub.classScore;
                     row.querySelector('.exam-score').value = foundSub.examScore;
@@ -810,4 +809,4 @@
 </script>
 
 </body>
-</html> 
+</html>
