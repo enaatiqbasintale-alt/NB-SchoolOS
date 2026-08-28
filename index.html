@@ -10,7 +10,7 @@
             --primary-hover: #312e81;
             --bg-color: #f4f6f9;
             --text-main: #1f2937;
-            --sidebar-width: 240px;
+            --sidebar-width: 250px;
         }
 
         body {
@@ -20,14 +20,11 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             box-sizing: border-box;
-            overflow-x: hidden;
         }
 
         #app-container {
             display: flex;
             min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
         }
 
         /* SIDEBAR STYLING */
@@ -35,9 +32,11 @@
             width: var(--sidebar-width);
             background: var(--primary);
             color: white;
-            min-height: 100vh;
-            position: relative;
-            flex-shrink: 0;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -46,8 +45,8 @@
         .sidebar-top { padding-bottom: 20px; }
 
         .sidebar h2 {
-            font-size: 17px;
-            padding: 22px 15px;
+            font-size: 19px;
+            padding: 22px 20px;
             margin: 0;
             border-bottom: 1px solid rgba(255,255,255,0.08);
             letter-spacing: 0.5px;
@@ -56,11 +55,11 @@
         .sidebar a {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             color: rgba(255, 255, 255, 0.85);
-            padding: 13px 15px;
+            padding: 14px 20px;
             text-decoration: none;
-            font-size: 13px;
+            font-size: 14px;
             transition: background 0.2s;
         }
 
@@ -70,7 +69,7 @@
         }
 
         .sidebar-footer {
-            padding: 15px;
+            padding: 20px;
             border-top: 1px solid rgba(255,255,255,0.08);
         }
 
@@ -80,10 +79,10 @@
             border: none;
             cursor: pointer;
             padding: 0;
-            font-size: 13px;
+            font-size: 14px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             text-decoration: none;
         }
 
@@ -91,32 +90,22 @@
 
         /* MAIN CONTENT AREA */
         .main-content {
+            margin-left: var(--sidebar-width);
             flex: 1;
-            padding: 15px;
+            padding: 25px;
             box-sizing: border-box;
-            width: 100%;
-            overflow-x: hidden;
-            min-width: 0;
+            max-width: calc(100vw - var(--sidebar-width));
         }
 
         .top-bar {
             background: white;
-            padding: 15px 20px;
+            padding: 15px 25px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.04);
             display: flex;
-            flex-direction: column;
-            gap: 5px;
-            align-items: flex-start;
+            justify-content: space-between;
+            align-items: center;
             border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        @media (min-width: 600px) {
-            .top-bar {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-            }
+            margin-bottom: 25px;
         }
 
         .role-switcher-card {
@@ -124,9 +113,9 @@
             padding: 15px 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.04);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
             margin-bottom: 20px;
         }
 
@@ -137,14 +126,13 @@
             font-weight: bold;
             font-size: 13px;
             cursor: pointer;
-            display: inline-block;
         }
         .badge-admin { background: #007bff; }
         .badge-teacher { background: #10b981; }
 
         .card {
             background: white;
-            padding: 20px;
+            padding: 25px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.04);
             margin-bottom: 20px;
@@ -163,7 +151,7 @@
         }
 
         table, th, td { border: 1px solid #e2e8f0; }
-        th, td { padding: 8px; text-align: left; font-size: 12px; }
+        th, td { padding: 10px; text-align: left; font-size: 13px; }
         th { background-color: #f8fafc; color: var(--primary); }
 
         input[type="text"], input[type="number"], input[type="password"], select {
@@ -184,7 +172,7 @@
             border-radius: 6px;
             cursor: pointer;
             font-weight: bold;
-            font-size: 13px;
+            font-size: 14px;
         }
         button:hover { background: var(--primary-hover); }
         .btn-danger { background: #dc2626; }
@@ -192,7 +180,7 @@
 
         /* PARENT PORTAL OVERLAY */
         #parent-portal-screen {
-            display: none; padding: 20px; max-width: 750px; margin: 20px auto; 
+            display: none; padding: 30px; max-width: 750px; margin: 40px auto; 
             background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
@@ -202,7 +190,7 @@
             background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 9999;
         }
         .login-card {
-            background: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 380px; text-align: center;
+            background: white; padding: 40px; border-radius: 10px; width: 90%; max-width: 400px; text-align: center;
         }
     </style>
 </head>
@@ -218,7 +206,7 @@
     <input type="text" id="parentSearchInput" placeholder="Enter Student Name or ID (e.g. John Doe)..." style="padding: 12px; margin-bottom: 15px;">
     <button onclick="searchChildRecord()" style="width: 100%; padding: 12px;">Search Records</button>
 
-    <div id="childResultBox" style="margin-top: 20px; padding: 15px; background: #f8fafc; border-radius: 6px; display: none; border: 1px solid #e2e8f0; overflow-x: auto;">
+    <div id="childResultBox" style="margin-top: 20px; padding: 20px; background: #f8fafc; border-radius: 6px; display: none; border: 1px solid #e2e8f0;">
         <h4 style="color: var(--primary); margin-top: 0;">Student Status & Performance Report Card</h4>
         <div id="resultDetails" style="color: #333; line-height: 1.6;"></div>
     </div>
@@ -268,7 +256,7 @@
     <div class="main-content">
         <div class="top-bar">
             <span><strong>Right Hope Academy</strong> — Administrative Portal</span>
-            <span id="current-date" style="color: #666; font-size: 13px;"></span>
+            <span id="current-date" style="color: #666; font-size: 14px;"></span>
         </div>
         
         <div class="role-switcher-card">
@@ -294,18 +282,16 @@
             <div class="card">
                 <h3>Teacher Directory</h3>
                 <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
-                    <input type="text" id="newTeacherName" placeholder="Teacher Full Name" style="max-width: 100%;">
-                    <input type="text" id="newTeacherSubject" placeholder="Assigned Subject" style="max-width: 100%;">
+                    <input type="text" id="newTeacherName" placeholder="Teacher Full Name" style="max-width: 250px;">
+                    <input type="text" id="newTeacherSubject" placeholder="Assigned Subject" style="max-width: 250px;">
                     <button onclick="addTeacher()">Add Teacher</button>
                 </div>
-                <div style="width: 100%; overflow-x: auto;">
-                    <table id="teacherTable">
-                        <thead><tr><th>Staff ID</th><th>Name</th><th>Subject Specialty</th><th>Actions</th></tr></thead>
-                        <tbody>
-                            <tr><td>TCH-101</td><td>Mr. Kwaku Mensah</td><td>Core Mathematics</td><td><button class="btn-danger" onclick="deleteRow(this)">Delete</button></td></tr>
-                        </tbody>
-                    </table>
-                </div>
+                <table id="teacherTable">
+                    <thead><tr><th>Staff ID</th><th>Name</th><th>Subject Specialty</th><th>Actions</th></tr></thead>
+                    <tbody>
+                        <tr><td>TCH-101</td><td>Mr. Kwaku Mensah</td><td>Core Mathematics</td><td><button class="btn-danger" onclick="deleteRow(this)">Delete</button></td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -314,19 +300,17 @@
             <div class="card">
                 <h3>Student Records & Management</h3>
                 <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
-                    <input type="text" id="newStudentName" placeholder="Student Full Name" style="max-width: 100%;">
-                    <input type="text" id="newStudentClass" placeholder="Class (e.g. Basic 5 / JHS 2)" style="max-width: 100%;">
+                    <input type="text" id="newStudentName" placeholder="Student Full Name" style="max-width: 250px;">
+                    <input type="text" id="newStudentClass" placeholder="Class (e.g. Basic 5 / JHS 2)" style="max-width: 250px;">
                     <button onclick="addStudent()">Register Student</button>
                 </div>
-                <div style="width: 100%; overflow-x: auto;">
-                    <table id="studentTable">
-                        <thead><tr><th>ID</th><th>Name</th><th>Class Level</th><th>Status</th><th>Actions</th></tr></thead>
-                        <tbody>
-                            <tr><td>RHA-001</td><td>John Doe</td><td>Basic 5</td><td>Active</td><td><button class="btn-danger" onclick="deleteRow(this)">Delete</button></td></tr>
-                            <tr><td>RHA-002</td><td>Abigail Mensah</td><td>JHS Form 2</td><td>Active</td><td><button class="btn-danger" onclick="deleteRow(this)">Delete</button></td></tr>
-                        </tbody>
-                    </table>
-                </div>
+                <table id="studentTable">
+                    <thead><tr><th>ID</th><th>Name</th><th>Class Level</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody>
+                        <tr><td>RHA-001</td><td>John Doe</td><td>Basic 5</td><td>Active</td><td><button class="btn-danger" onclick="deleteRow(this)">Delete</button></td></tr>
+                        <tr><td>RHA-002</td><td>Abigail Mensah</td><td>JHS Form 2</td><td>Active</td><td><button class="btn-danger" onclick="deleteRow(this)">Delete</button></td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -337,27 +321,25 @@
                 <div style="margin: 20px 0; padding: 15px; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;">
                     <h4 style="margin-top: 0; color: var(--primary);">Add Fee Record</h4>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <input type="text" id="feeStudentName" placeholder="Student Name" style="max-width: 100%;">
-                        <input type="number" id="feeTotal" placeholder="Total Fees (GHS)" style="max-width: 100%;">
-                        <input type="number" id="feePaid" placeholder="Amount Paid (GHS)" style="max-width: 100%;">
+                        <input type="text" id="feeStudentName" placeholder="Student Name" style="max-width: 200px;">
+                        <input type="number" id="feeTotal" placeholder="Total Fees (GHS)" style="max-width: 150px;">
+                        <input type="number" id="feePaid" placeholder="Amount Paid (GHS)" style="max-width: 150px;">
                         <button onclick="addFeeRecord()">Save Fee Record</button>
                     </div>
                 </div>
-                <div style="width: 100%; overflow-x: auto;">
-                    <table id="feesTable">
-                        <thead><tr><th>Student Name</th><th>Total Fees</th><th>Amount Paid</th><th>Balance</th><th>Status / Action</th></tr></thead>
-                        <tbody>
-                            <tr>
-                                <td>John Doe</td><td>GHS 500</td><td>GHS 500</td><td>GHS 0</td>
-                                <td><span style="color: green; font-weight: bold;">Fully Paid</span></td>
-                            </tr>
-                            <tr>
-                                <td>Abigail Mensah</td><td>GHS 500</td><td>GHS 300</td><td>GHS 200</td>
-                                <td><button onclick="recordMorePayment(this)">Record Payment</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <table id="feesTable">
+                    <thead><tr><th>Student Name</th><th>Total Fees</th><th>Amount Paid</th><th>Balance</th><th>Status / Action</th></tr></thead>
+                    <tbody>
+                        <tr>
+                            <td>John Doe</td><td>GHS 500</td><td>GHS 500</td><td>GHS 0</td>
+                            <td><span style="color: green; font-weight: bold;">Fully Paid</span></td>
+                        </tr>
+                        <tr>
+                            <td>Abigail Mensah</td><td>GHS 500</td><td>GHS 300</td><td>GHS 200</td>
+                            <td><button onclick="recordMorePayment(this)">Record Payment</button></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -365,15 +347,13 @@
         <div id="attendance" class="section-view">
             <div class="card">
                 <h3>Attendance Tracker</h3>
-                <div style="width: 100%; overflow-x: auto;">
-                    <table id="attendanceTable">
-                        <thead><tr><th>Student Name</th><th>Class</th><th>Attendance Status</th></tr></thead>
-                        <tbody>
-                            <tr><td>John Doe</td><td>Basic 5</td><td><select><option>Present</option><option>Absent</option><option>Excused</option></select></td></tr>
-                            <tr><td>Abigail Mensah</td><td>JHS Form 2</td><td><select><option>Present</option><option>Absent</option><option>Excused</option></select></td></tr>
-                        </tbody>
-                    </table>
-                </div>
+                <table id="attendanceTable">
+                    <thead><tr><th>Student Name</th><th>Class</th><th>Attendance Status</th></tr></thead>
+                    <tbody>
+                        <tr><td>John Doe</td><td>Basic 5</td><td><select><option>Present</option><option>Absent</option><option>Excused</option></select></td></tr>
+                        <tr><td>Abigail Mensah</td><td>JHS Form 2</td><td><select><option>Present</option><option>Absent</option><option>Excused</option></select></td></tr>
+                    </tbody>
+                </table>
                 <button style="margin-top: 15px;" onclick="alert('Attendance saved successfully!')">Save Attendance</button>
             </div>
         </div>
@@ -428,10 +408,10 @@
             <div class="card">
                 <h3>System Settings</h3>
                 <label style="display: block; font-weight: bold; font-size: 13px; margin-bottom: 5px;">Institution Name</label>
-                <input type="text" value="Right Hope Academy" style="margin-bottom: 15px; max-width: 100%;">
+                <input type="text" value="Right Hope Academy" style="margin-bottom: 15px; max-width: 350px;">
                 
                 <label style="display: block; font-weight: bold; font-size: 13px; margin-bottom: 5px;">School Motto</label>
-                <input type="text" value="Opportunity For All" style="margin-bottom: 15px; max-width: 100%;">
+                <input type="text" value="Opportunity For All" style="margin-bottom: 15px; max-width: 350px;">
 
                 <button onclick="alert('Settings updated successfully!')">Save Changes</button>
             </div>
@@ -453,6 +433,7 @@
         "Social Studies", "Information & Comm. Tech (ICT)", "Religious & Moral Education", "Career Tech", "Ghanaian Language", "Creative Arts"
     ];
 
+    // Storage for generated student reports accessible by parents and loaded per student
     const studentReports = {
         "john doe": {
             level: "primary",
@@ -527,19 +508,18 @@
                         <strong>Class Level:</strong> ${record.className} (${record.level.toUpperCase()})<br>
                         <strong>Fee Status:</strong> ${record.feeStatus}<br><br>
                         <strong>Terminal Assessment Report Card:</strong>
-                        <div style="overflow-x: auto;">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Subject</th>
-                                        <th>Class (30%)</th>
-                                        <th>Exam (70%)</th>
-                                        <th>Total (100%)</th>
-                                        <th>Grade</th>
-                                        <th>Remark</th>
-                                    </tr>
-                                </thead>
-                                <tbody>`;
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Class (30%)</th>
+                                    <th>Exam (70%)</th>
+                                    <th>Total (100%)</th>
+                                    <th>Grade</th>
+                                    <th>Remark</th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
             
             record.subjects.forEach(sub => {
                 html += `<tr>
@@ -552,7 +532,7 @@
                          </tr>`;
             });
 
-            html += `</tbody></table></div>`;
+            html += `</tbody></table>`;
             resultDetails.innerHTML = html;
         } else {
             resultDetails.innerHTML = "No records found matching '<strong>" + query + "</strong>'. Please verify the student name.";
