@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -21,13 +21,12 @@
             color: var(--text-main);
         }
 
-        /* LAYOUT CONTAINER */
         #app-container {
             display: flex;
             min-height: 100vh;
         }
 
-        /* SIDEBAR STYLING MATCHING YOUR SCREENSHOT */
+        /* SIDEBAR STYLING */
         .sidebar {
             width: var(--sidebar-width);
             background: var(--primary);
@@ -42,16 +41,14 @@
             justify-content: space-between;
         }
 
-        .sidebar-top {
-            padding-bottom: 20px;
-        }
+        .sidebar-top { padding-bottom: 20px; }
 
         .sidebar h2 {
             font-size: 19px;
             padding: 22px 20px;
             margin: 0;
-            letter-spacing: 0.5px;
             border-bottom: 1px solid rgba(255,255,255,0.08);
+            letter-spacing: 0.5px;
         }
 
         .sidebar a {
@@ -88,10 +85,7 @@
             text-decoration: none;
         }
 
-        .logout-btn:hover {
-            color: #f87171 !important;
-            background: transparent !important;
-        }
+        .logout-btn:hover { color: #f87171 !important; }
 
         /* MAIN CONTENT AREA */
         .main-content {
@@ -112,7 +106,6 @@
             margin-bottom: 25px;
         }
 
-        /* ROLE SWITCHER CARD MATCHING SCREENSHOT */
         .role-switcher-card {
             background: white;
             padding: 15px 20px;
@@ -132,7 +125,6 @@
             font-size: 13px;
             cursor: pointer;
         }
-
         .badge-admin { background: #007bff; }
         .badge-teacher { background: #10b981; }
 
@@ -144,13 +136,8 @@
             margin-bottom: 20px;
         }
 
-        .section-view {
-            display: none;
-        }
-
-        .section-view.active-view {
-            display: block;
-        }
+        .section-view { display: none; }
+        .section-view.active-view { display: block; }
 
         /* TABLES & FORMS */
         table {
@@ -159,29 +146,17 @@
             margin-top: 15px;
         }
 
-        table, th, td {
-            border: 1px solid #e2e8f0;
-        }
+        table, th, td { border: 1px solid #e2e8f0; }
+        th, td { padding: 10px; text-align: left; font-size: 13px; }
+        th { background-color: #f8fafc; color: var(--primary); }
 
-        th, td {
-            padding: 12px;
-            text-align: left;
-            font-size: 14px;
-        }
-
-        th {
-            background-color: #f8fafc;
-            color: var(--primary);
-        }
-
-        input[type="text"], input[type="password"], select {
-            padding: 10px;
-            margin: 6px 0;
+        input[type="text"], input[type="number"], input[type="password"], select {
+            padding: 9px;
+            margin: 5px 0;
             border: 1px solid #cbd5e1;
             border-radius: 6px;
             box-sizing: border-box;
             width: 100%;
-            max-width: 300px;
         }
 
         button {
@@ -194,59 +169,40 @@
             font-weight: bold;
             font-size: 14px;
         }
+        button:hover { background: var(--primary-hover); }
+        .btn-danger { background: #dc2626; }
+        .btn-danger:hover { background: #b91c1c; }
 
-        button:hover {
-            background: var(--primary-hover);
+        /* PARENT PORTAL OVERLAY */
+        #parent-portal-screen {
+            display: none; padding: 30px; max-width: 650px; margin: 40px auto; 
+            background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        .btn-danger {
-            background: #dc2626;
-        }
-
-        .btn-danger:hover {
-            background: #b91c1c;
-        }
-
-        /* LOGIN SCREEN OVERLAY */
+        /* LOGIN OVERLAY */
         #login-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: var(--primary);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 9999;
         }
-
         .login-card {
-            background: white;
-            padding: 40px;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            text-align: center;
+            background: white; padding: 40px; border-radius: 10px; width: 90%; max-width: 400px; text-align: center;
         }
     </style>
 </head>
 <body>
 
-<!-- STANDALONE PARENT PORTAL SCREEN -->
-<div id="parent-portal-screen" style="display: none; padding: 30px; max-width: 650px; margin: 40px auto; background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+<!-- PARENT PORTAL SCREEN -->
+<div id="parent-portal-screen">
     <div style="text-align: center; margin-bottom: 25px;">
         <h2 style="color: var(--primary); margin-bottom: 5px;">Right Hope Academy</h2>
-        <h3 style="color: #555; font-size: 16px;">Parent Portal - View Ward Results</h3>
-        <p style="color: #666; font-size: 14px;">Enter your ward's student ID or name to check scores and details (Motto: Opportunity For All).</p>
+        <h3 style="color: #555; font-size: 16px;">Parent Portal - View Ward Results & Fees</h3>
+        <p style="color: #666; font-size: 14px;">Motto: Opportunity For All</p>
     </div>
-
-    <input type="text" id="parentSearchInput" placeholder="Enter Student Name or ID (e.g. John Doe)..." style="max-width: 100%; padding: 12px; margin-bottom: 15px;">
+    <input type="text" id="parentSearchInput" placeholder="Enter Student Name or ID (e.g. John Doe)..." style="padding: 12px; margin-bottom: 15px;">
     <button onclick="searchChildRecord()" style="width: 100%; padding: 12px;">Search Records</button>
 
     <div id="childResultBox" style="margin-top: 20px; padding: 20px; background: #f8fafc; border-radius: 6px; display: none; border: 1px solid #e2e8f0;">
-        <h4 style="color: var(--primary); margin-top: 0;">Student Details & Performance</h4>
+        <h4 style="color: var(--primary); margin-top: 0;">Student Status & Performance</h4>
         <p id="resultDetails" style="color: #333; line-height: 1.6;"></p>
     </div>
 
@@ -260,21 +216,21 @@
     <div class="login-card">
         <h2 style="color: var(--primary); margin-bottom: 5px;">Right Hope Academy</h2>
         <p style="color: #666; font-size: 14px; margin-bottom: 25px;">NB-SchoolOS Portal</p>
-        <div style="text-align: left; margin-bottom: 8px; font-size: 13px; font-weight: bold; color: #4b5563;">Username</div>
-        <input type="text" id="username" placeholder="Enter Username">
-        <div style="text-align: left; margin-top: 10px; margin-bottom: 8px; font-size: 13px; font-weight: bold; color: #4b5563;">Password</div>
-        <input type="password" id="password" placeholder="Enter Password">
+        <div style="text-align: left; margin-bottom: 5px; font-size: 13px; font-weight: bold;">Username</div>
+        <input type="text" id="username" placeholder="Enter username">
+        <div style="text-align: left; margin-top: 10px; margin-bottom: 5px; font-size: 13px; font-weight: bold;">Password</div>
+        <input type="password" id="password" placeholder="Enter password">
         <button onclick="handleLogin()" style="width: 100%; margin-top: 20px; padding: 12px;">Login to Portal</button>
         <div style="margin-top: 20px;">
-            <a href="#" onclick="showParentPortal()" style="color: #4f46e5; text-decoration: none; font-size: 14px; font-weight: bold;">Parent Portal (Check Ward Results)</a>
+            <a href="#" onclick="showParentPortal()" style="color: #4f46e5; text-decoration: none; font-size: 14px; font-weight: bold;">Parent Portal (Check Ward)</a>
         </div>
     </div>
 </div>
 
-<!-- MAIN DASHBOARD CONTAINER -->
+<!-- MAIN APP CONTAINER -->
 <div id="app-container" style="display: none;">
     
-    <!-- SIDEBAR MATCHING SCREENSHOT -->
+    <!-- SIDEBAR -->
     <div class="sidebar">
         <div class="sidebar-top">
             <h2>🎓 NB-SchoolOS</h2>
@@ -283,7 +239,7 @@
             <a href="#" onclick="switchTab('students', this)">👥 Student Management</a>
             <a href="#" onclick="switchTab('fees', this)">💳 Fee Payments</a>
             <a href="#" onclick="switchTab('attendance', this)">📋 Attendance Tracker</a>
-            <a href="#" onclick="switchTab('reports', this)">📊 Report Card Generator</a>
+            <a href="#" onclick="switchTab('reports', this)">📊 Report Card & Assessment</a>
             <a href="#" onclick="switchTab('settings', this)">⚙️ Settings</a>
         </div>
         <div class="sidebar-footer">
@@ -291,138 +247,149 @@
         </div>
     </div>
 
-    <!-- MAIN CONTENT VIEW -->
+    <!-- MAIN CONTENT -->
     <div class="main-content">
         <div class="top-bar">
             <span><strong>Right Hope Academy</strong> — Administrative Portal</span>
             <span id="current-date" style="color: #666; font-size: 14px;"></span>
         </div>
         
-        <!-- Role Indicator Card matching screenshot -->
         <div class="role-switcher-card">
             <div><strong>School:</strong> Right Hope Academy</div>
             <div><strong>Role:</strong> <span style="color: #007bff;">Administrator</span></div>
             <div>
-                <span class="role-badge badge-admin" onclick="alert('Current Role: Admin')">Admin</span>
-                <span class="role-badge badge-teacher" onclick="alert('Switched view context to Teacher mode')">Teacher</span>
+                <span class="role-badge badge-admin" onclick="alert('Admin Mode Active')">Admin</span>
+                <span class="role-badge badge-teacher" onclick="alert('Teacher Mode Active')">Teacher</span>
             </div>
         </div>
 
-        <!-- 1. DASHBOARD OVERVIEW -->
+        <!-- 1. DASHBOARD -->
         <div id="dashboard" class="section-view active-view">
             <div class="card">
                 <h3>Dashboard Overview</h3>
-                <p>Welcome back to Right Hope Academy management portal. (Opportunity For All)</p>
-                <p style="color: #555; margin-top: 10px;">Use the sidebar navigation to control student enrollment, manage fee histories, review teacher directories, and process terminal reports seamlessly.</p>
+                <p>Welcome back to Right Hope Academy management portal. <strong>(Opportunity For All)</strong></p>
+                <p style="color: #555; margin-top: 10px;">Use the sidebar navigation to control student registrations, fee records, teacher directories, attendance, and automated terminal grade calculations.</p>
             </div>
         </div>
 
-        <!-- 2. TEACHER DIRECTORY -->
+        <!-- 2. TEACHERS -->
         <div id="teachers" class="section-view">
             <div class="card">
                 <h3>Teacher Directory</h3>
-                <p>Manage staff postings, subjects taught, and credentials.</p>
                 <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
-                    <input type="text" id="newTeacherName" placeholder="Teacher Full Name">
-                    <input type="text" id="newTeacherSubject" placeholder="Assigned Subject">
+                    <input type="text" id="newTeacherName" placeholder="Teacher Full Name" style="max-width: 250px;">
+                    <input type="text" id="newTeacherSubject" placeholder="Assigned Subject" style="max-width: 250px;">
                     <button onclick="addTeacher()">Add Teacher</button>
                 </div>
                 <table id="teacherTable">
-                    <thead>
-                        <tr><th>Staff ID</th><th>Name</th><th>Subject Specialty</th><th>Actions</th></tr>
-                    </thead>
+                    <thead><tr><th>Staff ID</th><th>Name</th><th>Subject Specialty</th><th>Actions</th></tr></thead>
                     <tbody>
-                        <tr><td>TCH-101</td><td>Mr. Kwaku Mensah</td><td>Core Mathematics</td><td><button class="btn-danger" onclick="deleteTeacher(this)">Delete</button></td></tr>
-                        <tr><td>TCH-102</td><td>Madam Akosua Serwaa</td><td>English Language</td><td><button class="btn-danger" onclick="deleteTeacher(this)">Delete</button></td></tr>
+                        <tr><td>TCH-101</td><td>Mr. Kwaku Mensah</td><td>Core Mathematics</td><td><button class="btn-danger" onclick="deleteRow(this)">Delete</button></td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- 3. STUDENT MANAGEMENT -->
+        <!-- 3. STUDENTS -->
         <div id="students" class="section-view">
             <div class="card">
                 <h3>Student Records & Management</h3>
-                <p>Manage student enrollment, classes, and personal profiles.</p>
                 <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
-                    <input type="text" id="newStudentName" placeholder="Student Full Name">
-                    <input type="text" id="newStudentClass" placeholder="Class (e.g. Basic 5)">
+                    <input type="text" id="newStudentName" placeholder="Student Full Name" style="max-width: 250px;">
+                    <input type="text" id="newStudentClass" placeholder="Class (e.g. Basic 5 / JHS 2)" style="max-width: 250px;">
                     <button onclick="addStudent()">Register Student</button>
                 </div>
                 <table id="studentTable">
-                    <thead>
-                        <tr><th>ID</th><th>Name</th><th>Class</th><th>Status</th><th>Actions</th></tr>
-                    </thead>
+                    <thead><tr><th>ID</th><th>Name</th><th>Class Level</th><th>Status</th><th>Actions</th></tr></thead>
                     <tbody>
-                        <tr><td>RHA-001</td><td>John Doe</td><td>Basic 5</td><td>Active</td><td><button class="btn-danger" onclick="deleteStudent(this)">Delete</button></td></tr>
-                        <tr><td>RHA-002</td><td>Abigail Mensah</td><td>Basic 4</td><td>Active</td><td><button class="btn-danger" onclick="deleteStudent(this)">Delete</button></td></tr>
+                        <tr><td>RHA-001</td><td>John Doe</td><td>Basic 5</td><td>Active</td><td><button class="btn-danger" onclick="deleteRow(this)">Delete</button></td></tr>
+                        <tr><td>RHA-002</td><td>Abigail Mensah</td><td>JHS Form 2</td><td>Active</td><td><button class="btn-danger" onclick="deleteRow(this)">Delete</button></td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- 4. FEE PAYMENTS -->
+        <!-- 4. FEES -->
         <div id="fees" class="section-view">
             <div class="card">
                 <h3>Fee Payments & Financial Tracking</h3>
-                <p>Monitor school fee balances, payments, and financial statuses for enrolled wards.</p>
-                <table>
-                    <thead>
-                        <tr><th>Student Name</th><th>Total Fees</th><th>Amount Paid</th><th>Balance</th><th>Status / Action</th></tr>
-                    </thead>
+                <div style="margin: 20px 0; padding: 15px; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;">
+                    <h4 style="margin-top: 0; color: var(--primary);">Add Fee Record</h4>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <input type="text" id="feeStudentName" placeholder="Student Name" style="max-width: 200px;">
+                        <input type="number" id="feeTotal" placeholder="Total Fees (GHS)" style="max-width: 150px;">
+                        <input type="number" id="feePaid" placeholder="Amount Paid (GHS)" style="max-width: 150px;">
+                        <button onclick="addFeeRecord()">Save Fee Record</button>
+                    </div>
+                </div>
+                <table id="feesTable">
+                    <thead><tr><th>Student Name</th><th>Total Fees</th><th>Amount Paid</th><th>Balance</th><th>Status / Action</th></tr></thead>
                     <tbody>
-                        <tr><td>John Doe</td><td>GHS 500</td><td>GHS 500</td><td>GHS 0</td><td><span style="color: green; font-weight: bold;">Fully Paid</span></td></tr>
-                        <tr><td>Abigail Mensah</td><td>GHS 500</td><td>GHS 300</td><td>GHS 200</td><td><button onclick="alert('Payment receipt prompt opened')">Record Payment</button></td></tr>
+                        <tr>
+                            <td>John Doe</td><td>GHS 500</td><td>GHS 500</td><td>GHS 0</td>
+                            <td><span style="color: green; font-weight: bold;">Fully Paid</span></td>
+                        </tr>
+                        <tr>
+                            <td>Abigail Mensah</td><td>GHS 500</td><td>GHS 300</td><td>GHS 200</td>
+                            <td><button onclick="recordMorePayment(this)">Record Payment</button></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- 5. ATTENDANCE TRACKER -->
+        <!-- 5. ATTENDANCE -->
         <div id="attendance" class="section-view">
             <div class="card">
                 <h3>Attendance Tracker</h3>
-                <p>Record and monitor daily student attendance status across classes.</p>
-                <table>
-                    <thead>
-                        <tr><th>Student Name</th><th>Class</th><th>Attendance Status</th></tr>
-                    </thead>
+                <table id="attendanceTable">
+                    <thead><tr><th>Student Name</th><th>Class</th><th>Attendance Status</th></tr></thead>
                     <tbody>
                         <tr><td>John Doe</td><td>Basic 5</td><td><select><option>Present</option><option>Absent</option><option>Excused</option></select></td></tr>
-                        <tr><td>Abigail Mensah</td><td>Basic 4</td><td><select><option>Present</option><option>Absent</option><option>Excused</option></select></td></tr>
+                        <tr><td>Abigail Mensah</td><td>JHS Form 2</td><td><select><option>Present</option><option>Absent</option><option>Excused</option></select></td></tr>
                     </tbody>
                 </table>
-                <button style="margin-top: 15px;" onclick="alert('Attendance records saved successfully!')">Save Attendance</button>
+                <button style="margin-top: 15px;" onclick="alert('Attendance saved successfully!')">Save Attendance</button>
             </div>
         </div>
 
-        <!-- 6. REPORT CARD GENERATOR -->
+        <!-- 6. REPORT CARD & AUTOMATED ASSESSMENT -->
         <div id="reports" class="section-view">
             <div class="card">
-                <h3>Report Card Generator</h3>
-                <p>Generate and preview term-end academic performance sheets.</p>
-                <div style="margin-top: 15px; display: flex; gap: 10px;">
-                    <select id="reportStudentSelect" style="max-width: 300px;">
-                        <option>John Doe (Basic 5)</option>
-                        <option>Abigail Mensah (Basic 4)</option>
-                    </select>
-                    <button onclick="generateReport()">Generate Terminal Report</button>
+                <h3>Terminal Assessment & Automated Report Card Generator</h3>
+                <p>Select educational level to load curriculum subjects. Enter Class Score (out of 30) and Exam Score (out of 70) to instantly calculate Totals, Grades, and Remarks.</p>
+                
+                <div style="margin: 15px 0; display: flex; gap: 15px; flex-wrap: wrap;">
+                    <div>
+                        <label style="font-size: 12px; font-weight: bold;">Select Level:</label>
+                        <select id="educationLevel" onchange="loadSubjectTable()" style="width: 220px;">
+                            <option value="primary">Primary Section</option>
+                            <option value="jhs">Junior High School (JHS)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-size: 12px; font-weight: bold;">Student Name:</label>
+                        <input type="text" id="reportStudentName" value="John Doe" style="width: 220px;">
+                    </div>
                 </div>
-                <div id="reportPreviewArea" style="margin-top: 25px; padding: 20px; border: 2px dashed #cbd5e1; background: #f8fafc; display: none; border-radius: 6px;">
-                    <h4 style="color: var(--primary); text-align: center; margin-top:0;">RIGHT HOPE ACADEMY - TERMINAL REPORT CARD</h4>
-                    <p style="text-align: center; font-style: italic; color: #555; margin-bottom: 15px;">Motto: Opportunity For All</p>
-                    <p><strong>Student Name:</strong> <span id="repName">John Doe</span></p>
-                    <hr style="border: 0; border-top: 1px solid #cbd5e1;">
-                    <table style="margin-top: 10px;">
-                        <thead><tr><th>Subject</th><th>Score</th><th>Grade</th><th>Remarks</th></tr></thead>
-                        <tbody>
-                            <tr><td>Core Mathematics</td><td>85%</td><td>A</td><td>Excellent</td></tr>
-                            <tr><td>English Language</td><td>78%</td><td>B+</td><td>Very Good</td></tr>
-                            <tr><td>Integrated Science</td><td>90%</td><td>A</td><td>Outstanding</td></tr>
-                        </tbody>
-                    </table>
-                    <p style="margin-top: 15px;"><strong>Class Teacher Remarks:</strong> Outstanding performance and active participation throughout the academic term.</p>
-                </div>
+
+                <table id="assessmentTable">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Class Score (30%)</th>
+                            <th>Exam Score (70%)</th>
+                            <th>Total (100%)</th>
+                            <th>Grade</th>
+                            <th>Automated Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody id="assessmentBody">
+                        <!-- Populated dynamically -->
+                    </tbody>
+                </table>
+
+                <button style="margin-top: 20px;" onclick="alert('Terminal Report successfully finalized and saved!')">Save & Finalize Terminal Report</button>
             </div>
         </div>
 
@@ -430,16 +397,13 @@
         <div id="settings" class="section-view">
             <div class="card">
                 <h3>System Settings</h3>
-                <p>Configure institution parameters, academic year structures, and system preferences for Right Hope Academy.</p>
-                <div style="margin-top: 15px;">
-                    <label style="display: block; font-weight: bold; font-size: 13px; margin-bottom: 5px;">Institution Name</label>
-                    <input type="text" value="Right Hope Academy" style="margin-bottom: 15px;">
-                    
-                    <label style="display: block; font-weight: bold; font-size: 13px; margin-bottom: 5px;">School Motto</label>
-                    <input type="text" value="Opportunity For All" style="margin-bottom: 15px;">
+                <label style="display: block; font-weight: bold; font-size: 13px; margin-bottom: 5px;">Institution Name</label>
+                <input type="text" value="Right Hope Academy" style="margin-bottom: 15px; max-width: 350px;">
+                
+                <label style="display: block; font-weight: bold; font-size: 13px; margin-bottom: 5px;">School Motto</label>
+                <input type="text" value="Opportunity For All" style="margin-bottom: 15px; max-width: 350px;">
 
-                    <button onclick="alert('Settings updated successfully!')">Save Changes</button>
-                </div>
+                <button onclick="alert('Settings updated successfully!')">Save Changes</button>
             </div>
         </div>
 
@@ -449,14 +413,23 @@
 <script>
     document.getElementById('current-date').innerText = new Date().toLocaleDateString();
 
+    const primarySubjects = [
+        "English Language", "Core Mathematics", "Integrated Science", 
+        "Creative Arts", "Our World Our People", "Religious & Moral Education", "Ghanaian Language"
+    ];
+
+    const jhsSubjects = [
+        "English Language", "Core Mathematics", "Integrated Science", 
+        "Social Studies", "Information & Comm. Tech (ICT)", "Religious & Moral Education", "Pre-Technical Skills", "Ghanaian Language"
+    ];
+
     function handleLogin() {
-        var user = document.getElementById("username").value;
-        var pass = document.getElementById("password").value;
-        if (user.trim() !== "" && pass.trim() !== "") {
+        if(document.getElementById("username").value.trim() !== "") {
             document.getElementById("login-container").style.display = "none";
             document.getElementById("app-container").style.display = "flex";
+            loadSubjectTable();
         } else {
-            alert("Please enter both username and password!");
+            alert("Please enter a username!");
         }
     }
 
@@ -476,15 +449,15 @@
         var resultDetails = document.getElementById("resultDetails");
 
         if (query === "") {
-            alert("Please enter a student name or ID to search.");
+            alert("Please enter a student name or ID.");
             return;
         }
 
         resultBox.style.display = "block";
         if (query.includes("john") || query.includes("student")) {
-            resultDetails.innerHTML = "<strong>Name:</strong> John Doe<br><strong>Class:</strong> Basic 5<br><strong>Attendance:</strong> 98%<br><strong>Performance Summary:</strong> Math: A, English: B+, Science: A<br><strong>Fee Status:</strong> Fully Paid";
+            resultDetails.innerHTML = "<strong>Student:</strong> John Doe<br><strong>Class:</strong> Basic 5<br><strong>Fee Status:</strong> Fully Paid (GHS 0 Balance)<br><strong>Academic Standing:</strong> Excellent Performance across subjects.";
         } else {
-            resultDetails.innerHTML = "No records found matching '<strong>" + query + "</strong>'. Please verify the student name or ID with school administration.";
+            resultDetails.innerHTML = "No records found matching '<strong>" + query + "</strong>'. Please verify the student name.";
         }
     }
 
@@ -496,19 +469,15 @@
             document.getElementById("password").value = "";
             return;
         }
-
-        var views = document.querySelectorAll('.section-view');
-        views.forEach(function(v) {
-            v.classList.remove('active-view');
-        });
-
-        var links = document.querySelectorAll('.sidebar a');
-        links.forEach(function(l) {
-            l.classList.remove('active');
-        });
-
+        document.querySelectorAll('.section-view').forEach(v => v.classList.remove('active-view'));
+        document.querySelectorAll('.sidebar a').forEach(l => l.classList.remove('active'));
         document.getElementById(tabId).classList.add('active-view');
         if(element) element.classList.add('active');
+    }
+
+    function deleteRow(btn) {
+        var row = btn.parentNode.parentNode;
+        row.parentNode.removeChild(row);
     }
 
     function addStudent() {
@@ -517,18 +486,13 @@
         if(name && cls) {
             var table = document.getElementById("studentTable").getElementsByTagName('tbody')[0];
             var newRow = table.insertRow();
-            newRow.innerHTML = "<td>RHA-00" + (table.rows.length + 1) + "</td><td>" + name + "</td><td>" + cls + "</td><td>Active</td><td><button class='btn-danger' onclick='deleteStudent(this)'>Delete</button></td>";
+            newRow.innerHTML = "<td>RHA-00" + (table.rows.length + 1) + "</td><td>" + name + "</td><td>" + cls + "</td><td>Active</td><td><button class='btn-danger' onclick='deleteRow(this)'>Delete</button></td>";
             document.getElementById("newStudentName").value = "";
             document.getElementById("newStudentClass").value = "";
-            alert("Student enrolled successfully!");
+            alert("Student registered successfully!");
         } else {
-            alert("Please fill in both student name and class.");
+            alert("Please provide both student name and class.");
         }
-    }
-
-    function deleteStudent(btn) {
-        var row = btn.parentNode.parentNode;
-        row.parentNode.removeChild(row);
     }
 
     function addTeacher() {
@@ -537,26 +501,101 @@
         if(name && sub) {
             var table = document.getElementById("teacherTable").getElementsByTagName('tbody')[0];
             var newRow = table.insertRow();
-            newRow.innerHTML = "<td>TCH-10" + (table.rows.length + 1) + "</td><td>" + name + "</td><td>" + sub + "</td><td><button class='btn-danger' onclick='deleteTeacher(this)'>Delete</button></td>";
+            newRow.innerHTML = "<td>TCH-10" + (table.rows.length + 1) + "</td><td>" + name + "</td><td>" + sub + "</td><td><button class='btn-danger' onclick='deleteRow(this)'>Delete</button></td>";
             document.getElementById("newTeacherName").value = "";
             document.getElementById("newTeacherSubject").value = "";
             alert("Teacher added successfully!");
         } else {
-            alert("Please fill in both teacher name and subject specialty.");
+            alert("Please provide both teacher name and subject.");
         }
     }
 
-    function deleteTeacher(btn) {
-        var row = btn.parentNode.parentNode;
-        row.parentNode.removeChild(row);
+    function addFeeRecord() {
+        var name = document.getElementById("feeStudentName").value;
+        var total = parseFloat(document.getElementById("feeTotal").value);
+        var paid = parseFloat(document.getElementById("feePaid").value);
+
+        if(name && !isNaN(total) && !isNaN(paid)) {
+            var balance = total - paid;
+            var table = document.getElementById("feesTable").getElementsByTagName('tbody')[0];
+            var newRow = table.insertRow();
+            
+            var actionHtml = balance <= 0 ? '<span style="color: green; font-weight: bold;">Fully Paid</span>' : '<button onclick="recordMorePayment(this)">Record Payment</button>';
+            newRow.innerHTML = "<td>" + name + "</td><td>GHS " + total + "</td><td>GHS " + paid + "</td><td>GHS " + balance + "</td><td>" + actionHtml + "</td>";
+            
+            document.getElementById("feeStudentName").value = "";
+            document.getElementById("feeTotal").value = "";
+            document.getElementById("feePaid").value = "";
+            alert("Fee record added successfully!");
+        } else {
+            alert("Please enter valid fee figures.");
+        }
     }
 
-    function generateReport() {
-        var select = document.getElementById("reportStudentSelect").value;
-        document.getElementById("repName").innerText = select.split('(')[0].trim();
-        document.getElementById("reportPreviewArea").style.display = "block";
+    function recordMorePayment(btn) {
+        var row = btn.parentNode.parentNode;
+        var name = row.cells[0].innerText;
+        var total = parseFloat(row.cells[1].innerText.replace('GHS ', ''));
+        var currentPaid = parseFloat(row.cells[2].innerText.replace('GHS ', ''));
+        
+        var additional = prompt("Enter additional payment for " + name + ":");
+        if(additional && !isNaN(additional)) {
+            var newPaid = currentPaid + parseFloat(additional);
+            var newBalance = total - newPaid;
+            
+            row.cells[2].innerText = "GHS " + newPaid;
+            row.cells[3].innerText = "GHS " + newBalance;
+            if(newBalance <= 0) {
+                row.cells[4].innerHTML = '<span style="color: green; font-weight: bold;">Fully Paid</span>';
+            }
+            alert("Payment updated!");
+        }
+    }
+
+    function loadSubjectTable() {
+        const level = document.getElementById("educationLevel").value;
+        const tbody = document.getElementById("assessmentBody");
+        tbody.innerHTML = "";
+
+        const subjects = level === 'primary' ? primarySubjects : jhsSubjects;
+
+        subjects.forEach((subject) => {
+            let row = tbody.insertRow();
+            row.innerHTML = `
+                <td><strong>${subject}</strong></td>
+                <td><input type="number" min="0" max="30" value="22" class="class-score" oninput="calculateRow(this)"></td>
+                <td><input type="number" min="0" max="70" value="53" class="exam-score" oninput="calculateRow(this)"></td>
+                <td><span class="row-total" style="font-weight: bold; color: var(--primary);">75</span></td>
+                <td><span class="row-grade" style="font-weight: bold; color: #0284c7;">A</span></td>
+                <td><span class="row-remark" style="font-style: italic; color: #555;">Excellent</span></td>
+            `;
+        });
+        document.querySelectorAll('.class-score').forEach(input => calculateRow(input));
+    }
+
+    function calculateRow(element) {
+        let row = element.parentNode.parentNode;
+        let classScore = parseFloat(row.querySelector('.class-score').value) || 0;
+        let examScore = parseFloat(row.querySelector('.exam-score').value) || 0;
+
+        let total = classScore + examScore;
+        row.querySelector('.row-total').innerText = total;
+
+        let grade = "";
+        let remark = "";
+
+        if (total >= 80) { grade = "A"; remark = "Excellent"; }
+        else if (total >= 70) { grade = "B+"; remark = "Very Good"; }
+        else if (total >= 60) { grade = "B"; remark = "Good"; }
+        else if (total >= 50) { grade = "C+"; remark = "Credit"; }
+        else if (total >= 45) { grade = "C"; remark = "Pass"; }
+        else if (total >= 40) { grade = "D"; remark = "Low Pass"; }
+        else { grade = "E"; remark = "Fail"; }
+
+        row.querySelector('.row-grade').innerText = grade;
+        row.querySelector('.row-remark').innerText = remark;
     }
 </script>
 
 </body>
-</html> 
+</html>
