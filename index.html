@@ -175,7 +175,7 @@
 
         /* PARENT PORTAL OVERLAY */
         #parent-portal-screen {
-            display: none; padding: 30px; max-width: 650px; margin: 40px auto; 
+            display: none; padding: 30px; max-width: 750px; margin: 40px auto; 
             background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
@@ -202,8 +202,8 @@
     <button onclick="searchChildRecord()" style="width: 100%; padding: 12px;">Search Records</button>
 
     <div id="childResultBox" style="margin-top: 20px; padding: 20px; background: #f8fafc; border-radius: 6px; display: none; border: 1px solid #e2e8f0;">
-        <h4 style="color: var(--primary); margin-top: 0;">Student Status & Performance</h4>
-        <p id="resultDetails" style="color: #333; line-height: 1.6;"></p>
+        <h4 style="color: var(--primary); margin-top: 0;">Student Status & Performance Report Card</h4>
+        <div id="resultDetails" style="color: #333; line-height: 1.6;"></div>
     </div>
 
     <div style="margin-top: 25px; text-align: center;">
@@ -389,7 +389,7 @@
                     </tbody>
                 </table>
 
-                <button style="margin-top: 20px;" onclick="alert('Terminal Report successfully finalized and saved!')">Save & Finalize Terminal Report</button>
+                <button style="margin-top: 20px;" onclick="saveTerminalReport()">Save & Finalize Terminal Report</button>
             </div>
         </div>
 
@@ -423,6 +423,41 @@
         "Social Studies", "Information & Comm. Tech (ICT)", "Religious & Moral Education", "Career Tech", "Ghanaian Language", "Creative Arts"
     ];
 
+    // Storage for generated student reports accessible by parents
+    const studentReports = {
+        "john doe": {
+            level: "primary",
+            className: "Basic 5",
+            feeStatus: "Fully Paid (GHS 0 Balance)",
+            subjects: [
+                { name: "English Language", classScore: 24, examScore: 58, total: 82, grade: "A", remark: "Excellent" },
+                { name: "Core Mathematics", classScore: 22, examScore: 53, total: 75, grade: "A", remark: "Excellent" },
+                { name: "Integrated Science", classScore: 20, examScore: 50, total: 70, grade: "B+", remark: "Very Good" },
+                { name: "Creative Arts", classScore: 25, examScore: 60, total: 85, grade: "A", remark: "Excellent" },
+                { name: "Our World Our People", classScore: 21, examScore: 49, total: 70, grade: "B+", remark: "Very Good" },
+                { name: "Religious & Moral Education", classScore: 23, examScore: 52, total: 75, grade: "A", remark: "Excellent" },
+                { name: "Ghanaian Language", classScore: 19, examScore: 46, total: 65, grade: "B", remark: "Good" },
+                { name: "History", classScore: 22, examScore: 51, total: 73, grade: "B+", remark: "Very Good" }
+            ]
+        },
+        "abigail mensah": {
+            level: "jhs",
+            className: "JHS Form 2",
+            feeStatus: "GHS 200 Balance Remaining",
+            subjects: [
+                { name: "English Language", classScore: 21, examScore: 48, total: 69, grade: "B", remark: "Good" },
+                { name: "Core Mathematics", classScore: 18, examScore: 42, total: 60, grade: "B", remark: "Good" },
+                { name: "Integrated Science", classScore: 20, examScore: 45, total: 65, grade: "B", remark: "Good" },
+                { name: "Social Studies", classScore: 22, examScore: 50, total: 72, grade: "B+", remark: "Very Good" },
+                { name: "Information & Comm. Tech (ICT)", classScore: 24, examScore: 55, total: 79, grade: "B+", remark: "Very Good" },
+                { name: "Religious & Moral Education", classScore: 20, examScore: 48, total: 68, grade: "B", remark: "Good" },
+                { name: "Career Tech", classScore: 23, examScore: 52, total: 75, grade: "A", remark: "Excellent" },
+                { name: "Ghanaian Language", classScore: 19, examScore: 44, total: 63, grade: "B", remark: "Good" },
+                { name: "Creative Arts", classScore: 22, examScore: 50, total: 72, grade: "B+", remark: "Very Good" }
+            ]
+        }
+    };
+
     function handleLogin() {
         if(document.getElementById("username").value.trim() !== "") {
             document.getElementById("login-container").style.display = "none";
@@ -454,8 +489,41 @@
         }
 
         resultBox.style.display = "block";
-        if (query.includes("john") || query.includes("student")) {
-            resultDetails.innerHTML = "<strong>Student:</strong> John Doe<br><strong>Class:</strong> Basic 5<br><strong>Fee Status:</strong> Fully Paid (GHS 0 Balance)<br><strong>Academic Standing:</strong> Excellent Performance across subjects.";
+        
+        let foundKey = Object.keys(studentReports).find(k => k.includes(query) || query.includes(k));
+
+        if (foundKey) {
+            let record = studentReports[foundKey];
+            let html = `<strong>Student:</strong> ${foundKey.toUpperCase()}<br>
+                        <strong>Class Level:</strong> ${record.className} (${record.level.toUpperCase()})<br>
+                        <strong>Fee Status:</strong> ${record.feeStatus}<br><br>
+                        <strong>Terminal Assessment Report Card:</strong>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Class (30%)</th>
+                                    <th>Exam (70%)</th>
+                                    <th>Total (100%)</th>
+                                    <th>Grade</th>
+                                    <th>Remark</th>
+                                </tr>
+                            </thead>
+                            <tbody>`;
+            
+            record.subjects.forEach(sub => {
+                html += `<tr>
+                            <td><strong>${sub.name}</strong></td>
+                            <td>${sub.classScore}</td>
+                            <td>${sub.examScore}</td>
+                            <td><strong>${sub.total}</strong></td>
+                            <td><span style="color: #0284c7; font-weight: bold;">${sub.grade}</span></td>
+                            <td><span style="font-style: italic; color: #555;">${sub.remark}</span></td>
+                         </tr>`;
+            });
+
+            html += `</tbody></table>`;
+            resultDetails.innerHTML = html;
         } else {
             resultDetails.innerHTML = "No records found matching '<strong>" + query + "</strong>'. Please verify the student name.";
         }
@@ -594,6 +662,46 @@
 
         row.querySelector('.row-grade').innerText = grade;
         row.querySelector('.row-remark').innerText = remark;
+    }
+
+    function saveTerminalReport() {
+        let studentName = document.getElementById("reportStudentName").value.trim().toLowerCase();
+        let level = document.getElementById("educationLevel").value;
+        
+        if (!studentName) {
+            alert("Please enter a student name!");
+            return;
+        }
+
+        let rows = document.querySelectorAll("#assessmentBody tr");
+        let subjectsList = [];
+
+        rows.forEach(row => {
+            let subName = row.cells[0].innerText;
+            let classScore = parseFloat(row.querySelector('.class-score').value) || 0;
+            let examScore = parseFloat(row.querySelector('.exam-score').value) || 0;
+            let total = parseFloat(row.querySelector('.row-total').innerText) || 0;
+            let grade = row.querySelector('.row-grade').innerText;
+            let remark = row.querySelector('.row-remark').innerText;
+
+            subjectsList.push({
+                name: subName,
+                classScore: classScore,
+                examScore: examScore,
+                total: total,
+                grade: grade,
+                remark: remark
+            });
+        });
+
+        studentReports[studentName] = {
+            level: level,
+            className: level === 'primary' ? 'Basic Level' : 'JHS Level',
+            feeStatus: 'Active Status',
+            subjects: subjectsList
+        };
+
+        alert("Terminal Report successfully finalized and saved for " + document.getElementById("reportStudentName").value + "! Parents can now view this in the Parent Portal.");
     }
 </script>
 
