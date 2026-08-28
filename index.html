@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -359,38 +359,40 @@
                 <h3>Terminal Assessment & Automated Report Card Generator</h3>
                 <p>Select educational level to load curriculum subjects and choose a student to manage their unique report card. Enter Class Score (out of 30) and Exam Score (out of 70) to instantly calculate Totals, Grades, and Remarks.</p>
                 
-                <div style="margin: 15px 0; display: flex; gap: 15px; flex-wrap: wrap;">
-                    <div>
-                        <label style="font-size: 12px; font-weight: bold;">Select Level:</label>
-                        <select id="educationLevel" onchange="loadSubjectTable()" style="width: 220px;">
+                <div style="margin: 15px 0; display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 100%; box-sizing: border-box;">
+                    <div style="width: 100%;">
+                        <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 3px;">Select Level:</label>
+                        <select id="educationLevel" onchange="loadSubjectTable()" style="width: 100%;">
                             <option value="primary">Primary Section</option>
                             <option value="jhs">Junior High School (JHS)</option>
                         </select>
                     </div>
-                    <div>
-                        <label style="font-size: 12px; font-weight: bold;">Select Student:</label>
-                        <select id="reportStudentSelect" onchange="onStudentSelectChange()" style="width: 220px;">
+                    <div style="width: 100%;">
+                        <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 3px;">Select Student:</label>
+                        <select id="reportStudentSelect" onchange="onStudentSelectChange()" style="width: 100%;">
                             <option value="john doe">John Doe (Basic 5)</option>
                             <option value="abigail mensah">Abigail Mensah (JHS Form 2)</option>
                         </select>
                     </div>
                 </div>
 
-                <table id="assessmentTable">
-                    <thead>
-                        <tr>
-                            <th>Subject</th>
-                            <th>Class Score (30%)</th>
-                            <th>Exam Score (70%)</th>
-                            <th>Total (100%)</th>
-                            <th>Grade</th>
-                            <th>Automated Remarks</th>
-                        </tr>
-                    </thead>
-                    <tbody id="assessmentBody">
-                        <!-- Populated dynamically -->
-                    </tbody>
-                </table>
+                <div style="width: 100%; overflow-x: auto;">
+                    <table id="assessmentTable" style="min-width: 500px;">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Class Score (30%)</th>
+                                <th>Exam Score (70%)</th>
+                                <th>Total (100%)</th>
+                                <th>Grade</th>
+                                <th>Automated Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody id="assessmentBody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
 
                 <button style="margin-top: 20px;" onclick="saveTerminalReport()">Save & Finalize Terminal Report</button>
             </div>
@@ -551,7 +553,6 @@
         var studentNameCell = row.cells[1] ? row.cells[1].innerText.toLowerCase() : "";
         row.parentNode.removeChild(row);
         
-        // Remove from student dropdown and reports if it was a student table row
         if (studentNameCell && studentReports[studentNameCell]) {
             delete studentReports[studentNameCell];
             refreshStudentDropdown();
@@ -567,7 +568,6 @@
             var newId = "RHA-00" + (table.rows.length);
             newRow.innerHTML = "<td>" + newId + "</td><td>" + name + "</td><td>" + cls + "</td><td>Active</td><td><button class='btn-danger' onclick='deleteRow(this)'>Delete</button></td>";
             
-            // Initialize default report structure for the new student
             let defaultLevel = cls.toLowerCase().includes('jhs') ? 'jhs' : 'primary';
             let activeSubjects = defaultLevel === 'primary' ? primarySubjects : jhsSubjects;
             let initialSubjects = activeSubjects.map(sub => ({
@@ -592,6 +592,7 @@
 
     function refreshStudentDropdown() {
         let select = document.getElementById("reportStudentSelect");
+        if (!select) return;
         let currentVal = select.value;
         select.innerHTML = "";
         Object.keys(studentReports).forEach(key => {
@@ -633,7 +634,6 @@
             var actionHtml = balance <= 0 ? '<span style="color: green; font-weight: bold;">Fully Paid</span>' : '<button onclick="recordMorePayment(this)">Record Payment</button>';
             newRow.innerHTML = "<td>" + name + "</td><td>GHS " + total + "</td><td>GHS " + paid + "</td><td>GHS " + balance + "</td><td>" + actionHtml + "</td>";
             
-            // Update student report fee status if exists
             let key = name.toLowerCase();
             if (studentReports[key]) {
                 studentReports[key].feeStatus = balance <= 0 ? "Fully Paid (GHS 0 Balance)" : `GHS ${balance} Balance Remaining`;
@@ -692,17 +692,17 @@
             `;
         });
         
-        // Load selected student's existing scores if available
         onStudentSelectChange();
     }
 
     function onStudentSelectChange() {
-        let selectedStudent = document.getElementById("reportStudentSelect").value;
+        let selectEl = document.getElementById("reportStudentSelect");
+        if (!selectEl) return;
+        let selectedStudent = selectEl.value;
         if (studentReports[selectedStudent]) {
             let record = studentReports[selectedStudent];
             document.getElementById("educationLevel").value = record.level;
             
-            // Re-render table for level if needed
             let tbody = document.getElementById("assessmentBody");
             let subjects = record.level === 'primary' ? primarySubjects : jhsSubjects;
             
@@ -721,7 +721,6 @@
                 });
             }
 
-            // Populate input values from stored record
             let rows = tbody.querySelectorAll("tr");
             rows.forEach((row, index) => {
                 let subName = row.cells[0].innerText;
@@ -802,9 +801,8 @@
         alert("Terminal Report successfully finalized and saved for " + studentKey.toUpperCase() + "! Parents can now view this in the Parent Portal.");
     }
 
-    // Initialize student dropdown choices on startup
     refreshStudentDropdown();
 </script>
 
 </body>
-</html>
+</html> 
