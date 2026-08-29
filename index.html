@@ -208,7 +208,6 @@
 </head>
 <body>
 
-<!-- PARENT PORTAL SCREEN -->
 <div id="parent-portal-screen">
     <div style="text-align: center; margin-bottom: 25px;">
         <h2 style="color: var(--primary); margin-bottom: 5px;">Right Hope Academy</h2>
@@ -228,7 +227,6 @@
     </div>
 </div>
 
-<!-- STAFF LOGIN SCREEN -->
 <div id="login-container">
     <div class="login-card">
         <h2 style="color: var(--primary); margin-bottom: 5px;">Right Hope Academy</h2>
@@ -244,10 +242,8 @@
     </div>
 </div>
 
-<!-- MAIN APP CONTAINER -->
 <div id="app-container" style="display: none;">
     
-    <!-- SIDEBAR -->
     <div class="sidebar">
         <div class="sidebar-top">
             <h2>🎓 NB-SchoolOS</h2>
@@ -264,7 +260,6 @@
         </div>
     </div>
 
-    <!-- MAIN CONTENT -->
     <div class="main-content">
         <div class="top-bar">
             <span><strong>Right Hope Academy</strong> — Administrative Portal</span>
@@ -280,7 +275,6 @@
             </div>
         </div>
 
-        <!-- 1. DASHBOARD -->
         <div id="dashboard" class="section-view active-view">
             <div class="card">
                 <h3>Dashboard Overview</h3>
@@ -289,7 +283,6 @@
             </div>
         </div>
 
-        <!-- 2. TEACHERS -->
         <div id="teachers" class="section-view">
             <div class="card">
                 <h3>Teacher Directory</h3>
@@ -309,7 +302,6 @@
             </div>
         </div>
 
-        <!-- 3. STUDENTS -->
         <div id="students" class="section-view">
             <div class="card">
                 <h3>Student Records & Management</h3>
@@ -330,7 +322,6 @@
             </div>
         </div>
 
-        <!-- 4. FEES -->
         <div id="fees" class="section-view">
             <div class="card">
                 <h3>Fee Payments & Financial Tracking</h3>
@@ -361,7 +352,6 @@
             </div>
         </div>
 
-        <!-- 5. ATTENDANCE -->
         <div id="attendance" class="section-view">
             <div class="card">
                 <h3>Attendance Tracker</h3>
@@ -378,7 +368,6 @@
             </div>
         </div>
 
-        <!-- 6. REPORT CARD & AUTOMATED ASSESSMENT -->
         <div id="reports" class="section-view">
             <div class="card">
                 <h3>Terminal Assessment & Automated Report Card Generator</h3>
@@ -411,8 +400,7 @@
                             </tr>
                         </thead>
                         <tbody id="assessmentBody">
-                            <!-- Populated dynamically -->
-                        </tbody>
+                            </tbody>
                     </table>
                 </div>
 
@@ -420,7 +408,6 @@
             </div>
         </div>
 
-        <!-- 7. SETTINGS -->
         <div id="settings" class="section-view">
             <div class="card">
                 <h3>System Settings</h3>
@@ -450,7 +437,8 @@
         "Social Studies", "Information & Comm. Tech (ICT)", "Religious & Moral Education", "Career Tech", "Ghanaian Language", "Creative Arts"
     ];
 
-    const studentReports = {
+    // Default data structure
+    const defaultReports = {
         "john doe": {
             level: "primary",
             className: "Basic 5",
@@ -483,6 +471,13 @@
             ]
         }
     };
+
+    // Load from browser's LocalStorage if available, otherwise use defaults
+    let studentReports = JSON.parse(localStorage.getItem("rha_student_reports")) || defaultReports;
+
+    function saveToStorage() {
+        localStorage.setItem("rha_student_reports", JSON.stringify(studentReports));
+    }
 
     function handleLogin() {
         if(document.getElementById("username").value.trim() !== "") {
@@ -577,6 +572,7 @@
         
         if (studentNameCell && studentReports[studentNameCell]) {
             delete studentReports[studentNameCell];
+            saveToStorage();
         }
     }
 
@@ -601,10 +597,11 @@
                 feeStatus: "Active Status",
                 subjects: initialSubjects
             };
+            saveToStorage();
 
             document.getElementById("newStudentName").value = "";
             document.getElementById("newStudentClass").value = "";
-            alert("Student registered successfully!");
+            alert("Student registered and saved successfully!");
         } else {
             alert("Please provide both student name and class.");
         }
@@ -641,6 +638,7 @@
             let key = name.toLowerCase();
             if (studentReports[key]) {
                 studentReports[key].feeStatus = balance <= 0 ? "Fully Paid (GHS 0 Balance)" : `GHS ${balance} Balance Remaining`;
+                saveToStorage();
             }
 
             document.getElementById("feeStudentName").value = "";
@@ -672,6 +670,7 @@
             let key = name.toLowerCase();
             if (studentReports[key]) {
                 studentReports[key].feeStatus = newBalance <= 0 ? "Fully Paid (GHS 0 Balance)" : `GHS ${newBalance} Balance Remaining`;
+                saveToStorage();
             }
             alert("Payment updated!");
         }
@@ -801,8 +800,10 @@
         studentReports[studentKey].level = level;
         studentReports[studentKey].className = level === 'primary' ? 'Primary Level' : 'JHS Level';
         studentReports[studentKey].subjects = subjectsList;
+        
+        saveToStorage();
 
-        alert("Terminal Report successfully finalized and saved for " + studentKey.toUpperCase() + "! Parents can now view this in the Parent Portal.");
+        alert("Terminal Report successfully saved for " + studentKey.toUpperCase() + "! It will remain saved on this device.");
     }
 
     loadSubjectTable();
