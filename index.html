@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NB-SchoolOS | Right Hope Academy</title>
+    <!-- Paystack Inline JS Script -->
+    <script src="https://js.paystack.co/v1/inline.js"></script>
     <style>
         :root {
             --primary: #1e1b4b;
@@ -189,6 +191,8 @@
         button:hover { background: var(--primary-hover); }
         .btn-danger { background: #dc2626; }
         .btn-danger:hover { background: #b91c1c; }
+        .btn-pay { background: #10b981; }
+        .btn-pay:hover { background: #059669; }
 
         /* PARENT PORTAL OVERLAY */
         #parent-portal-screen {
@@ -208,6 +212,7 @@
 </head>
 <body>
 
+<!-- PARENT PORTAL SCREEN -->
 <div id="parent-portal-screen">
     <div style="text-align: center; margin-bottom: 25px;">
         <h2 style="color: var(--primary); margin-bottom: 5px;">Right Hope Academy</h2>
@@ -227,6 +232,7 @@
     </div>
 </div>
 
+<!-- STAFF LOGIN SCREEN -->
 <div id="login-container">
     <div class="login-card">
         <h2 style="color: var(--primary); margin-bottom: 5px;">Right Hope Academy</h2>
@@ -242,15 +248,17 @@
     </div>
 </div>
 
+<!-- MAIN APP CONTAINER -->
 <div id="app-container" style="display: none;">
     
+    <!-- SIDEBAR -->
     <div class="sidebar">
         <div class="sidebar-top">
             <h2>🎓 NB-SchoolOS</h2>
             <a href="#" class="active" onclick="switchTab('dashboard', this)">🏠 Dashboard</a>
             <a href="#" onclick="switchTab('teachers', this)">👨‍🏫 Teacher Directory</a>
             <a href="#" onclick="switchTab('students', this)">👥 Student Management</a>
-            <a href="#" onclick="switchTab('fees', this)">💳 Fee Payments</a>
+            <a href="#" onclick="switchTab('fees', this)">💳 Fee Payments & MoMo</a>
             <a href="#" onclick="switchTab('attendance', this)">📋 Attendance Tracker</a>
             <a href="#" onclick="switchTab('reports', this)">📊 Report Card & Assessment</a>
             <a href="#" onclick="switchTab('settings', this)">⚙️ Settings</a>
@@ -260,6 +268,7 @@
         </div>
     </div>
 
+    <!-- MAIN CONTENT -->
     <div class="main-content">
         <div class="top-bar">
             <span><strong>Right Hope Academy</strong> — Administrative Portal</span>
@@ -275,14 +284,16 @@
             </div>
         </div>
 
+        <!-- 1. DASHBOARD -->
         <div id="dashboard" class="section-view active-view">
             <div class="card">
                 <h3>Dashboard Overview</h3>
                 <p>Welcome back to Right Hope Academy management portal. <strong>(Opportunity For All)</strong></p>
-                <p style="color: #555; margin-top: 10px;">Use the sidebar navigation to control student registrations, fee records, teacher directories, attendance, and automated terminal grade calculations.</p>
+                <p style="color: #555; margin-top: 10px;">Use the sidebar navigation to control student registrations, fee records with Mobile Money support, teacher directories, attendance, and automated terminal grade calculations.</p>
             </div>
         </div>
 
+        <!-- 2. TEACHERS -->
         <div id="teachers" class="section-view">
             <div class="card">
                 <h3>Teacher Directory</h3>
@@ -302,6 +313,7 @@
             </div>
         </div>
 
+        <!-- 3. STUDENTS -->
         <div id="students" class="section-view">
             <div class="card">
                 <h3>Student Records & Management</h3>
@@ -322,9 +334,11 @@
             </div>
         </div>
 
+        <!-- 4. FEES & MOMO PAYMENTS -->
         <div id="fees" class="section-view">
             <div class="card">
-                <h3>Fee Payments & Financial Tracking</h3>
+                <h3>Fee Payments & Online MoMo Gateway</h3>
+                <p style="font-size: 13px; color: #555;">Parents can pay balances instantly using Mobile Money (MTN, Telecel, AirtelTigo) or Credit/Debit Cards via Paystack.</p>
                 <div style="margin: 20px 0; padding: 15px; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;">
                     <h4 style="margin-top: 0; color: var(--primary);">Add Fee Record</h4>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
@@ -336,7 +350,7 @@
                 </div>
                 <div style="width: 100%; overflow-x: auto;">
                     <table id="feesTable">
-                        <thead><tr><th>Student Name</th><th>Total Fees</th><th>Amount Paid</th><th>Balance</th><th>Status / Action</th></tr></thead>
+                        <thead><tr><th>Student Name</th><th>Total Fees</th><th>Amount Paid</th><th>Balance</th><th>Payment Actions</th></tr></thead>
                         <tbody>
                             <tr>
                                 <td>John Doe</td><td>GHS 500</td><td>GHS 500</td><td>GHS 0</td>
@@ -344,7 +358,12 @@
                             </tr>
                             <tr>
                                 <td>Abigail Mensah</td><td>GHS 500</td><td>GHS 300</td><td>GHS 200</td>
-                                <td><button onclick="recordMorePayment(this)">Record Payment</button></td>
+                                <td>
+                                    <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                                        <button onclick="recordMorePayment(this)">Manual Record</button>
+                                        <button class="btn-pay" onclick="payWithPaystack('Abigail Mensah', 200, this)">Pay GHS 200 Online</button>
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -352,6 +371,7 @@
             </div>
         </div>
 
+        <!-- 5. ATTENDANCE -->
         <div id="attendance" class="section-view">
             <div class="card">
                 <h3>Attendance Tracker</h3>
@@ -368,6 +388,7 @@
             </div>
         </div>
 
+        <!-- 6. REPORT CARD & AUTOMATED ASSESSMENT -->
         <div id="reports" class="section-view">
             <div class="card">
                 <h3>Terminal Assessment & Automated Report Card Generator</h3>
@@ -400,7 +421,8 @@
                             </tr>
                         </thead>
                         <tbody id="assessmentBody">
-                            </tbody>
+                            <!-- Populated dynamically -->
+                        </tbody>
                     </table>
                 </div>
 
@@ -408,6 +430,7 @@
             </div>
         </div>
 
+        <!-- 7. SETTINGS -->
         <div id="settings" class="section-view">
             <div class="card">
                 <h3>System Settings</h3>
@@ -472,11 +495,41 @@
         }
     };
 
-    // Load from browser's LocalStorage if available, otherwise use defaults
     let studentReports = JSON.parse(localStorage.getItem("rha_student_reports")) || defaultReports;
 
     function saveToStorage() {
         localStorage.setItem("rha_student_reports", JSON.stringify(studentReports));
+    }
+
+    // PAYSTACK PAYMENT INTEGRATION FUNCTION
+    function payWithPaystack(studentName, amountInGHS, btnElement) {
+        let handler = PaystackPop.setup({
+            key: 'pk_test_b61c9441113220392095f923c914e6e66e949987', // Demo key - replace with your actual Paystack public key when live
+            email: 'rha.parent@rha-portal.com',
+            amount: amountInGHS * 100, // Paystack counts in pesewas
+            currency: 'GHS',
+            ref: 'RHA-' + Math.floor((Math.random() * 1000000) + 1),
+            callback: function(response) {
+                alert('Payment successful! Reference ID: ' + response.reference);
+                
+                // Automatically clear the balance in the table UI
+                var row = btnElement.parentNode.parentNode.parentNode;
+                var total = parseFloat(row.cells[1].innerText.replace('GHS ', ''));
+                row.cells[2].innerText = "GHS " + total;
+                row.cells[3].innerText = "GHS 0";
+                row.cells[4].innerHTML = '<span style="color: green; font-weight: bold;">Fully Paid Online</span>';
+
+                let key = studentName.toLowerCase();
+                if (studentReports[key]) {
+                    studentReports[key].feeStatus = "Fully Paid Online (GHS 0 Balance)";
+                    saveToStorage();
+                }
+            },
+            onClose: function() {
+                alert('Payment window closed.');
+            }
+        });
+        handler.openIframe();
     }
 
     function handleLogin() {
@@ -623,7 +676,7 @@
     }
 
     function addFeeRecord() {
-        var name = document.getElementById("feeStudentName").value;
+        var name = document.getElementById("feeStudentName").value.trim();
         var total = parseFloat(document.getElementById("feeTotal").value);
         var paid = parseFloat(document.getElementById("feePaid").value);
 
@@ -632,7 +685,12 @@
             var table = document.getElementById("feesTable").getElementsByTagName('tbody')[0];
             var newRow = table.insertRow();
             
-            var actionHtml = balance <= 0 ? '<span style="color: green; font-weight: bold;">Fully Paid</span>' : '<button onclick="recordMorePayment(this)">Record Payment</button>';
+            var actionHtml = balance <= 0 ? '<span style="color: green; font-weight: bold;">Fully Paid</span>' : 
+                `<div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                    <button onclick="recordMorePayment(this)">Manual Record</button>
+                    <button class="btn-pay" onclick="payWithPaystack('${name}', ${balance}, this)">Pay GHS ${balance} Online</button>
+                 </div>`;
+            
             newRow.innerHTML = "<td>" + name + "</td><td>GHS " + total + "</td><td>GHS " + paid + "</td><td>GHS " + balance + "</td><td>" + actionHtml + "</td>";
             
             let key = name.toLowerCase();
@@ -651,12 +709,12 @@
     }
 
     function recordMorePayment(btn) {
-        var row = btn.parentNode.parentNode;
+        var row = btn.parentNode.parentNode.parentNode;
         var name = row.cells[0].innerText;
         var total = parseFloat(row.cells[1].innerText.replace('GHS ', ''));
         var currentPaid = parseFloat(row.cells[2].innerText.replace('GHS ', ''));
         
-        var additional = prompt("Enter additional payment for " + name + ":");
+        var additional = prompt("Enter additional cash payment for " + name + ":");
         if(additional && !isNaN(additional)) {
             var newPaid = currentPaid + parseFloat(additional);
             var newBalance = total - newPaid;
@@ -665,6 +723,12 @@
             row.cells[3].innerText = "GHS " + newBalance;
             if(newBalance <= 0) {
                 row.cells[4].innerHTML = '<span style="color: green; font-weight: bold;">Fully Paid</span>';
+            } else {
+                row.cells[4].innerHTML = `
+                    <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+                        <button onclick="recordMorePayment(this)">Manual Record</button>
+                        <button class="btn-pay" onclick="payWithPaystack('${name}', ${newBalance}, this)">Pay GHS ${newBalance} Online</button>
+                    </div>`;
             }
 
             let key = name.toLowerCase();
@@ -803,7 +867,7 @@
         
         saveToStorage();
 
-        alert("Terminal Report successfully saved for " + studentKey.toUpperCase() + "! It will remain saved on this device.");
+        alert("Terminal Report successfully saved for " + studentKey.toUpperCase() + "!");
     }
 
     loadSubjectTable();
