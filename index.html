@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -887,6 +887,19 @@
         }
     }
 
+    // PARENT PORTAL DIRECT MoMo PAYMENT INITIATION FUNCTION
+    function parentPayWithMoMo(studentKey) {
+        let ref = prompt(`Enter MoMo Transaction Reference ID after sending payment to +233244603378 for ${studentKey.toUpperCase()}:`);
+        if (ref && ref.trim() !== "") {
+            alert(`Payment Reference (${ref}) submitted successfully! Administration will review and clear balance.`);
+            if (studentReports[studentKey]) {
+                studentReports[studentKey].feeStatus = "Payment Pending Verification (Ref: " + ref + ")";
+                saveToStorage();
+                searchChildRecord();
+            }
+        }
+    }
+
     function handleLogin() {
         if(document.getElementById("username").value.trim() !== "") {
             document.getElementById("login-container").style.display = "none";
@@ -926,11 +939,15 @@
             let record = studentReports[foundKey];
             let term1Subjects = record.terms && record.terms["Term 1"] ? record.terms["Term 1"] : (record.subjects || []);
             let photoHtml = record.photo ? `<img src="${record.photo}" style="width:60px; height:60px; border-radius:50%; object-fit:cover; border:2px solid #1e1b4b; float:right;">` : '';
+            let feeStatusText = record.feeStatus || "Active Status";
+
             let html = `${photoHtml}<strong>Student:</strong> ${foundKey.toUpperCase()}<br>
                         <strong>Class Level:</strong> ${record.className} (${record.level.toUpperCase()})<br>
-                        <strong>Fee Status:</strong> ${record.feeStatus}<br>
-                        <div style="margin: 10px 0; padding: 10px; background: #fef3c7; border-radius: 6px; font-size: 13px;">
-                            <strong>Make Fee Payment via MoMo:</strong> Send to Proprietor Number <strong>+233244603378</strong>
+                        <strong>Fee Status & Arrears:</strong> <span style="color: #b45309; font-weight: bold;">${feeStatusText}</span><br>
+                        <div style="margin: 12px 0; padding: 12px; background: #fef3c7; border-radius: 6px; border: 1px solid #f59e0b;">
+                            <h4 style="margin: 0 0 5px 0; color: #b45309; font-size: 14px;">📱 Pay Fees via Mobile Money (Without Portal Access)</h4>
+                            <p style="margin: 0 0 8px 0; font-size: 12px; color: #78350f;">Send payment directly to proprietor number: <strong>+233244603378</strong> (Right Hope Academy). Then click below to submit your reference.</p>
+                            <button onclick="parentPayWithMoMo('${foundKey}')" style="background: #10b981; color: white; padding: 8px 14px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px;">Confirm MoMo Payment (+233244603378)</button>
                         </div><br>
                         <strong>Term 1 Assessment Report Card:</strong>
                         <div style="overflow-x: auto;">
@@ -1031,7 +1048,7 @@
         studentReports[name.toLowerCase()] = {
             level: defaultLevel,
             className: cls,
-            feeStatus: "Active Status",
+            feeStatus: "Unpaid / Arrears Pending",
             photo: photoBase64,
             terms: {
                 "Term 1": initialSubjects,
@@ -1078,7 +1095,7 @@
                         studentReports[name.toLowerCase()] = {
                             level: defaultLevel,
                             className: cls,
-                            feeStatus: "Active Status",
+                            feeStatus: "Unpaid / Arrears Pending",
                             photo: "",
                             terms: { "Term 1": initialSubjects, "Term 2": initialSubjects, "Term 3": initialSubjects }
                         };
@@ -1133,7 +1150,7 @@
             
             let key = name.toLowerCase();
             if (studentReports[key]) {
-                studentReports[key].feeStatus = balance <= 0 ? "Fully Paid (GHS 0 Balance)" : `GHS ${balance} Balance Remaining`;
+                studentReports[key].feeStatus = balance <= 0 ? "Fully Paid (GHS 0 Balance)" : `GHS ${balance} Balance Remaining (Paid Half / Arrears)`;
                 saveToStorage();
             }
 
@@ -1171,7 +1188,7 @@
 
             let key = name.toLowerCase();
             if (studentReports[key]) {
-                studentReports[key].feeStatus = newBalance <= 0 ? "Fully Paid (GHS 0 Balance)" : `GHS ${newBalance} Balance Remaining`;
+                studentReports[key].feeStatus = newBalance <= 0 ? "Fully Paid (GHS 0 Balance)" : `GHS ${newBalance} Balance Remaining (Paid Half / Arrears)`;
                 saveToStorage();
             }
             alert("Payment updated!");
@@ -1300,7 +1317,7 @@
         });
 
         if (!studentReports[studentKey]) {
-            studentReports[studentKey] = { feeStatus: "Active Status", photo: "", terms: {} };
+            studentReports[studentKey] = { feeStatus: "Unpaid / Arrears Pending", photo: "", terms: {} };
         }
         if (!studentReports[studentKey].terms) {
             studentReports[studentKey].terms = {};
@@ -1601,4 +1618,4 @@
 </script>
 
 </body>
-</html>
+</html> 
