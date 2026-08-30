@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NB-SchoolOS | Right Hope Academy</title>
-    <!-- Paystack Inline JS Script -->
-    <script src="https://js.paystack.co/v1/inline.js"></script>
     <!-- Chart.js for Visual Performance Analytics -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <style>
@@ -305,7 +303,7 @@
             <div class="card">
                 <h3>Dashboard Overview</h3>
                 <p>Welcome back to Right Hope Academy management portal. <strong>(Opportunity For All)</strong></p>
-                <p style="color: #555; margin-top: 10px;">Use the sidebar navigation to control student registrations, Paystack Mobile Money fee processing, attendance, multi-term cumulative tracking, school ledger accounting, ID cards, and official printable report cards.</p>
+                <p style="color: #555; margin-top: 10px;">Use the sidebar navigation to control student registrations, Mobile Money fee processing, attendance, multi-term cumulative tracking, school ledger accounting, ID cards, and official printable report cards.</p>
             </div>
         </div>
 
@@ -349,7 +347,7 @@
                     <button onclick="addStudent()" style="height: 41px;">Register Student</button>
                 </div>
 
-                <!-- NEW FEATURE: BULK CSV / EXCEL DATA IMPORT -->
+                <!-- BULK CSV / EXCEL DATA IMPORT -->
                 <div style="margin-top: 25px; padding: 15px; background: #f8fafc; border-radius: 6px; border: 1px dashed #cbd5e1;">
                     <h4 style="margin-top: 0; color: var(--primary); font-size: 14px;">📂 Bulk Student CSV / Excel Import</h4>
                     <p style="font-size: 12px; color: #555; margin-bottom: 10px;">Upload a CSV file containing columns: <code>Name, Class</code> to import students in bulk.</p>
@@ -388,8 +386,13 @@
         <!-- 4. FEES & MOMO PAYMENTS -->
         <div id="fees" class="section-view">
             <div class="card">
-                <h3>Fee Payments & Online MoMo Gateway</h3>
-                <p style="font-size: 13px; color: #555;">Parents can pay balances instantly using Mobile Money (MTN, Telecel, AirtelTigo) or Credit/Debit Cards via Paystack.</p>
+                <h3>Fee Payments & Mobile Money (MoMo)</h3>
+                <p style="font-size: 13px; color: #555;">Parents can pay ward fees directly via Mobile Money to the proprietor's official number: <strong>+233244603378</strong>.</p>
+                <div style="margin: 20px 0; padding: 15px; background: #fef3c7; border-radius: 6px; border: 1px solid #f59e0b;">
+                    <h4 style="margin-top: 0; color: #b45309;">📱 Official MoMo Payment Instructions</h4>
+                    <p style="margin: 0; font-size: 13px; color: #78350f;">Send payment to Mobile Money Number: <strong>+233244603378</strong> (Account Name: Right Hope Academy / Proprietor). After sending, click <strong>"Confirm MoMo Payment"</strong> or record it manually below.</p>
+                </div>
+
                 <div style="margin: 20px 0; padding: 15px; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;">
                     <h4 style="margin-top: 0; color: var(--primary);">Add Fee Record</h4>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
@@ -412,7 +415,7 @@
                                 <td>
                                     <div style="display: flex; gap: 5px; flex-wrap: wrap;">
                                         <button onclick="recordMorePayment(this)">Manual Record</button>
-                                        <button class="btn-pay" onclick="payWithPaystack('Abigail Mensah', 200, this)">Pay GHS 200 Online</button>
+                                        <button class="btn-pay" onclick="payWithMoMo('Abigail Mensah', 200, this)">Confirm MoMo (+233244603378)</button>
                                     </div>
                                 </td>
                             </tr>
@@ -535,7 +538,7 @@
                     <input type="text" id="analyticsStudentInput" placeholder="Enter student name to check yearly progress (e.g. John Doe)..." oninput="loadAnalyticsData()" value="John Doe">
                 </div>
 
-                <!-- NEW FEATURE: CHART.JS VISUAL PERFORMANCE ANALYTICS GRAPH -->
+                <!-- CHART.JS VISUAL PERFORMANCE ANALYTICS GRAPH -->
                 <div style="background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
                     <h4 style="margin-top: 0; color: var(--primary); font-size: 14px;">📊 Term-to-Term Performance Trend Chart</h4>
                     <div style="position: relative; height: 250px; width: 100%;">
@@ -615,7 +618,7 @@
                 <h3>SMS & WhatsApp Direct Parent Alerts</h3>
                 <p style="font-size: 13px; color: #555;">Send instant automated payment reminders, report card updates, or attendance notices to parents via SMS (Hubtel/MNotify Gateway) or WhatsApp.</p>
                 
-                <!-- NEW FEATURE: LIVE SMS GATEWAY CREDENTIALS CONFIGURATION -->
+                <!-- LIVE SMS GATEWAY CREDENTIALS CONFIGURATION -->
                 <div style="margin: 15px 0; padding: 15px; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;">
                     <h4 style="margin-top: 0; color: var(--primary); font-size: 13px;">⚙️ Live SMS Gateway Settings (Hubtel / MNotify)</h4>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
@@ -645,7 +648,7 @@
                     </div>
                     <div>
                         <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 3px;">Message Text:</label>
-                        <textarea id="smsTextBody" rows="4">Dear Parent, this is a reminder from Right Hope Academy regarding your ward's fee balance. Kindly clear remaining arrears via the portal. Motto: Opportunity For All.</textarea>
+                        <textarea id="smsTextBody" rows="4">Dear Parent, this is a reminder from Right Hope Academy regarding your ward's fee balance. Kindly clear remaining arrears via Mobile Money to +233244603378. Motto: Opportunity For All.</textarea>
                     </div>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                         <button onclick="sendLiveSMSAPI()">🚀 Dispatch Live SMS via Gateway</button>
@@ -726,7 +729,7 @@
                     <ul style="margin: 0; padding-left: 18px; color: #333; font-size: 13px;">
                         <li><strong>Network:</strong> MTN / Telecel</li>
                         <li><strong>Account Name:</strong> Edmond Naatiq Basintale (NB Designs)</li>
-                        <li><strong>Number:</strong> [Enter Your MoMo Number Here]</li>
+                        <li><strong>Number:</strong> +233244603378</li>
                     </ul>
                 </div>
 
@@ -862,33 +865,26 @@
         localStorage.setItem("rha_student_reports", JSON.stringify(studentReports));
     }
 
-    // PAYSTACK PAYMENT INTEGRATION FUNCTION
-    function payWithPaystack(studentName, amountInGHS, btnElement) {
-        let handler = PaystackPop.setup({
-            key: 'pk_test_b61c9441113220392095f923c914e6e66e949987',
-            email: 'rha.parent@rha-portal.com',
-            amount: amountInGHS * 100,
-            currency: 'GHS',
-            ref: 'RHA-' + Math.floor((Math.random() * 1000000) + 1),
-            callback: function(response) {
-                alert('Payment successful! Reference ID: ' + response.reference);
-                var row = btnElement.parentNode.parentNode.parentNode;
-                var total = parseFloat(row.cells[1].innerText.replace('GHS ', ''));
-                row.cells[2].innerText = "GHS " + total;
-                row.cells[3].innerText = "GHS 0";
-                row.cells[4].innerHTML = '<span style="color: green; font-weight: bold;">Fully Paid Online</span>';
+    // DIRECT MOMO PAYMENT CONFIRMATION FUNCTION TO PROPRIETOR (+233244603378)
+    function payWithMoMo(studentName, amountInGHS, btnElement) {
+        let confirmationCode = prompt(`To confirm MoMo payment of GHS ${amountInGHS} for ${studentName} to Proprietor Number (+233244603378), please enter the Mobile Money Transaction Reference / ID:`);
+        
+        if (confirmationCode && confirmationCode.trim() !== "") {
+            alert(`MoMo Payment of GHS ${amountInGHS} confirmed successfully! Reference: ${confirmationCode}`);
+            var row = btnElement.parentNode.parentNode.parentNode;
+            var total = parseFloat(row.cells[1].innerText.replace('GHS ', ''));
+            row.cells[2].innerText = "GHS " + total;
+            row.cells[3].innerText = "GHS 0";
+            row.cells[4].innerHTML = '<span style="color: green; font-weight: bold;">Fully Paid via MoMo (+233244603378)</span>';
 
-                let key = studentName.toLowerCase();
-                if (studentReports[key]) {
-                    studentReports[key].feeStatus = "Fully Paid Online (GHS 0 Balance)";
-                    saveToStorage();
-                }
-            },
-            onClose: function() {
-                alert('Payment window closed.');
+            let key = studentName.toLowerCase();
+            if (studentReports[key]) {
+                studentReports[key].feeStatus = "Fully Paid via MoMo (+233244603378) - GHS 0 Balance";
+                saveToStorage();
             }
-        });
-        handler.openIframe();
+        } else {
+            alert('Payment confirmation canceled or reference ID not entered.');
+        }
     }
 
     function handleLogin() {
@@ -932,7 +928,10 @@
             let photoHtml = record.photo ? `<img src="${record.photo}" style="width:60px; height:60px; border-radius:50%; object-fit:cover; border:2px solid #1e1b4b; float:right;">` : '';
             let html = `${photoHtml}<strong>Student:</strong> ${foundKey.toUpperCase()}<br>
                         <strong>Class Level:</strong> ${record.className} (${record.level.toUpperCase()})<br>
-                        <strong>Fee Status:</strong> ${record.feeStatus}<br><br>
+                        <strong>Fee Status:</strong> ${record.feeStatus}<br>
+                        <div style="margin: 10px 0; padding: 10px; background: #fef3c7; border-radius: 6px; font-size: 13px;">
+                            <strong>Make Fee Payment via MoMo:</strong> Send to Proprietor Number <strong>+233244603378</strong>
+                        </div><br>
                         <strong>Term 1 Assessment Report Card:</strong>
                         <div style="overflow-x: auto;">
                             <table>
@@ -1048,7 +1047,7 @@
         alert("Student registered with photo and saved successfully!");
     }
 
-    // NEW FEATURE: BULK CSV / EXCEL DATA IMPORT
+    // BULK CSV / EXCEL DATA IMPORT
     function importBulkStudents() {
         let fileInput = document.getElementById("bulkCsvFile");
         if (!fileInput.files || fileInput.files.length === 0) {
@@ -1127,7 +1126,7 @@
             var actionHtml = balance <= 0 ? '<span style="color: green; font-weight: bold;">Fully Paid</span>' : 
                 `<div style="display: flex; gap: 5px; flex-wrap: wrap;">
                     <button onclick="recordMorePayment(this)">Manual Record</button>
-                    <button class="btn-pay" onclick="payWithPaystack('${name}', ${balance}, this)">Pay GHS ${balance} Online</button>
+                    <button class="btn-pay" onclick="payWithMoMo('${name}', ${balance}, this)">Confirm MoMo (+233244603378)</button>
                  </div>`;
             
             newRow.innerHTML = "<td>" + name + "</td><td>GHS " + total + "</td><td>GHS " + paid + "</td><td>GHS " + balance + "</td><td>" + actionHtml + "</td>";
@@ -1166,7 +1165,7 @@
                 row.cells[4].innerHTML = `
                     <div style="display: flex; gap: 5px; flex-wrap: wrap;">
                         <button onclick="recordMorePayment(this)">Manual Record</button>
-                        <button class="btn-pay" onclick="payWithPaystack('${name}', ${newBalance}, this)">Pay GHS ${newBalance} Online</button>
+                        <button class="btn-pay" onclick="payWithMoMo('${name}', ${newBalance}, this)">Confirm MoMo (+233244603378)</button>
                     </div>`;
             }
 
@@ -1509,7 +1508,7 @@
         let textBody = document.getElementById("smsTextBody");
 
         if (template === 'fee') {
-            textBody.value = "Dear Parent, this is a reminder from Right Hope Academy regarding your ward's school fee balance. Kindly clear remaining arrears via the portal. Motto: Opportunity For All.";
+            textBody.value = "Dear Parent, this is a reminder from Right Hope Academy regarding your ward's school fee balance. Kindly clear remaining arrears via Mobile Money to +233244603378. Motto: Opportunity For All.";
         } else if (template === 'report') {
             textBody.value = "Dear Parent, your ward's official terminal report card for Right Hope Academy is now ready and available for review and print. Motto: Opportunity For All.";
         } else if (template === 'attendance') {
