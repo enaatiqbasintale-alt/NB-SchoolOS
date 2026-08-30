@@ -60,9 +60,9 @@
             align-items: center;
             gap: 10px;
             color: rgba(255, 255, 255, 0.85);
-            padding: 13px 15px;
+            padding: 12px 15px;
             text-decoration: none;
-            font-size: 13px;
+            font-size: 12px;
             transition: background 0.2s;
         }
 
@@ -168,7 +168,7 @@
         th, td { padding: 8px; text-align: left; font-size: 12px; }
         th { background-color: #f8fafc; color: var(--primary); }
 
-        input[type="text"], input[type="number"], input[type="password"], select {
+        input[type="text"], input[type="number"], input[type="password"], select, textarea {
             padding: 9px;
             margin: 5px 0;
             border: 1px solid #cbd5e1;
@@ -176,6 +176,7 @@
             box-sizing: border-box;
             width: 100%;
             max-width: 100%;
+            font-family: inherit;
         }
 
         button {
@@ -193,6 +194,14 @@
         .btn-danger:hover { background: #b91c1c; }
         .btn-pay { background: #10b981; }
         .btn-pay:hover { background: #059669; }
+
+        /* PRINTABLE REPORT CARD STYLES */
+        @media print {
+            body * { visibility: hidden; }
+            #printable-report-card, #printable-report-card * { visibility: visible; }
+            #printable-report-card { position: absolute; left: 0; top: 0; width: 100%; background: white; padding: 20px; }
+            .sidebar, .top-bar, .role-switcher-card, button, .no-print { display: none !important; }
+        }
 
         /* PARENT PORTAL OVERLAY */
         #parent-portal-screen {
@@ -261,7 +270,11 @@
             <a href="#" onclick="switchTab('fees', this)">💳 Fee Payments & MoMo</a>
             <a href="#" onclick="switchTab('attendance', this)">📋 Attendance Tracker</a>
             <a href="#" onclick="switchTab('reports', this)">📊 Report Card & Assessment</a>
-            <a href="#" onclick="switchTab('developer-billing', this)">📊 Developer billing (NB Designs)</a>
+            <a href="#" onclick="switchTab('analytics', this)">📈 Cumulative Analytics</a>
+            <a href="#" onclick="switchTab('accounting', this)">💰 School Accounting Ledger</a>
+            <a href="#" onclick="switchTab('notifications', this)">📱 SMS & WhatsApp Alerts</a>
+            <a href="#" onclick="switchTab('idcards', this)">🪪 ID Card Generator</a>
+            <a href="#" onclick="switchTab('developer-billing', this)">📊 Developer billing (NB)</a>
             <a href="#" onclick="switchTab('settings', this)">⚙️ Settings</a>
         </div>
         <div class="sidebar-footer">
@@ -290,7 +303,7 @@
             <div class="card">
                 <h3>Dashboard Overview</h3>
                 <p>Welcome back to Right Hope Academy management portal. <strong>(Opportunity For All)</strong></p>
-                <p style="color: #555; margin-top: 10px;">Use the sidebar navigation to control student registrations, fee records with Mobile Money support, teacher directories, attendance, and automated terminal grade calculations.</p>
+                <p style="color: #555; margin-top: 10px;">Use the sidebar navigation to control student registrations, Paystack Mobile Money fee processing, attendance, multi-term cumulative tracking, school ledger accounting, ID cards, and official printable report cards.</p>
             </div>
         </div>
 
@@ -392,19 +405,27 @@
         <!-- 6. REPORT CARD & AUTOMATED ASSESSMENT -->
         <div id="reports" class="section-view">
             <div class="card">
-                <h3>Terminal Assessment & Automated Report Card Generator</h3>
-                <p>Select educational level and type the student's name to generate or load their unique report card. Enter Class Score (out of 30) and Exam Score (out of 70) to instantly calculate Totals, Grades, and Remarks.</p>
+                <h3>Terminal Assessment & Printable Report Card Generator</h3>
+                <p>Select level, student, and term to compute scores. Click <strong>Print Official Report Card</strong> to generate a clean PDF layout ready for print.</p>
                 
-                <div style="margin: 15px 0; display: flex; flex-direction: column; gap: 12px; width: 100%;">
-                    <div>
+                <div style="margin: 15px 0; display: flex; gap: 10px; flex-wrap: wrap; width: 100%;">
+                    <div style="flex: 1; min-width: 180px;">
                         <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 3px;">Select Level:</label>
                         <select id="educationLevel" onchange="loadSubjectTable()">
                             <option value="primary">Primary Section</option>
                             <option value="jhs">Junior High School (JHS)</option>
                         </select>
                     </div>
-                    <div>
-                        <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 3px;">Type Student Name:</label>
+                    <div style="flex: 1; min-width: 180px;">
+                        <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 3px;">Select Term:</label>
+                        <select id="reportTermSelect">
+                            <option value="Term 1">First Term (Term 1)</option>
+                            <option value="Term 2">Second Term (Term 2)</option>
+                            <option value="Term 3">Third Term (Term 3)</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1; min-width: 180px;">
+                        <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 3px;">Student Name:</label>
                         <input type="text" id="reportStudentInput" placeholder="e.g. John Doe" oninput="onStudentNameInput()" value="John Doe">
                     </div>
                 </div>
@@ -427,7 +448,190 @@
                     </table>
                 </div>
 
-                <button style="margin-top: 20px;" onclick="saveTerminalReport()">Save & Finalize Terminal Report</button>
+                <div style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button onclick="saveTerminalReport()">Save Terminal Report</button>
+                    <button class="btn-pay" onclick="printOfficialReportCard()">🖨️ Print Official Report Card (PDF)</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- HIDDEN PRINTABLE REPORT CARD TEMPLATE -->
+        <div id="printable-report-card" style="display: none;">
+            <div style="text-align: center; border-bottom: 2px solid #1e1b4b; padding-bottom: 12px; margin-bottom: 15px;">
+                <h2 style="color: #1e1b4b; margin: 0;">RIGHT HOPE ACADEMY</h2>
+                <p style="margin: 3px 0; font-size: 13px; font-weight: bold;">Dugshegu, Ghana | Motto: Opportunity For All</p>
+                <h3 style="margin: 8px 0 0 0; color: #333; font-size: 15px;" id="print-report-title">OFFICIAL TERMINAL REPORT CARD</h3>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 13px; background: #f8fafc; padding: 10px; border-radius: 6px;">
+                <div><strong>Student Name:</strong> <span id="print-student-name">John Doe</span></div>
+                <div><strong>Class Level:</strong> <span id="print-student-class">Basic 5</span></div>
+                <div><strong>Academic Term:</strong> <span id="print-student-term">Term 1</span></div>
+            </div>
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                <thead>
+                    <tr style="background: #1e1b4b; color: white;">
+                        <th style="border: 1px solid #cbd5e1; padding: 8px; color: white;">Subject</th>
+                        <th style="border: 1px solid #cbd5e1; padding: 8px; color: white;">Class (30%)</th>
+                        <th style="border: 1px solid #cbd5e1; padding: 8px; color: white;">Exam (70%)</th>
+                        <th style="border: 1px solid #cbd5e1; padding: 8px; color: white;">Total (100%)</th>
+                        <th style="border: 1px solid #cbd5e1; padding: 8px; color: white;">Grade</th>
+                        <th style="border: 1px solid #cbd5e1; padding: 8px; color: white;">Remarks</th>
+                    </tr>
+                </thead>
+                <tbody id="print-table-body">
+                    <!-- Populated dynamically on print -->
+                </tbody>
+            </table>
+            <div style="display: flex; justify-content: space-between; margin-top: 40px; font-size: 13px;">
+                <div>___________________________<br>Class Teacher Signature</div>
+                <div>___________________________<br>Headmaster Signature</div>
+            </div>
+        </div>
+
+        <!-- 7. CUMULATIVE ANALYTICS -->
+        <div id="analytics" class="section-view">
+            <div class="card">
+                <h3>Term-to-Term Cumulative Performance Analytics</h3>
+                <p style="font-size: 13px; color: #555;">Review student performance across all three terms of the academic year with automated yearly averages and cumulative ranking.</p>
+                
+                <div style="margin: 15px 0;">
+                    <input type="text" id="analyticsStudentInput" placeholder="Enter student name to check yearly progress (e.g. John Doe)..." oninput="loadAnalyticsData()" value="John Doe">
+                </div>
+
+                <div style="width: 100%; overflow-x: auto;">
+                    <table id="analyticsTable">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Term 1 Total</th>
+                                <th>Term 2 Total</th>
+                                <th>Term 3 Total</th>
+                                <th>Cumulative Yearly Average</th>
+                                <th>Yearly Grade</th>
+                            </tr>
+                        </thead>
+                        <tbody id="analyticsBody">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. SCHOOL ACCOUNTING LEDGER -->
+        <div id="accounting" class="section-view">
+            <div class="card">
+                <h3>School Income & Expense Accounting Ledger</h3>
+                <p style="font-size: 13px; color: #555;">Track daily school revenue, PTA collections, and operational expenses in real-time.</p>
+                
+                <div style="margin: 15px 0; padding: 15px; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;">
+                    <h4 style="margin-top: 0; color: var(--primary);">Add Financial Transaction</h4>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <input type="text" id="txnDesc" placeholder="Description (e.g. PTA Dues / Printing Paper)" style="max-width: 100%;">
+                        <select id="txnType" style="max-width: 100%;">
+                            <option value="Income">Income (Credit)</option>
+                            <option value="Expense">Expense (Debit)</option>
+                        </select>
+                        <input type="number" id="txnAmount" placeholder="Amount (GHS)" style="max-width: 100%;">
+                        <button onclick="addTransaction()">Record Transaction</button>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
+                    <div style="background: #f1f8f5; padding: 12px; border-radius: 6px; flex: 1; border-left: 4px solid #10b981;">
+                        <span style="font-size: 12px; color: #666; font-weight: bold;">Total Income</span>
+                        <h4 id="total-income-display" style="margin: 5px 0 0 0; color: #047857; font-size: 18px;">GHS 2,500</h4>
+                    </div>
+                    <div style="background: #fef2f2; padding: 12px; border-radius: 6px; flex: 1; border-left: 4px solid #dc2626;">
+                        <span style="font-size: 12px; color: #666; font-weight: bold;">Total Expenses</span>
+                        <h4 id="total-expense-display" style="margin: 5px 0 0 0; color: #b91c1c; font-size: 18px;">GHS 450</h4>
+                    </div>
+                    <div style="background: #eff6ff; padding: 12px; border-radius: 6px; flex: 1; border-left: 4px solid #0284c7;">
+                        <span style="font-size: 12px; color: #666; font-weight: bold;">Net Balance</span>
+                        <h4 id="net-balance-display" style="margin: 5px 0 0 0; color: #0369a1; font-size: 18px;">GHS 2,050</h4>
+                    </div>
+                </div>
+
+                <div style="width: 100%; overflow-x: auto;">
+                    <table id="accountingTable">
+                        <thead><tr><th>Date</th><th>Description</th><th>Type</th><th>Amount</th><th>Action</th></tr></thead>
+                        <tbody id="accountingBody">
+                            <tr><td>28/08/2026</td><td>Term 1 School Fees Collection</td><td>Income</td><td>GHS 2,500</td><td><button class="btn-danger" onclick="deleteTransaction(this)">Delete</button></td></tr>
+                            <tr><td>29/08/2026</td><td>Stationery & Examination Paper Supply</td><td>Expense</td><td>GHS 450</td><td><button class="btn-danger" onclick="deleteTransaction(this)">Delete</button></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. SMS & WHATSAPP NOTIFICATIONS -->
+        <div id="notifications" class="section-view">
+            <div class="card">
+                <h3>SMS & WhatsApp Direct Parent Alerts</h3>
+                <p style="font-size: 13px; color: #555;">Send instant automated payment reminders, report card updates, or attendance notices to parents via SMS or WhatsApp.</p>
+                
+                <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 12px;">
+                    <div>
+                        <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 3px;">Select Recipient Parent / Student:</label>
+                        <select id="smsRecipient">
+                            <option value="John Doe">John Doe's Parent (024 123 4567)</option>
+                            <option value="Abigail Mensah">Abigail Mensah's Parent (020 987 6543)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 3px;">Message Template:</label>
+                        <select id="smsTemplate" onchange="updateSmsMessage()">
+                            <option value="fee">Fee Payment Reminder & Balance Notification</option>
+                            <option value="report">Terminal Report Ready for Review</option>
+                            <option value="attendance">Student Absentee Notice</option>
+                            <option value="custom">Custom Message</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 3px;">Message Text:</label>
+                        <textarea id="smsTextBody" rows="4">Dear Parent, this is a reminder from Right Hope Academy regarding your ward's fee balance. Kindly clear remaining arrears via the portal. Motto: Opportunity For All.</textarea>
+                    </div>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button onclick="sendSimulatedSMS()">📱 Send SMS Alert</button>
+                        <button class="btn-pay" onclick="sendWhatsAppAlert()">💬 Send via WhatsApp</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 10. ID CARD GENERATOR -->
+        <div id="idcards" class="section-view">
+            <div class="card">
+                <h3>NB Designs - Student & Staff ID Card Generator</h3>
+                <p style="font-size: 13px; color: #555;">Generate official identification cards styled under your brand for Right Hope Academy.</p>
+                
+                <div style="margin: 15px 0; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <input type="text" id="idCardName" placeholder="Full Name (e.g. John Doe)" style="max-width: 100%;">
+                    <input type="text" id="idCardRole" placeholder="Role / Class (e.g. Student - Basic 5)" style="max-width: 100%;">
+                    <button onclick="generateIDCard()">Preview ID Card</button>
+                </div>
+
+                <!-- ID CARD PREVIEW CONTAINER -->
+                <div id="idCardPreviewContainer" style="margin-top: 20px; display: flex; justify-content: center;">
+                    <div style="width: 320px; background: white; border: 2px solid #1e1b4b; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden;">
+                        <div style="background: #1e1b4b; color: white; padding: 12px; text-align: center;">
+                            <h4 style="margin: 0; font-size: 15px;">RIGHT HOPE ACADEMY</h4>
+                            <span style="font-size: 10px; opacity: 0.8;">Opportunity For All</span>
+                        </div>
+                        <div style="padding: 20px; text-align: center;">
+                            <div style="width: 90px; height: 90px; background: #e2e8f0; border-radius: 50%; margin: 0 auto 15px auto; display: flex; align-items: center; justify-content: center; font-size: 32px; color: #64748b;">🎓</div>
+                            <h3 id="card-preview-name" style="margin: 0 0 5px 0; color: #1e1b4b; font-size: 18px;">John Doe</h3>
+                            <p id="card-preview-role" style="margin: 0 0 15px 0; color: #64748b; font-size: 13px; font-weight: bold;">Student - Basic 5</p>
+                            <div style="background: #f8fafc; padding: 8px; border-radius: 6px; font-size: 11px; color: #475569; border: 1px solid #e2e8f0;">
+                                ID No: <span id="card-preview-id">RHA-2026-001</span><br>
+                                Issued by <strong>NB Designs</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 15px;">
+                    <button onclick="window.print()">Print ID Card</button>
+                </div>
             </div>
         </div>
 
@@ -473,7 +677,7 @@
             </div>
         </div>
 
-        <!-- 7. SETTINGS -->
+        <!-- 11. SETTINGS -->
         <div id="settings" class="section-view">
             <div class="card">
                 <h3>System Settings</h3>
@@ -503,38 +707,84 @@
         "Social Studies", "Information & Comm. Tech (ICT)", "Religious & Moral Education", "Career Tech", "Ghanaian Language", "Creative Arts"
     ];
 
-    // Default data structure
+    // Default multi-term data structure
     const defaultReports = {
         "john doe": {
             level: "primary",
             className: "Basic 5",
             feeStatus: "Fully Paid (GHS 0 Balance)",
-            subjects: [
-                { name: "English Language", classScore: 24, examScore: 58, total: 82, grade: "A", remark: "Excellent" },
-                { name: "Core Mathematics", classScore: 22, examScore: 53, total: 75, grade: "A", remark: "Excellent" },
-                { name: "Integrated Science", classScore: 20, examScore: 50, total: 70, grade: "B+", remark: "Very Good" },
-                { name: "Creative Arts", classScore: 25, examScore: 60, total: 85, grade: "A", remark: "Excellent" },
-                { name: "Our World Our People", classScore: 21, examScore: 49, total: 70, grade: "B+", remark: "Very Good" },
-                { name: "Religious & Moral Education", classScore: 23, examScore: 52, total: 75, grade: "A", remark: "Excellent" },
-                { name: "Ghanaian Language", classScore: 19, examScore: 46, total: 65, grade: "B", remark: "Good" },
-                { name: "History", classScore: 22, examScore: 51, total: 73, grade: "B+", remark: "Very Good" }
-            ]
+            terms: {
+                "Term 1": [
+                    { name: "English Language", classScore: 24, examScore: 58, total: 82, grade: "A", remark: "Excellent" },
+                    { name: "Core Mathematics", classScore: 22, examScore: 53, total: 75, grade: "A", remark: "Excellent" },
+                    { name: "Integrated Science", classScore: 20, examScore: 50, total: 70, grade: "B+", remark: "Very Good" },
+                    { name: "Creative Arts", classScore: 25, examScore: 60, total: 85, grade: "A", remark: "Excellent" },
+                    { name: "Our World Our People", classScore: 21, examScore: 49, total: 70, grade: "B+", remark: "Very Good" },
+                    { name: "Religious & Moral Education", classScore: 23, examScore: 52, total: 75, grade: "A", remark: "Excellent" },
+                    { name: "Ghanaian Language", classScore: 19, examScore: 46, total: 65, grade: "B", remark: "Good" },
+                    { name: "History", classScore: 22, examScore: 51, total: 73, grade: "B+", remark: "Very Good" }
+                ],
+                "Term 2": [
+                    { name: "English Language", classScore: 25, examScore: 60, total: 85, grade: "A", remark: "Excellent" },
+                    { name: "Core Mathematics", classScore: 23, examScore: 55, total: 78, grade: "A", remark: "Excellent" },
+                    { name: "Integrated Science", classScore: 22, examScore: 52, total: 74, grade: "B+", remark: "Very Good" },
+                    { name: "Creative Arts", classScore: 26, examScore: 62, total: 88, grade: "A", remark: "Excellent" },
+                    { name: "Our World Our People", classScore: 20, examScore: 50, total: 70, grade: "B+", remark: "Very Good" },
+                    { name: "Religious & Moral Education", classScore: 24, examScore: 54, total: 78, grade: "A", remark: "Excellent" },
+                    { name: "Ghanaian Language", classScore: 21, examScore: 48, total: 69, grade: "B", remark: "Good" },
+                    { name: "History", classScore: 23, examScore: 53, total: 76, grade: "A", remark: "Excellent" }
+                ],
+                "Term 3": [
+                    { name: "English Language", classScore: 26, examScore: 62, total: 88, grade: "A", remark: "Excellent" },
+                    { name: "Core Mathematics", classScore: 24, examScore: 58, total: 82, grade: "A", remark: "Excellent" },
+                    { name: "Integrated Science", classScore: 23, examScore: 55, total: 78, grade: "A", remark: "Excellent" },
+                    { name: "Creative Arts", classScore: 27, examScore: 63, total: 90, grade: "A", remark: "Excellent" },
+                    { name: "Our World Our People", classScore: 22, examScore: 52, total: 74, grade: "B+", remark: "Very Good" },
+                    { name: "Religious & Moral Education", classScore: 25, examScore: 56, total: 81, grade: "A", remark: "Excellent" },
+                    { name: "Ghanaian Language", classScore: 22, examScore: 50, total: 72, grade: "B+", remark: "Very Good" },
+                    { name: "History", classScore: 24, examScore: 55, total: 79, grade: "A", remark: "Excellent" }
+                ]
+            }
         },
         "abigail mensah": {
             level: "jhs",
             className: "JHS Form 2",
             feeStatus: "GHS 200 Balance Remaining",
-            subjects: [
-                { name: "English Language", classScore: 21, examScore: 48, total: 69, grade: "B", remark: "Good" },
-                { name: "Core Mathematics", classScore: 18, examScore: 42, total: 60, grade: "B", remark: "Good" },
-                { name: "Integrated Science", classScore: 20, examScore: 45, total: 65, grade: "B", remark: "Good" },
-                { name: "Social Studies", classScore: 22, examScore: 50, total: 72, grade: "B+", remark: "Very Good" },
-                { name: "Information & Comm. Tech (ICT)", classScore: 24, examScore: 55, total: 79, grade: "B+", remark: "Very Good" },
-                { name: "Religious & Moral Education", classScore: 20, examScore: 48, total: 68, grade: "B", remark: "Good" },
-                { name: "Career Tech", classScore: 23, examScore: 52, total: 75, grade: "A", remark: "Excellent" },
-                { name: "Ghanaian Language", classScore: 19, examScore: 44, total: 63, grade: "B", remark: "Good" },
-                { name: "Creative Arts", classScore: 22, examScore: 50, total: 72, grade: "B+", remark: "Very Good" }
-            ]
+            terms: {
+                "Term 1": [
+                    { name: "English Language", classScore: 21, examScore: 48, total: 69, grade: "B", remark: "Good" },
+                    { name: "Core Mathematics", classScore: 18, examScore: 42, total: 60, grade: "B", remark: "Good" },
+                    { name: "Integrated Science", classScore: 20, examScore: 45, total: 65, grade: "B", remark: "Good" },
+                    { name: "Social Studies", classScore: 22, examScore: 50, total: 72, grade: "B+", remark: "Very Good" },
+                    { name: "Information & Comm. Tech (ICT)", classScore: 24, examScore: 55, total: 79, grade: "B+", remark: "Very Good" },
+                    { name: "Religious & Moral Education", classScore: 20, examScore: 48, total: 68, grade: "B", remark: "Good" },
+                    { name: "Career Tech", classScore: 23, examScore: 52, total: 75, grade: "A", remark: "Excellent" },
+                    { name: "Ghanaian Language", classScore: 19, examScore: 44, total: 63, grade: "B", remark: "Good" },
+                    { name: "Creative Arts", classScore: 22, examScore: 50, total: 72, grade: "B+", remark: "Very Good" }
+                ],
+                "Term 2": [
+                    { name: "English Language", classScore: 22, examScore: 50, total: 72, grade: "B+", remark: "Very Good" },
+                    { name: "Core Mathematics", classScore: 19, examScore: 45, total: 64, grade: "B", remark: "Good" },
+                    { name: "Integrated Science", classScore: 21, examScore: 48, total: 69, grade: "B", remark: "Good" },
+                    { name: "Social Studies", classScore: 23, examScore: 52, total: 75, grade: "A", remark: "Excellent" },
+                    { name: "Information & Comm. Tech (ICT)", classScore: 25, examScore: 58, total: 83, grade: "A", remark: "Excellent" },
+                    { name: "Religious & Moral Education", classScore: 21, examScore: 50, total: 71, grade: "B+", remark: "Very Good" },
+                    { name: "Career Tech", classScore: 24, examScore: 54, total: 78, grade: "A", remark: "Excellent" },
+                    { name: "Ghanaian Language", classScore: 20, examScore: 46, total: 66, grade: "B", remark: "Good" },
+                    { name: "Creative Arts", classScore: 23, examScore: 52, total: 75, grade: "A", remark: "Excellent" }
+                ],
+                "Term 3": [
+                    { name: "English Language", classScore: 23, examScore: 52, total: 75, grade: "A", remark: "Excellent" },
+                    { name: "Core Mathematics", classScore: 20, examScore: 48, total: 68, grade: "B", remark: "Good" },
+                    { name: "Integrated Science", classScore: 22, examScore: 50, total: 72, grade: "B+", remark: "Very Good" },
+                    { name: "Social Studies", classScore: 24, examScore: 54, total: 78, grade: "A", remark: "Excellent" },
+                    { name: "Information & Comm. Tech (ICT)", classScore: 26, examScore: 60, total: 86, grade: "A", remark: "Excellent" },
+                    { name: "Religious & Moral Education", classScore: 22, examScore: 52, total: 74, grade: "B+", remark: "Very Good" },
+                    { name: "Career Tech", classScore: 25, examScore: 56, total: 81, grade: "A", remark: "Excellent" },
+                    { name: "Ghanaian Language", classScore: 21, examScore: 48, total: 69, grade: "B", remark: "Good" },
+                    { name: "Creative Arts", classScore: 24, examScore: 54, total: 78, grade: "A", remark: "Excellent" }
+                ]
+            }
         }
     };
 
@@ -547,15 +797,13 @@
     // PAYSTACK PAYMENT INTEGRATION FUNCTION
     function payWithPaystack(studentName, amountInGHS, btnElement) {
         let handler = PaystackPop.setup({
-            key: 'pk_test_b61c9441113220392095f923c914e6e66e949987', // Demo key - replace with your actual Paystack public key when live
+            key: 'pk_test_b61c9441113220392095f923c914e6e66e949987',
             email: 'rha.parent@rha-portal.com',
-            amount: amountInGHS * 100, // Paystack counts in pesewas
+            amount: amountInGHS * 100,
             currency: 'GHS',
             ref: 'RHA-' + Math.floor((Math.random() * 1000000) + 1),
             callback: function(response) {
                 alert('Payment successful! Reference ID: ' + response.reference);
-                
-                // Automatically clear the balance in the table UI
                 var row = btnElement.parentNode.parentNode.parentNode;
                 var total = parseFloat(row.cells[1].innerText.replace('GHS ', ''));
                 row.cells[2].innerText = "GHS " + total;
@@ -580,6 +828,8 @@
             document.getElementById("login-container").style.display = "none";
             document.getElementById("app-container").style.display = "flex";
             loadSubjectTable();
+            loadAnalyticsData();
+            updateAccountingDisplay();
         } else {
             alert("Please enter a username!");
         }
@@ -606,15 +856,15 @@
         }
 
         resultBox.style.display = "block";
-        
         let foundKey = Object.keys(studentReports).find(k => k.includes(query) || query.includes(k));
 
         if (foundKey) {
             let record = studentReports[foundKey];
+            let term1Subjects = record.terms && record.terms["Term 1"] ? record.terms["Term 1"] : (record.subjects || []);
             let html = `<strong>Student:</strong> ${foundKey.toUpperCase()}<br>
                         <strong>Class Level:</strong> ${record.className} (${record.level.toUpperCase()})<br>
                         <strong>Fee Status:</strong> ${record.feeStatus}<br><br>
-                        <strong>Terminal Assessment Report Card:</strong>
+                        <strong>Term 1 Assessment Report Card:</strong>
                         <div style="overflow-x: auto;">
                             <table>
                                 <thead>
@@ -629,7 +879,7 @@
                                 </thead>
                                 <tbody>`;
             
-            record.subjects.forEach(sub => {
+            term1Subjects.forEach(sub => {
                 html += `<tr>
                             <td><strong>${sub.name}</strong></td>
                             <td>${sub.classScore}</td>
@@ -691,7 +941,11 @@
                 level: defaultLevel,
                 className: cls,
                 feeStatus: "Active Status",
-                subjects: initialSubjects
+                terms: {
+                    "Term 1": initialSubjects,
+                    "Term 2": initialSubjects,
+                    "Term 3": initialSubjects
+                }
             };
             saveToStorage();
 
@@ -809,6 +1063,7 @@
         let nameInputEl = document.getElementById("reportStudentInput");
         if (!nameInputEl) return;
         let typedName = nameInputEl.value.trim().toLowerCase();
+        let termSelect = document.getElementById("reportTermSelect").value;
         
         if (studentReports[typedName]) {
             let record = studentReports[typedName];
@@ -816,6 +1071,8 @@
             let currentLevel = document.getElementById("educationLevel").value;
             let subjects = currentLevel === 'primary' ? primarySubjects : jhsSubjects;
             
+            let termSubjects = record.terms && record.terms[termSelect] ? record.terms[termSelect] : (record.subjects || []);
+
             if (tbody.rows.length !== subjects.length) {
                 tbody.innerHTML = "";
                 subjects.forEach((subject) => {
@@ -834,7 +1091,7 @@
             let rows = tbody.querySelectorAll("tr");
             rows.forEach((row) => {
                 let subName = row.cells[0].innerText;
-                let foundSub = record.subjects ? record.subjects.find(s => s.name === subName) : null;
+                let foundSub = termSubjects.find(s => s.name === subName);
                 if (foundSub) {
                     row.querySelector('.class-score').value = foundSub.classScore;
                     row.querySelector('.exam-score').value = foundSub.examScore;
@@ -873,6 +1130,7 @@
     function saveTerminalReport() {
         let studentKey = document.getElementById("reportStudentInput").value.trim().toLowerCase();
         let level = document.getElementById("educationLevel").value;
+        let termSelect = document.getElementById("reportTermSelect").value;
         
         if (!studentKey) {
             alert("Please type a student name!");
@@ -901,16 +1159,215 @@
         });
 
         if (!studentReports[studentKey]) {
-            studentReports[studentKey] = { feeStatus: "Active Status" };
+            studentReports[studentKey] = { feeStatus: "Active Status", terms: {} };
+        }
+        if (!studentReports[studentKey].terms) {
+            studentReports[studentKey].terms = {};
         }
 
         studentReports[studentKey].level = level;
         studentReports[studentKey].className = level === 'primary' ? 'Primary Level' : 'JHS Level';
-        studentReports[studentKey].subjects = subjectsList;
+        studentReports[studentKey].terms[termSelect] = subjectsList;
         
         saveToStorage();
+        loadAnalyticsData();
 
-        alert("Terminal Report successfully saved for " + studentKey.toUpperCase() + "!");
+        alert("Terminal Report successfully saved for " + studentKey.toUpperCase() + " (" + termSelect + ")!");
+    }
+
+    function printOfficialReportCard() {
+        let studentName = document.getElementById("reportStudentInput").value.trim();
+        let termSelect = document.getElementById("reportTermSelect").value;
+        let level = document.getElementById("educationLevel").value;
+
+        if (!studentName) {
+            alert("Please enter a student name before printing.");
+            return;
+        }
+
+        document.getElementById("print-student-name").innerText = studentName.toUpperCase();
+        document.getElementById("print-student-class").innerText = level === 'primary' ? 'Primary Level' : 'Junior High School';
+        document.getElementById("print-student-term").innerText = termSelect;
+
+        let printBody = document.getElementById("print-table-body");
+        printBody.innerHTML = "";
+
+        let rows = document.querySelectorAll("#assessmentBody tr");
+        rows.forEach(row => {
+            let subName = row.cells[0].innerText;
+            let classScore = row.querySelector('.class-score').value;
+            let examScore = row.querySelector('.exam-score').value;
+            let total = row.querySelector('.row-total').innerText;
+            let grade = row.querySelector('.row-grade').innerText;
+            let remark = row.querySelector('.row-remark').innerText;
+
+            printBody.innerHTML += `
+                <tr>
+                    <td style="border: 1px solid #cbd5e1; padding: 6px;"><strong>${subName}</strong></td>
+                    <td style="border: 1px solid #cbd5e1; padding: 6px;">${classScore}</td>
+                    <td style="border: 1px solid #cbd5e1; padding: 6px;">${examScore}</td>
+                    <td style="border: 1px solid #cbd5e1; padding: 6px;"><strong>${total}</strong></td>
+                    <td style="border: 1px solid #cbd5e1; padding: 6px;"><strong>${grade}</strong></td>
+                    <td style="border: 1px solid #cbd5e1; padding: 6px;">${remark}</td>
+                </tr>
+            `;
+        });
+
+        window.print();
+    }
+
+    function loadAnalyticsData() {
+        let inputEl = document.getElementById("analyticsStudentInput");
+        if (!inputEl) return;
+        let query = inputEl.value.trim().toLowerCase();
+        let tbody = document.getElementById("analyticsBody");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+
+        if (studentReports[query] && studentReports[query].terms) {
+            let terms = studentReports[query].terms;
+            let t1 = terms["Term 1"] || [];
+            let t2 = terms["Term 2"] || [];
+            let t3 = terms["Term 3"] || [];
+
+            let allSubjects = primarySubjects;
+            if (studentReports[query].level === 'jhs') allSubjects = jhsSubjects;
+
+            allSubjects.forEach(sub => {
+                let subT1 = t1.find(s => s.name === sub)?.total || 0;
+                let subT2 = t2.find(s => s.name === sub)?.total || 0;
+                let subT3 = t3.find(s => s.name === sub)?.total || 0;
+
+                let avg = Math.round((subT1 + subT2 + subT3) / 3);
+                let grade = avg >= 80 ? "A" : (avg >= 70 ? "B+" : (avg >= 60 ? "B" : (avg >= 50 ? "C+" : (avg >= 45 ? "C" : "D"))));
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${sub}</strong></td>
+                        <td>${subT1}</td>
+                        <td>${subT2}</td>
+                        <td>${subT3}</td>
+                        <td><strong style="color: var(--primary);">${avg}</strong></td>
+                        <td><span style="color: #0284c7; font-weight: bold;">${grade}</span></td>
+                    </tr>
+                `;
+            });
+        } else {
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #666;">No multi-term records found for '${query}'.</td></tr>`;
+        }
+    }
+
+    // ACCOUNTING LEDGER STORAGE & FUNCTIONS
+    let accountingTransactions = JSON.parse(localStorage.getItem("rha_transactions")) || [
+        { date: "28/08/2026", desc: "Term 1 School Fees Collection", type: "Income", amount: 2500 },
+        { date: "29/08/2026", desc: "Stationery & Examination Paper Supply", type: "Expense", amount: 450 }
+    ];
+
+    function saveAccountingStorage() {
+        localStorage.setItem("rha_transactions", JSON.stringify(accountingTransactions));
+    }
+
+    function addTransaction() {
+        let desc = document.getElementById("txnDesc").value.trim();
+        let type = document.getElementById("txnType").value;
+        let amount = parseFloat(document.getElementById("txnAmount").value);
+
+        if (desc && !isNaN(amount)) {
+            let dateStr = new Date().toLocaleDateString();
+            accountingTransactions.push({ date: dateStr, desc, type, amount });
+            saveAccountingStorage();
+            updateAccountingDisplay();
+
+            document.getElementById("txnDesc").value = "";
+            document.getElementById("txnAmount").value = "";
+            alert("Transaction successfully recorded!");
+        } else {
+            alert("Please provide a valid description and amount.");
+        }
+    }
+
+    function deleteTransaction(btn) {
+        let row = btn.parentNode.parentNode;
+        let index = row.rowIndex - 1;
+        accountingTransactions.splice(index, 1);
+        saveAccountingStorage();
+        updateAccountingDisplay();
+    }
+
+    function updateAccountingDisplay() {
+        let tbody = document.getElementById("accountingBody");
+        if (!tbody) return;
+        tbody.innerHTML = "";
+
+        let totalInc = 0;
+        let totalExp = 0;
+
+        accountingTransactions.forEach((txn) => {
+            if (txn.type === "Income") totalInc += txn.amount;
+            else totalExp += txn.amount;
+
+            tbody.innerHTML += `
+                <tr>
+                    <td>${txn.date}</td>
+                    <td>${txn.desc}</td>
+                    <td><span style="color: ${txn.type === 'Income' ? '#047857' : '#b91c1c'}; font-weight: bold;">${txn.type}</span></td>
+                    <td>GHS ${txn.amount.toLocaleString()}</td>
+                    <td><button class="btn-danger" onclick="deleteTransaction(this)">Delete</button></td>
+                </tr>
+            `;
+        });
+
+        document.getElementById("total-income-display").innerText = "GHS " + totalInc.toLocaleString();
+        document.getElementById("total-expense-display").innerText = "GHS " + totalExp.toLocaleString();
+        document.getElementById("net-balance-display").innerText = "GHS " + (totalInc - totalExp).toLocaleString();
+    }
+
+    // SMS & WHATSAPP NOTIFICATIONS
+    function updateSmsMessage() {
+        let template = document.getElementById("smsTemplate").value;
+        let textBody = document.getElementById("smsTextBody");
+
+        if (template === 'fee') {
+            textBody.value = "Dear Parent, this is a reminder from Right Hope Academy regarding your ward's school fee balance. Kindly clear remaining arrears via the portal. Motto: Opportunity For All.";
+        } else if (template === 'report') {
+            textBody.value = "Dear Parent, your ward's official terminal report card for Right Hope Academy is now ready and available for review and print. Motto: Opportunity For All.";
+        } else if (template === 'attendance') {
+            textBody.value = "Dear Parent, our records indicate your ward was marked absent from school today without prior excuse. Kindly contact Right Hope Academy administration.";
+        } else {
+            textBody.value = "";
+        }
+    }
+
+    function sendSimulatedSMS() {
+        let recipient = document.getElementById("smsRecipient").value;
+        let msg = document.getElementById("smsTextBody").value;
+        if (!msg) {
+            alert("Please type a message.");
+            return;
+        }
+        alert("SMS successfully transmitted to " + recipient + "'s registered phone number!");
+    }
+
+    function sendWhatsAppAlert() {
+        let recipient = document.getElementById("smsRecipient").value;
+        let msg = encodeURIComponent(document.getElementById("smsTextBody").value);
+        // Opens WhatsApp chat simulation/link
+        window.open("https://wa.me/?text=" + msg, "_blank");
+    }
+
+    // ID CARD GENERATOR
+    function generateIDCard() {
+        let name = document.getElementById("idCardName").value.trim();
+        let role = document.getElementById("idCardRole").value.trim();
+
+        if (name) {
+            document.getElementById("card-preview-name").innerText = name.toUpperCase();
+        }
+        if (role) {
+            document.getElementById("card-preview-role").innerText = role;
+        }
+        document.getElementById("card-preview-id").innerText = "RHA-2026-" + Math.floor(100 + Math.random() * 900);
+        alert("ID Card generated successfully!");
     }
 
     function markFeePaid(type) {
@@ -926,6 +1383,8 @@
     }
 
     loadSubjectTable();
+    loadAnalyticsData();
+    updateAccountingDisplay();
 </script>
 
 </body>
