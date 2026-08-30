@@ -261,6 +261,7 @@
             <a href="#" onclick="switchTab('fees', this)">💳 Fee Payments & MoMo</a>
             <a href="#" onclick="switchTab('attendance', this)">📋 Attendance Tracker</a>
             <a href="#" onclick="switchTab('reports', this)">📊 Report Card & Assessment</a>
+            <a href="#" onclick="switchTab('developer-billing', this)">📊 Developer billing (NB Designs)</a>
             <a href="#" onclick="switchTab('settings', this)">⚙️ Settings</a>
         </div>
         <div class="sidebar-footer">
@@ -427,6 +428,48 @@
                 </div>
 
                 <button style="margin-top: 20px;" onclick="saveTerminalReport()">Save & Finalize Terminal Report</button>
+            </div>
+        </div>
+
+        <!-- DEVELOPER BILLING PANEL SECTION -->
+        <div id="developer-billing" class="section-view">
+            <div class="card">
+                <h3>NB Designs - Developer Portal</h3>
+                <p style="color: #666; font-size: 13px;">System management, deployment, and service fee tracking for Right Hope Academy.</p>
+                
+                <div style="display: flex; gap: 15px; margin: 20px 0; flex-wrap: wrap;">
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; flex: 1; min-width: 200px; border-left: 4px solid #ffc107;">
+                        <span style="font-size: 12px; color: #666; font-weight: bold;">Setup & Deployment Fee</span>
+                        <h4 style="margin: 5px 0 0 0; color: #333; font-size: 20px;">GH₵ 500.00</h4>
+                        <span id="setup-payment-status" style="font-size: 12px; color: #d9534f; font-weight: bold;">Status: Unpaid</span>
+                    </div>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; flex: 1; min-width: 200px; border-left: 4px solid #10b981;">
+                        <span style="font-size: 12px; color: #666; font-weight: bold;">Termly Maintenance Fee</span>
+                        <h4 style="margin: 5px 0 0 0; color: #333; font-size: 20px;">GH₵ 200.00</h4>
+                        <span id="term-payment-status" style="font-size: 12px; color: #d9534f; font-weight: bold;">Status: Unpaid (Current Term)</span>
+                    </div>
+                </div>
+
+                <div style="background: #fdf8f0; border: 1px solid #fce8cc; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+                    <h4 style="margin: 0 0 5px 0; color: #b78103; font-size: 14px;">Direct Mobile Money Payment Details</h4>
+                    <p style="margin: 0 0 8px 0; color: #555; font-size: 12px;">Make direct transfers to your developer account using the details below:</p>
+                    <ul style="margin: 0; padding-left: 18px; color: #333; font-size: 13px;">
+                        <li><strong>Network:</strong> MTN / Telecel</li>
+                        <li><strong>Account Name:</strong> Edmond Naatiq Basintale (NB Designs)</li>
+                        <li><strong>Number:</strong> [Enter Your MoMo Number Here]</li>
+                    </ul>
+                </div>
+
+                <div style="background: #f1f8f5; border: 1px dashed #10b981; padding: 15px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <h4 style="margin: 0 0 3px 0; color: #047857; font-size: 13px;">Developer Controls</h4>
+                        <p style="margin: 0; color: #555; font-size: 12px;">Mark fees as paid once cash or MoMo transfer is received.</p>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button onclick="markFeePaid('setup')" style="background: #10b981; padding: 6px 12px; font-size: 12px;">Mark Setup Paid</button>
+                        <button onclick="markFeePaid('term')" style="background: #0284c7; padding: 6px 12px; font-size: 12px;">Mark Term Paid</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -868,6 +911,18 @@
         saveToStorage();
 
         alert("Terminal Report successfully saved for " + studentKey.toUpperCase() + "!");
+    }
+
+    function markFeePaid(type) {
+        if(type === 'setup') {
+            document.getElementById('setup-payment-status').innerText = 'Status: Paid (GH₵ 500)';
+            document.getElementById('setup-payment-status').style.color = '#10b981';
+            alert('Setup fee marked as Paid!');
+        } else if(type === 'term') {
+            document.getElementById('term-payment-status').innerText = 'Status: Paid (GH₵ 200)';
+            document.getElementById('term-payment-status').style.color = '#10b981';
+            alert('Termly maintenance fee marked as Paid!');
+        }
     }
 
     loadSubjectTable();
