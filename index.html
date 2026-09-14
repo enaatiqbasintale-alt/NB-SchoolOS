@@ -621,7 +621,6 @@ async function searchChildRecordSecure() {
     return; 
   }
 
-  // 1. Verify student ID and PIN in the 'students' table first
   let { data: studentData, error: studentError } = await supabaseClient
     .from('students')
     .select('*')
@@ -635,20 +634,12 @@ async function searchChildRecordSecure() {
     return;
   }
 
-  // Check if PIN matches
   if (studentData.parent_pin && studentData.parent_pin !== pinInput) {
     resultDetails.innerHTML = "❌ Incorrect Access PIN for this student ID.";
     return;
   }
 
-  // 2. Fetch report card based on the exact student name
   let targetName = studentData.name.trim().toLowerCase();
-  let { data: reportData, error: reportError } = await supabaseClient
-    .from('terminal_reports')
-    .select('*')
-    .eq('student_id', studentIdInput); // Fallback or search by name
-
-  // If not found by ID directly, search by name match
   let { data: reportByName } = await supabaseClient
     .from('terminal_reports')
     .select('*')
