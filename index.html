@@ -53,11 +53,17 @@ button:hover { background: var(--primary-hover); }
 <div id="parent-portal-screen"> 
 <div style="text-align: center; margin-bottom: 25px;"> 
 <h2 style="color: var(--primary); margin-bottom: 5px;">Right Hope Academy</h2> 
-<h3 style="color: #555; font-size: 16px;">Parent Portal - View Ward Results & Fees</h3> 
+<h3 style="color: #555; font-size: 16px;">Parent Portal - Secure Ward Verification</h3> 
 <p style="color: #666; font-size: 14px;">Motto: Opportunity For All</p> 
 </div> 
-<input type="text" id="parentSearchInput" placeholder="Enter Student Name..." style="padding: 12px; margin-bottom: 15px;"> 
-<button onclick="searchChildRecord()" style="width: 100%; padding: 12px;">Search Cloud Records</button> 
+<div style="text-align: left; font-size: 13px; font-weight: bold; margin-bottom: 5px;">Student ID Number (e.g. RHA-XXXX)</div>
+<input type="text" id="parentStudentIdInput" placeholder="Enter exact Student ID..." style="padding: 12px; margin-bottom: 12px;"> 
+
+<div style="text-align: left; font-size: 13px; font-weight: bold; margin-bottom: 5px;">Parent Access PIN / Secret Code</div>
+<input type="password" id="parentPinInput" placeholder="Enter student access PIN..." style="padding: 12px; margin-bottom: 15px;"> 
+
+<button onclick="searchChildRecordSecure()" style="width: 100%; padding: 12px;">Verify & View Ward Results</button> 
+
 <div id="childResultBox" style="margin-top: 20px; padding: 15px; background: #f8fafc; border-radius: 6px; display: none; border: 1px solid #e2e8f0; overflow-x: auto;"> 
 <h4 style="color: var(--primary); margin-top: 0;">Student Status & Performance Report Card</h4> 
 <div id="resultDetails" style="color: #333; line-height: 1.6;"></div> 
@@ -161,15 +167,19 @@ button:hover { background: var(--primary-hover); }
 <div class="card"> 
 <h3>Student Records & Management</h3> 
 <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end;"> 
-<div style="flex: 1; min-width: 200px;"> 
+<div style="flex: 1; min-width: 180px;"> 
 <label style="font-size: 11px; font-weight: bold; display: block;">Full Name:</label> 
 <input type="text" id="newStudentName" placeholder="Student Full Name"> 
 </div> 
-<div style="flex: 1; min-width: 180px;"> 
+<div style="flex: 1; min-width: 150px;"> 
 <label style="font-size: 11px; font-weight: bold; display: block;">Class Level:</label> 
-<input type="text" id="newStudentClass" placeholder="e.g. Basic 5 / JHS 2"> 
+<input type="text" id="newStudentClass" placeholder="e.g. Basic 5"> 
 </div> 
-<div style="flex: 1; min-width: 200px;"> 
+<div style="flex: 1; min-width: 150px;"> 
+<label style="font-size: 11px; font-weight: bold; display: block;">Parent Access PIN:</label> 
+<input type="text" id="newStudentPin" placeholder="e.g. 1234"> 
+</div> 
+<div style="flex: 1; min-width: 180px;"> 
 <label style="font-size: 11px; font-weight: bold; display: block;">Passport Photo:</label> 
 <input type="file" id="newStudentPhoto" accept="image/*"> 
 </div> 
@@ -177,7 +187,7 @@ button:hover { background: var(--primary-hover); }
 </div> 
 <div style="width: 100%; overflow-x: auto;"> 
 <table id="studentTable"> 
-<thead><tr><th>ID</th><th>Photo</th><th>Name</th><th>Class Level</th><th>Status</th><th>Actions</th></tr></thead> 
+<thead><tr><th>ID</th><th>Photo</th><th>Name</th><th>Class Level</th><th>PIN</th><th>Status</th><th>Actions</th></tr></thead> 
 <tbody id="studentTableBody"> 
 <!-- Loaded from Supabase --> 
 </tbody> 
@@ -536,8 +546,9 @@ async function fetchStudentsFromCloud() {
 
   if(data) {
     data.forEach(st => {
+      let studentPin = st.parent_pin || '1234';
       if(tbody) {
-        tbody.innerHTML += `<tr><td>${st.student_id}</td><td>👤</td><td>${st.name}</td><td>${st.class_level}</td><td>Active</td><td><button class='btn-danger' onclick="deleteCloudStudent('${st.id}')">Delete</button></td></tr>`;
+        tbody.innerHTML += `<tr><td>${st.student_id}</td><td>👤</td><td>${st.name}</td><td>${st.class_level}</td><td><code>${studentPin}</code></td><td>Active</td><td><button class='btn-danger' onclick="deleteCloudStudent('${st.id}')">Delete</button></td></tr>`;
       }
       if(feesBody) {
         feesBody.innerHTML += `<tr><td>${st.name}</td><td>${st.class_level}</td><td><span style="color:green; font-weight:bold;">${st.fee_status}</span></td><td><button class="btn-pay" onclick="payWithMoMo('${st.name}')">Confirm MoMo (+233244603378)</button></td></tr>`;
@@ -552,14 +563,16 @@ async function fetchStudentsFromCloud() {
 async function addStudent() {
   let name = document.getElementById("newStudentName").value.trim();
   let cls = document.getElementById("newStudentClass").value.trim();
+  let pin = document.getElementById("newStudentPin").value.trim() || "1234";
   if(!name || !cls) { alert("Please provide name and class."); return; }
   let studentId = "RHA-" + Math.floor(1000 + Math.random() * 9000);
-  let { error } = await supabaseClient.from('students').insert([{ student_id: studentId, name, class_level: cls, fee_status: 'Unpaid Arrears' }]);
+  let { error } = await supabaseClient.from('students').insert([{ student_id: studentId, name, class_level: cls, parent_pin: pin, fee_status: 'Unpaid Arrears' }]);
   if (error) { alert("Error saving student to cloud: " + error.message); } 
   else { 
-    alert("Student successfully saved to Supabase cloud database!"); 
+    alert("Student successfully saved to Supabase with ID: " + studentId); 
     document.getElementById("newStudentName").value = "";
     document.getElementById("newStudentClass").value = "";
+    document.getElementById("newStudentPin").value = "";
     fetchStudentsFromCloud();
   }
 }
@@ -597,21 +610,58 @@ async function saveTerminalReport() {
   else { alert("Terminal report successfully saved to Cloud database!"); }
 }
 
-async function searchChildRecord() {
-  let query = document.getElementById("parentSearchInput").value.trim().toLowerCase();
+async function searchChildRecordSecure() {
+  let studentIdInput = document.getElementById("parentStudentIdInput").value.trim().toUpperCase();
+  let pinInput = document.getElementById("parentPinInput").value.trim();
   let resultBox = document.getElementById("childResultBox");
   let resultDetails = document.getElementById("resultDetails");
-  if (!query) { alert("Enter student name."); return; }
 
-  let { data, error } = await supabaseClient.from('terminal_reports').select('*').ilike('student_name', `%${query}%`);
+  if (!studentIdInput || !pinInput) { 
+    alert("Please enter both your Student ID and Access PIN."); 
+    return; 
+  }
+
+  // 1. Verify student ID and PIN in the 'students' table first
+  let { data: studentData, error: studentError } = await supabaseClient
+    .from('students')
+    .select('*')
+    .eq('student_id', studentIdInput)
+    .single();
+
   resultBox.style.display = "block";
-  if (error || !data || data.length === 0) {
-    resultDetails.innerHTML = "No cloud records found for '<strong>" + query + "</strong>'.";
+
+  if (studentError || !studentData) {
+    resultDetails.innerHTML = "❌ Invalid Student ID. Please check the ID provided by the school.";
     return;
   }
 
-  let record = data[0];
-  let html = `<strong>Student:</strong> ${record.student_name.toUpperCase()}<br><strong>Term:</strong> ${record.term}<br><br><table><thead><tr><th>Subject</th><th>Total</th><th>Grade</th><th>Remark</th></tr></thead><tbody>`;
+  // Check if PIN matches
+  if (studentData.parent_pin && studentData.parent_pin !== pinInput) {
+    resultDetails.innerHTML = "❌ Incorrect Access PIN for this student ID.";
+    return;
+  }
+
+  // 2. Fetch report card based on the exact student name
+  let targetName = studentData.name.trim().toLowerCase();
+  let { data: reportData, error: reportError } = await supabaseClient
+    .from('terminal_reports')
+    .select('*')
+    .eq('student_id', studentIdInput); // Fallback or search by name
+
+  // If not found by ID directly, search by name match
+  let { data: reportByName } = await supabaseClient
+    .from('terminal_reports')
+    .select('*')
+    .ilike('student_name', targetName);
+
+  let record = (reportByName && reportByName.length > 0) ? reportByName[0] : null;
+
+  if (!record) {
+    resultDetails.innerHTML = `✅ Student Verified: <strong>${studentData.name}</strong> (${studentData.class_level})<br><br><em>No terminal report has been uploaded for this student yet. Please check back later.</em>`;
+    return;
+  }
+
+  let html = `<strong>Verified Student:</strong> ${studentData.name.toUpperCase()} (${studentData.class_level})<br><strong>Term:</strong> ${record.term}<br><br><table><thead><tr><th>Subject</th><th>Total</th><th>Grade</th><th>Remark</th></tr></thead><tbody>`;
   record.subjects_json.forEach(sub => {
     html += `<tr><td>${sub.name}</td><td><strong>${sub.total}</strong></td><td>${sub.grade}</td><td>${sub.remark}</td></tr>`;
   });
