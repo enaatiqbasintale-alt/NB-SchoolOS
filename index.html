@@ -200,7 +200,7 @@ button:hover { background: var(--primary-hover); }
 <div id="fees" class="section-view"> 
 <div class="card"> 
 <h3>Fee Payments & Mobile Money (MoMo)</h3> 
-<p style="font-size: 13px; color: #555;">Official Proprietor MoMo Number: <strong>+233244603378</strong>.</p> 
+<p style="font-size: 13px; color: #555;">Official Proprietor MoMo Number: <strong>0546247266</strong>.</p> 
 <div style="width: 100%; overflow-x: auto;"> 
 <table id="feesTable"> 
 <thead><tr><th>Student Name</th><th>Class</th><th>Fee Status</th><th>Payment Actions</th></tr></thead> 
@@ -434,7 +434,7 @@ button:hover { background: var(--primary-hover); }
 <div id="developer-billing" class="section-view"> 
 <div class="card"> 
 <h3>NB Designs - Developer Portal & Billing</h3> 
-<p style="color: #666; font-size: 13px;">System management, deployment, and service fee tracking for Right Hope Academy (+233244603378).</p> 
+<p style="color: #666; font-size: 13px;">System management, deployment, and service fee tracking for Right Hope Academy (0546247266).</p> 
 
 <div style="margin-top: 20px; padding: 15px; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;">
 <h4 style="margin-top: 0; color: var(--primary);">Active Maintenance & Deployment Billing</h4>
@@ -448,7 +448,7 @@ button:hover { background: var(--primary-hover); }
 <h4 style="margin: 5px 0 0 0; color: #b91c1c; font-size: 18px;">GHS 500</h4> 
 </div> 
 </div> 
-<button class="btn-pay" onclick="alert('MoMo payment prompt generated for +233244603378')">Process MoMo Settlement</button>
+<button class="btn-pay" onclick="alert('MoMo payment prompt generated for 0546247266')">Process MoMo Settlement</button>
 </div>
 </div> 
 </div> 
@@ -566,7 +566,7 @@ async function fetchStudentsFromCloud() {
         tbody.innerHTML += `<tr><td>${st.student_id}</td><td>👤</td><td>${st.name}</td><td>${st.class_level}</td><td><code>${studentPin}</code></td><td>Active</td><td><button class='btn-danger' onclick="deleteCloudStudent('${st.id}')">Delete</button></td></tr>`;
       }
       if(feesBody) {
-        feesBody.innerHTML += `<tr><td>${st.name}</td><td>${st.class_level}</td><td><span style="color:green; font-weight:bold;">${st.fee_status}</span></td><td><button class="btn-pay" onclick="payWithMoMo('${st.name}')">Confirm MoMo (+233244603378)</button></td></tr>`;
+        feesBody.innerHTML += `<tr><td>${st.name}</td><td>${st.class_level}</td><td><span style="color:green; font-weight:bold;">${st.fee_status}</span></td><td><button class="btn-pay" onclick="payWithMoMo('${st.name}')">Confirm MoMo (0546247266)</button></td></tr>`;
       }
       if(attendanceBody) {
         attendanceBody.innerHTML += `<tr><td>${st.name}</td><td>${st.class_level}</td><td><select><option>Present</option><option>Absent</option></select></td></tr>`;
