@@ -3,7 +3,7 @@
 <head> 
 <meta charset="UTF-8"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-<title>NB-SchoolOS | Right Hope Academy</title> 
+<title>NB-SchoolOS | Multi-Tenant Cloud Portal</title> 
 <!-- Chart.js for Visual Performance Analytics --> 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script> 
 <!-- Supabase JS Client SDK via CDN -->
@@ -52,11 +52,10 @@ button:hover { background: var(--primary-hover); }
 <!-- PARENT PORTAL SCREEN --> 
 <div id="parent-portal-screen"> 
 <div style="text-align: center; margin-bottom: 25px;"> 
-<h2 style="color: var(--primary); margin-bottom: 5px;">Right Hope Academy</h2> 
+<h2 id="parent-school-name" style="color: var(--primary); margin-bottom: 5px;">School Portal</h2> 
 <h3 style="color: #555; font-size: 16px;">Parent Portal - Secure Ward Verification</h3> 
-<p style="color: #666; font-size: 14px;">Motto: Opportunity For All</p> 
 </div> 
-<div style="text-align: left; font-size: 13px; font-weight: bold; margin-bottom: 5px;">Student ID Number (e.g. RHA-XXXX)</div>
+<div style="text-align: left; font-size: 13px; font-weight: bold; margin-bottom: 5px;">Student ID Number</div>
 <input type="text" id="parentStudentIdInput" placeholder="Enter exact Student ID..." style="padding: 12px; margin-bottom: 12px;"> 
 
 <div style="text-align: left; font-size: 13px; font-weight: bold; margin-bottom: 5px;">Parent Access PIN / Secret Code</div>
@@ -73,21 +72,40 @@ button:hover { background: var(--primary-hover); }
 </div> 
 </div> 
 
-<!-- STAFF LOGIN SCREEN --> 
+<!-- STAFF LOGIN & REGISTRATION SCREEN --> 
 <div id="login-container"> 
 <div class="login-card"> 
-<h2 style="color: var(--primary); margin-bottom: 5px;">Right Hope Academy</h2> 
-<p style="color: #666; font-size: 14px; margin-bottom: 25px;">NB-SchoolOS Cloud Portal</p> 
-<div style="text-align: left; margin-bottom: 5px; font-size: 13px; font-weight: bold;">Username</div> 
-<input type="text" id="username" placeholder="Enter username"> 
-<div style="text-align: left; margin-top: 10px; margin-bottom: 5px; font-size: 13px; font-weight: bold;">Password</div> 
-<input type="password" id="password" placeholder="Enter password"> 
-<div style="text-align: left; margin-top: 10px; margin-bottom: 5px; font-size: 13px; font-weight: bold;">Login Role</div>
-<select id="loginRole" style="padding: 9px; margin: 5px 0; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; width: 100%;">
-    <option value="admin">Administrator</option>
-    <option value="teacher">Teacher (Results Entry Only)</option>
-</select>
-<button onclick="handleLogin()" style="width: 100%; margin-top: 20px; padding: 12px;">Login to Cloud Portal</button> 
+<h2 style="color: var(--primary); margin-bottom: 5px;">🎓 NB-SchoolOS</h2> 
+<p style="color: #666; font-size: 14px; margin-bottom: 20px;">Multi-Tenant Cloud Portal</p> 
+
+<!-- Tab Switcher for Login / Register School -->
+<div style="display: flex; margin-bottom: 15px; border-bottom: 2px solid #e2e8f0;">
+    <button onclick="switchAuthMode('login')" id="tabLoginBtn" style="flex: 1; background: none; color: var(--primary); border-bottom: 2px solid var(--primary); border-radius: 0;">Login</button>
+    <button onclick="switchAuthMode('register')" id="tabRegisterBtn" style="flex: 1; background: none; color: #666; border: none; border-radius: 0;">Register School</button>
+</div>
+
+<!-- LOGIN FORM -->
+<div id="loginFormView">
+    <div style="text-align: left; margin-bottom: 5px; font-size: 13px; font-weight: bold;">School ID or Email</div> 
+    <input type="text" id="loginEmail" placeholder="Enter admin email or school ID"> 
+    <div style="text-align: left; margin-top: 10px; margin-bottom: 5px; font-size: 13px; font-weight: bold;">Password</div> 
+    <input type="password" id="loginPassword" placeholder="Enter password"> 
+    <button onclick="handleLogin()" style="width: 100%; margin-top: 20px; padding: 12px;">Login to Cloud Portal</button> 
+</div>
+
+<!-- REGISTRATION FORM -->
+<div id="registerFormView" style="display: none;">
+    <div style="text-align: left; margin-bottom: 3px; font-size: 12px; font-weight: bold;">School Name</div> 
+    <input type="text" id="regSchoolName" placeholder="e.g. Oakridge Academy"> 
+    <div style="text-align: left; margin-top: 5px; margin-bottom: 3px; font-size: 12px; font-weight: bold;">Admin Email</div> 
+    <input type="text" id="regEmail" placeholder="admin@school.com"> 
+    <div style="text-align: left; margin-top: 5px; margin-bottom: 3px; font-size: 12px; font-weight: bold;">Password</div> 
+    <input type="password" id="regPassword" placeholder="Create password"> 
+    <div style="text-align: left; margin-top: 5px; margin-bottom: 3px; font-size: 12px; font-weight: bold;">MoMo / Payment Number</div> 
+    <input type="text" id="regMomo" placeholder="e.g. 0244603378"> 
+    <button onclick="handleSchoolRegistration()" style="width: 100%; margin-top: 15px; padding: 12px;" class="btn-pay">Create School Account</button> 
+</div>
+
 <div style="margin-top: 20px;"> 
 <a href="#" onclick="showParentPortal()" style="color: #4f46e5; text-decoration: none; font-size: 14px; font-weight: bold;">Parent Portal (Check Ward)</a> 
 </div> 
@@ -99,7 +117,7 @@ button:hover { background: var(--primary-hover); }
 <!-- SIDEBAR --> 
 <div class="sidebar"> 
 <div class="sidebar-top"> 
-<h2>🎓 NB-SchoolOS</h2> 
+<h2 id="sidebar-school-title">🎓 NB-SchoolOS</h2> 
 <a href="#" class="active" onclick="switchTab('dashboard', this)">🏠 Dashboard</a> 
 <a href="#" onclick="switchTab('teachers', this)">👨‍🏫 Teacher Directory</a> 
 <a href="#" onclick="switchTab('students', this)">👥 Student Management</a> 
@@ -110,7 +128,7 @@ button:hover { background: var(--primary-hover); }
 <a href="#" onclick="switchTab('accounting', this)">💰 School Accounting Ledger</a> 
 <a href="#" onclick="switchTab('notifications', this)">📱 SMS & WhatsApp Alerts</a> 
 <a href="#" onclick="switchTab('idcards', this)">🪪 ID Card Generator</a> 
-<a href="#" onclick="switchTab('developer-billing', this)">📊 Developer billing (NB)</a> 
+<a href="#" onclick="switchTab('developer-billing', this)">📊 SaaS Subscription</a> 
 <a href="#" onclick="switchTab('settings', this)">⚙️ Settings</a> 
 </div> 
 <div class="sidebar-footer"> 
@@ -121,11 +139,11 @@ button:hover { background: var(--primary-hover); }
 <!-- MAIN CONTENT --> 
 <div class="main-content"> 
 <div class="top-bar"> 
-<span><strong>Right Hope Academy</strong> — Cloud Connected Portal</span> 
+<span><strong id="topbar-school-name">School Portal</strong> — Cloud Connected Multi-Tenant</span> 
 <span id="current-date" style="color: #666; font-size: 13px;"></span> 
 </div> 
 <div class="role-switcher-card"> 
-<div><strong>School:</strong> Right Hope Academy</div> 
+<div><strong>Active Institution:</strong> <span id="active-school-label">Loading...</span></div> 
 <div><strong>Role:</strong> <span id="role-display"><span style="color: #007bff;">Administrator</span></span></div> 
 <div> 
 <span class="role-badge badge-admin" onclick="setRole('admin')">Admin</span> 
@@ -137,8 +155,8 @@ button:hover { background: var(--primary-hover); }
 <div id="dashboard" class="section-view active-view"> 
 <div class="card"> 
 <h3>Dashboard Overview</h3> 
-<p>Welcome back to Right Hope Academy cloud management portal. <strong>(Opportunity For All)</strong></p> 
-<p style="color: #555; margin-top: 10px;">All data is synchronized live with the online Supabase database.</p> 
+<p>Welcome back to your school's autonomous cloud management portal.</p> 
+<p style="color: #555; margin-top: 10px;">All records are securely isolated and synchronized live via Supabase multi-tenant cloud storage.</p> 
 </div> 
 </div> 
 
@@ -154,8 +172,8 @@ button:hover { background: var(--primary-hover); }
 <div style="width: 100%; overflow-x: auto;"> 
 <table id="teacherTable"> 
 <thead><tr><th>Staff ID</th><th>Name</th><th>Subject Specialty</th><th>Actions</th></tr></thead> 
-<tbody> 
-<tr><td>TCH-101</td><td>Mr. Kwaku Mensah</td><td>Core Mathematics</td><td><button class="btn-danger" onclick="deleteRow(this)">Delete</button></td></tr> 
+<tbody id="teacherTableBody"> 
+<!-- Loaded dynamically --> 
 </tbody> 
 </table> 
 </div> 
@@ -200,7 +218,7 @@ button:hover { background: var(--primary-hover); }
 <div id="fees" class="section-view"> 
 <div class="card"> 
 <h3>Fee Payments & Mobile Money (MoMo)</h3> 
-<p style="font-size: 13px; color: #555;">Official School MoMo Number: <strong>0244603378</strong>.</p> 
+<p style="font-size: 13px; color: #555;">Registered School MoMo Number: <strong id="school-momo-display">0244603378</strong>.</p> 
 <div style="width: 100%; overflow-x: auto;"> 
 <table id="feesTable"> 
 <thead><tr><th>Student Name</th><th>Class</th><th>Fee Status</th><th>Payment Actions</th></tr></thead> 
@@ -276,9 +294,8 @@ button:hover { background: var(--primary-hover); }
 <!-- HIDDEN PRINTABLE REPORT CARD TEMPLATE --> 
 <div id="printable-report-card" style="display: none;"> 
 <div style="text-align: center; border-bottom: 2px solid #1e1b4b; padding-bottom: 12px; margin-bottom: 15px;"> 
-<h2 style="color: #1e1b4b; margin: 0;">RIGHT HOPE ACADEMY</h2> 
-<p style="margin: 3px 0; font-size: 13px; font-weight: bold;">Dugshegu, Ghana | Motto: Opportunity For All</p> 
-<h3 style="margin: 8px 0 0 0; color: #333; font-size: 15px;" id="print-report-title">OFFICIAL TERMINAL REPORT CARD</h3> 
+<h2 id="print-school-name" style="color: #1e1b4b; margin: 0;">SCHOOL NAME</h2> 
+<p style="margin: 3px 0; font-size: 13px; font-weight: bold;">Official Terminal Report Card</p> 
 </div> 
 <div style="display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 13px; background: #f8fafc; padding: 10px; border-radius: 6px;"> 
 <div><strong>Student Name:</strong> <span id="print-student-name">John Doe</span></div> 
@@ -389,7 +406,7 @@ button:hover { background: var(--primary-hover); }
 </div> 
 <div> 
 <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 3px;">Message Text:</label> 
-<textarea id="smsTextBody" rows="4">Dear Parent, reminder from Right Hope Academy. Motto: Opportunity For All.</textarea> 
+<textarea id="smsTextBody" rows="4">Dear Parent, reminder regarding your ward's school records.</textarea> 
 </div> 
 <button class="btn-pay" onclick="sendWhatsAppAlert()">💬 Send via WhatsApp</button> 
 </div> 
@@ -414,13 +431,13 @@ button:hover { background: var(--primary-hover); }
 <div id="idCardPreviewContainer" style="margin-top: 20px; display: flex; justify-content: center;"> 
 <div style="width: 320px; background: white; border: 2px solid #1e1b4b; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden;"> 
 <div style="background: #1e1b4b; color: white; padding: 12px; text-align: center;"> 
-<h4 style="margin: 0; font-size: 15px;">RIGHT HOPE ACADEMY</h4> 
-<span style="font-size: 10px; opacity: 0.8;">Opportunity For All</span> 
+<h4 id="card-preview-school" style="margin: 0; font-size: 15px;">SCHOOL NAME</h4> 
+<span style="font-size: 10px; opacity: 0.8;">Student ID Card</span> 
 </div> 
 <div style="padding: 20px; text-align: center;"> 
 <h3 id="card-preview-name" style="margin: 0 0 5px 0; color: #1e1b4b; font-size: 18px;">John Doe</h3> 
 <p id="card-preview-role" style="margin: 0 0 15px 0; color: #64748b; font-size: 13px; font-weight: bold;">Student - Basic 5</p> 
-<div style="background: #f8fafc; padding: 8px; border-radius: 6px; font-size: 11px; color: #475569; border: 1px solid #e2e8f0;"> ID No: <span id="card-preview-id">RHA-2026-001</span><br> Issued by <strong>NB Designs</strong> </div> 
+<div style="background: #f8fafc; padding: 8px; border-radius: 6px; font-size: 11px; color: #475569; border: 1px solid #e2e8f0;"> Issued by <strong>NB Designs</strong> </div> 
 </div> 
 </div> 
 </div> 
@@ -430,25 +447,25 @@ button:hover { background: var(--primary-hover); }
 </div> 
 </div> 
 
-<!-- DEVELOPER BILLING PANEL SECTION --> 
+<!-- SAAS SUBSCRIPTION BILLING PANEL --> 
 <div id="developer-billing" class="section-view"> 
 <div class="card"> 
-<h3>NB Designs - Developer Portal & Billing</h3> 
-<p style="color: #666; font-size: 13px;">System management, deployment, and service fee tracking for Right Hope Academy (0546247266).</p> 
+<h3>NB Designs - SaaS Platform Subscription</h3> 
+<p style="color: #666; font-size: 13px;">Manage your school's autonomous cloud platform subscription and billing status.</p> 
 
 <div style="margin-top: 20px; padding: 15px; background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0;">
-<h4 style="margin-top: 0; color: var(--primary);">Active Maintenance & Deployment Billing</h4>
+<h4 style="margin-top: 0; color: var(--primary);">Active Cloud License Status</h4>
 <div style="display: flex; gap: 15px; margin: 15px 0; flex-wrap: wrap;"> 
 <div style="background: #eff6ff; padding: 12px; border-radius: 6px; flex: 1; border-left: 4px solid #0284c7;"> 
-<span style="font-size: 12px; color: #666; font-weight: bold;">Monthly Maintenance Fee</span> 
+<span style="font-size: 12px; color: #666; font-weight: bold;">Monthly SaaS License Fee</span> 
 <h4 style="margin: 5px 0 0 0; color: #0369a1; font-size: 18px;">GHS 500</h4> 
 </div> 
-<div style="background: #fef2f2; padding: 12px; border-radius: 6px; flex: 1; border-left: 4px solid #dc2626;"> 
-<span style="font-size: 12px; color: #666; font-weight: bold;">Total Outstanding Balance</span> 
-<h4 style="margin: 5px 0 0 0; color: #b91c1c; font-size: 18px;">GHS 500</h4> 
+<div style="background: #f1f8f5; padding: 12px; border-radius: 6px; flex: 1; border-left: 4px solid #10b981;"> 
+<span style="font-size: 12px; color: #666; font-weight: bold;">Subscription Status</span> 
+<h4 style="margin: 5px 0 0 0; color: #047857; font-size: 18px;">Active & Fully Synchronized</h4> 
 </div> 
 </div> 
-<button class="btn-pay" onclick="alert('MoMo payment prompt generated for 0546247266')">Process MoMo Settlement</button>
+<button class="btn-pay" onclick="alert('MoMo payment prompt generated for automated SaaS subscription renewal.')">Renew Subscription via MoMo</button>
 </div>
 </div> 
 </div> 
@@ -458,10 +475,10 @@ button:hover { background: var(--primary-hover); }
 <div class="card"> 
 <h3>System Settings</h3> 
 <label style="display: block; font-weight: bold; font-size: 13px; margin-bottom: 5px;">Institution Name</label> 
-<input type="text" value="Right Hope Academy" style="margin-bottom: 15px;"> 
-<label style="display: block; font-weight: bold; font-size: 13px; margin-bottom: 5px;">School Motto</label> 
-<input type="text" value="Opportunity For All" style="margin-bottom: 15px;"> 
-<button onclick="alert('Settings updated successfully!')">Save Changes</button> 
+<input type="text" id="settingSchoolName" style="margin-bottom: 15px;"> 
+<label style="display: block; font-weight: bold; font-size: 13px; margin-bottom: 5px;">Fee MoMo Number</label> 
+<input type="text" id="settingSchoolMomo" style="margin-bottom: 15px;"> 
+<button onclick="updateSchoolSettings()">Save Changes</button> 
 </div> 
 </div> 
 </div> 
@@ -478,6 +495,128 @@ const primarySubjects = [ "English Language", "Core Mathematics", "Integrated Sc
 const jhsSubjects = [ "English Language", "Core Mathematics", "Integrated Science", "Social Studies", "Information & Comm. Tech (ICT)", "Religious & Moral Education", "Career Tech", "Ghanaian Language", "Creative Arts" ]; 
 
 let currentRole = 'admin';
+let currentSchoolId = null;
+let currentSchoolData = null;
+
+function switchAuthMode(mode) {
+    if(mode === 'login') {
+        document.getElementById('loginFormView').style.display = 'block';
+        document.getElementById('registerFormView').style.display = 'none';
+        document.getElementById('tabLoginBtn').style.borderBottom = '2px solid var(--primary)';
+        document.getElementById('tabLoginBtn').style.color = 'var(--primary)';
+        document.getElementById('tabRegisterBtn').style.borderBottom = 'none';
+        document.getElementById('tabRegisterBtn').style.color = '#666';
+    } else {
+        document.getElementById('loginFormView').style.display = 'none';
+        document.getElementById('registerFormView').style.display = 'block';
+        document.getElementById('tabRegisterBtn').style.borderBottom = '2px solid var(--primary)';
+        document.getElementById('tabRegisterBtn').style.color = 'var(--primary)';
+        document.getElementById('tabLoginBtn').style.borderBottom = 'none';
+        document.getElementById('tabLoginBtn').style.color = '#666';
+    }
+}
+
+async function handleSchoolRegistration() {
+    let name = document.getElementById("regSchoolName").value.trim();
+    let email = document.getElementById("regEmail").value.trim();
+    let password = document.getElementById("regPassword").value.trim();
+    let momo = document.getElementById("regMomo").value.trim() || "0244603378";
+
+    if(!name || !email || !password) {
+        alert("Please fill in all required registration details.");
+        return;
+    }
+
+    let { data, error } = await supabaseClient.from('schools').insert([
+        { school_name: name, admin_email: email, admin_password: password, momo_number: momo, subscription_status: 'Active' }
+    ]).select();
+
+    if(error) {
+        alert("Registration error: " + error.message);
+    } else {
+        alert("School account created successfully! You can now log in.");
+        switchAuthMode('login');
+        document.getElementById("loginEmail").value = email;
+    }
+}
+
+async function handleLogin() { 
+  let emailInput = document.getElementById("loginEmail").value.trim();
+  let passInput = document.getElementById("loginPassword").value.trim();
+
+  if(!emailInput || !passInput) { 
+    alert("Please enter your login credentials!"); 
+    return;
+  } 
+
+  let { data: schoolMatch, error } = await supabaseClient
+    .from('schools')
+    .select('*')
+    .eq('admin_email', emailInput)
+    .single();
+
+  if(error || !schoolMatch || schoolMatch.admin_password !== passInput) {
+      alert("Invalid login credentials or school account not found.");
+      return;
+  }
+
+  currentSchoolId = schoolMatch.id;
+  currentSchoolData = schoolMatch;
+
+  applySchoolBranding();
+
+  document.getElementById("login-container").style.display = "none"; 
+  document.getElementById("app-container").style.display = "flex"; 
+  setRole('admin');
+  loadSubjectTable(); 
+  fetchCloudData();
+} 
+
+function applySchoolBranding() {
+    let name = currentSchoolData.school_name;
+    let momo = currentSchoolData.momo_number || "0244603378";
+
+    document.getElementById("sidebar-school-title").innerText = "🎓 " + name;
+    document.getElementById("topbar-school-name").innerText = name;
+    document.getElementById("active-school-label").innerText = name;
+    document.getElementById("school-momo-display").innerText = momo;
+    document.getElementById("print-school-name").innerText = name.toUpperCase();
+    document.getElementById("card-preview-school").innerText = name.toUpperCase();
+    document.getElementById("parent-school-name").innerText = name;
+
+    document.getElementById("settingSchoolName").value = name;
+    document.getElementById("settingSchoolMomo").value = momo;
+}
+
+async function updateSchoolSettings() {
+    let newName = document.getElementById("settingSchoolName").value.trim();
+    let newMomo = document.getElementById("settingSchoolMomo").value.trim();
+
+    let { error } = await supabaseClient
+        .from('schools')
+        .update({ school_name: newName, momo_number: newMomo })
+        .eq('id', currentSchoolId);
+
+    if(error) {
+        alert("Error updating settings.");
+    } else {
+        currentSchoolData.school_name = newName;
+        currentSchoolData.momo_number = newMomo;
+        applySchoolBranding();
+        alert("Settings updated successfully in the cloud!");
+    }
+}
+
+function showParentPortal() { 
+  document.getElementById("login-container").style.display = "none"; 
+  document.getElementById("parent-portal-screen").style.display = "block"; 
+} 
+
+function backToLogin() { 
+  document.getElementById("parent-portal-screen").style.display = "none"; 
+  document.getElementById("login-container").style.display = "flex"; 
+} 
+
 function setRole(role) {
     currentRole = role;
     let roleDisplay = document.getElementById('role-display');
@@ -500,36 +639,14 @@ function setRole(role) {
     }
 }
 
-function handleLogin() { 
-  let username = document.getElementById("username").value.trim();
-  let loginRole = document.getElementById("loginRole") ? document.getElementById("loginRole").value : 'admin';
-  if(username !== "") { 
-    document.getElementById("login-container").style.display = "none"; 
-    document.getElementById("app-container").style.display = "flex"; 
-    setRole(loginRole);
-    loadSubjectTable(); 
-    fetchCloudData();
-  } else { 
-    alert("Please enter a username!"); 
-  } 
-} 
-
-function showParentPortal() { 
-  document.getElementById("login-container").style.display = "none"; 
-  document.getElementById("parent-portal-screen").style.display = "block"; 
-} 
-
-function backToLogin() { 
-  document.getElementById("parent-portal-screen").style.display = "none"; 
-  document.getElementById("login-container").style.display = "flex"; 
-} 
-
 function switchTab(tabId, element) { 
   if (tabId === 'logout') { 
     document.getElementById("app-container").style.display = "none"; 
     document.getElementById("login-container").style.display = "flex"; 
-    document.getElementById("username").value = ""; 
-    document.getElementById("password").value = ""; 
+    document.getElementById("loginEmail").value = ""; 
+    document.getElementById("loginPassword").value = ""; 
+    currentSchoolId = null;
+    currentSchoolData = null;
     return; 
   } 
   if (currentRole === 'teacher' && tabId !== 'reports') {
@@ -543,14 +660,14 @@ function switchTab(tabId, element) {
   if(tabId === 'analytics') { loadAnalyticsData(); } 
 } 
 
-// --- SUPABASE CLOUD DATA FUNCTIONS ---
+// --- SUPABASE CLOUD MULTI-TENANT DATA FUNCTIONS ---
 async function fetchCloudData() {
   await fetchStudentsFromCloud();
   await fetchAccountingFromCloud();
 }
 
 async function fetchStudentsFromCloud() {
-  let { data, error } = await supabaseClient.from('students').select('*');
+  let { data, error } = await supabaseClient.from('students').select('*').eq('school_id', currentSchoolId);
   if (error) { console.error('Error fetching students:', error); return; }
   let tbody = document.getElementById('studentTableBody');
   let feesBody = document.getElementById('feesTableBody');
@@ -559,6 +676,8 @@ async function fetchStudentsFromCloud() {
   if(feesBody) feesBody.innerHTML = '';
   if(attendanceBody) attendanceBody.innerHTML = '';
 
+  let momoNum = currentSchoolData.momo_number || "0244603378";
+
   if(data) {
     data.forEach(st => {
       let studentPin = st.parent_pin || '1234';
@@ -566,7 +685,7 @@ async function fetchStudentsFromCloud() {
         tbody.innerHTML += `<tr><td>${st.student_id}</td><td>👤</td><td>${st.name}</td><td>${st.class_level}</td><td><code>${studentPin}</code></td><td>Active</td><td><button class='btn-danger' onclick="deleteCloudStudent('${st.id}')">Delete</button></td></tr>`;
       }
       if(feesBody) {
-        feesBody.innerHTML += `<tr><td>${st.name}</td><td>${st.class_level}</td><td><span style="color:green; font-weight:bold;">${st.fee_status}</span></td><td><button class="btn-pay" onclick="payWithMoMo('${st.name}')">Confirm MoMo (0244603378)</button></td></tr>`;
+        feesBody.innerHTML += `<tr><td>${st.name}</td><td>${st.class_level}</td><td><span style="color:green; font-weight:bold;">${st.fee_status}</span></td><td><button class="btn-pay" onclick="payWithMoMo('${st.name}')">Confirm MoMo (${momoNum})</button></td></tr>`;
       }
       if(attendanceBody) {
         attendanceBody.innerHTML += `<tr><td>${st.name}</td><td>${st.class_level}</td><td><select><option>Present</option><option>Absent</option></select></td></tr>`;
@@ -581,7 +700,7 @@ async function addStudent() {
   let pin = document.getElementById("newStudentPin").value.trim() || "1234";
   if(!name || !cls) { alert("Please provide name and class."); return; }
   let studentId = "RHA-" + Math.floor(1000 + Math.random() * 9000);
-  let { error } = await supabaseClient.from('students').insert([{ student_id: studentId, name, class_level: cls, parent_pin: pin, fee_status: 'Unpaid Arrears' }]);
+  let { error } = await supabaseClient.from('students').insert([{ school_id: currentSchoolId, student_id: studentId, name, class_level: cls, parent_pin: pin, fee_status: 'Unpaid Arrears' }]);
   if (error) { alert("Error saving student to cloud: " + error.message); } 
   else { 
     alert("Student successfully saved to Supabase with ID: " + studentId); 
@@ -618,8 +737,8 @@ async function saveTerminalReport() {
   });
 
   let { error } = await supabaseClient.from('terminal_reports').upsert([
-    { student_name: studentName, term: term, level: level, subjects_json: subjectsList }
-  ], { onConflict: 'student_name,term' });
+    { school_id: currentSchoolId, student_name: studentName, term: term, level: level, subjects_json: subjectsList }
+  ], { onConflict: 'school_id,student_name,term' });
 
   if (error) { alert("Error saving report: " + error.message); }
   else { alert("Terminal report successfully saved to Cloud database!"); }
@@ -658,6 +777,7 @@ async function searchChildRecordSecure() {
   let { data: reportByName } = await supabaseClient
     .from('terminal_reports')
     .select('*')
+    .eq('school_id', studentData.school_id)
     .ilike('student_name', targetName);
 
   let record = (reportByName && reportByName.length > 0) ? reportByName[0] : null;
@@ -676,7 +796,7 @@ async function searchChildRecordSecure() {
 }
 
 async function fetchAccountingFromCloud() {
-  let { data } = await supabaseClient.from('accounting_ledger').select('*');
+  let { data } = await supabaseClient.from('accounting_ledger').select('*').eq('school_id', currentSchoolId);
   let tbody = document.getElementById('accountingBody');
   if(!tbody) return;
   tbody.innerHTML = '';
@@ -699,7 +819,7 @@ async function addTransaction() {
   let amount = parseFloat(document.getElementById("txnAmount").value);
   if(!desc || isNaN(amount)) { alert("Enter valid description and amount."); return; }
   let dateStr = new Date().toLocaleDateString();
-  let { error } = await supabaseClient.from('accounting_ledger').insert([{ date: dateStr, description: desc, type, amount }]);
+  let { error } = await supabaseClient.from('accounting_ledger').insert([{ school_id: currentSchoolId, date: dateStr, description: desc, type, amount }]);
   if(error) { alert("Error saving transaction"); }
   else {
     document.getElementById("txnDesc").value = "";
