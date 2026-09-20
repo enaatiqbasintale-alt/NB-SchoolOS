@@ -1,4 +1,4 @@
- <!DOCTYPE html> 
+<!DOCTYPE html> 
 <html lang="en"> 
 <head> 
 <meta charset="UTF-8"> 
@@ -42,84 +42,82 @@ button:hover { background: var(--primary-hover); }
 .btn-pay { background: #10b981; } 
 .btn-pay:hover { background: #059669; } 
 @media print { body * { visibility: hidden; } #printable-report-card, #printable-report-card * { visibility: visible; } #printable-report-card { position: absolute; left: 0; top: 0; width: 100%; background: white; padding: 20px; } .sidebar, .top-bar, .role-switcher-card, button, .no-print { display: none !important; } } 
-#parent-portal-screen { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--primary); overflow-y: auto; z-index: 9999; justify-content: center; align-items: center; } 
-.parent-portal-card { background: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 420px; margin: 40px auto; box-shadow: 0 4px 20px rgba(0,0,0,0.2); } 
-#login-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 9999; overflow-y: auto; } 
-.login-card { background: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 380px; text-align: center; margin: 20px auto; } 
+.auth-screen-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 9999; overflow-y: auto; } 
+.auth-card { background: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 380px; text-align: center; margin: 20px auto; box-shadow: 0 4px 20px rgba(0,0,0,0.2); } 
 </style> 
 </head> 
 <body> 
 
-<!-- DEDICATED PARENT PORTAL SCREEN (Completely Isolated from School Registration) --> 
-<div id="parent-portal-screen"> 
-<div class="parent-portal-card"> 
+<!-- 1. DEDICATED PARENT PORTAL SCREEN (Completely Isolated) --> 
+<div id="parent-portal-screen" class="auth-screen-overlay" style="display: none;"> 
+<div class="auth-card"> 
 <div style="text-align: center; margin-bottom: 20px;"> 
 <h2 id="parent-school-name" style="color: var(--primary); margin-bottom: 5px;">School Portal</h2> 
-<h3 style="color: #64748b; font-size: 14px; font-weight: normal; margin: 0;">Parent Portal - Secure Ward Verification</h3> 
+<h3 style="color: #64748b; font-size: 13px; font-weight: normal; margin: 0;">Parent Portal - Secure Ward Verification</h3> 
 </div> 
 
-<div style="text-align: left; font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #1f2937;">Student ID Number</div>
-<input type="text" id="parentStudentIdInput" placeholder="Enter exact Student ID..." style="padding: 12px; margin-bottom: 12px;"> 
+<div style="text-align: left; font-size: 13px; font-weight: bold; margin-bottom: 3px; color: #1f2937;">Student ID Number</div>
+<input type="text" id="parentStudentIdInput" placeholder="Enter exact Student ID..." style="padding: 10px; margin-bottom: 10px;"> 
 
-<div style="text-align: left; font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #1f2937;">Parent Access PIN / Secret Code</div>
-<input type="password" id="parentPinInput" placeholder="Enter student access PIN..." style="padding: 12px; margin-bottom: 15px;"> 
+<div style="text-align: left; font-size: 13px; font-weight: bold; margin-bottom: 3px; color: #1f2937;">Parent Access PIN / Secret Code</div>
+<input type="password" id="parentPinInput" placeholder="Enter student access PIN..." style="padding: 10px; margin-bottom: 12px;"> 
 
-<button onclick="searchChildRecordSecure()" style="width: 100%; padding: 12px;">Verify & View Ward Results</button> 
+<button onclick="searchChildRecordSecure()" style="width: 100%; padding: 11px;">Verify & View Ward Results</button> 
 
-<div id="childResultBox" style="margin-top: 20px; padding: 15px; background: #f8fafc; border-radius: 6px; display: none; border: 1px solid #e2e8f0; overflow-x: auto;"> 
-<h4 style="color: var(--primary); margin-top: 0;">Student Status & Performance Report Card</h4> 
-<div id="resultDetails" style="color: #333; line-height: 1.6; font-size: 13px;"></div> 
+<div id="childResultBox" style="margin-top: 15px; padding: 12px; background: #f8fafc; border-radius: 6px; display: none; border: 1px solid #e2e8f0; overflow-x: auto; text-align: left;"> 
+<h4 style="color: var(--primary); margin-top: 0; font-size: 13px;">Student Status & Performance Report Card</h4> 
+<div id="resultDetails" style="color: #333; line-height: 1.5; font-size: 12px;"></div> 
 </div> 
-<div style="margin-top: 25px; text-align: center;"> 
-<a href="#" onclick="backToLogin()" style="color: var(--primary); text-decoration: none; font-weight: bold; font-size: 13px;">&larr; Back to Staff Login</a> 
+<div style="margin-top: 20px; text-align: center;"> 
+<a href="#" onclick="showScreen('login-screen')" style="color: var(--primary); text-decoration: none; font-weight: bold; font-size: 13px;">&larr; Back to Staff Login</a> 
 </div> 
 </div>
 </div> 
 
-<!-- STAFF LOGIN & REGISTRATION SCREEN --> 
-<div id="login-container"> 
-<div class="login-card"> 
+<!-- 2. DEDICATED SCHOOL REGISTRATION SCREEN (Completely Separated) --> 
+<div id="register-screen" class="auth-screen-overlay" style="display: none;"> 
+<div class="auth-card"> 
 <h2 style="color: var(--primary); margin-bottom: 5px;">🎓 NB-SchoolOS</h2> 
-<p style="color: #666; font-size: 14px; margin-bottom: 20px;">Multi-Tenant Cloud Portal</p> 
+<p style="color: #666; font-size: 13px; margin-bottom: 15px;">Register a New Educational Institution</p> 
 
-<!-- Tab Switcher for Login / Register School -->
-<div style="display: flex; margin-bottom: 15px; border-bottom: 2px solid #e2e8f0;">
-    <button onclick="switchAuthMode('login')" id="tabLoginBtn" style="flex: 1; background: none; color: var(--primary); border-bottom: 2px solid var(--primary); border-radius: 0;">Login</button>
-    <button onclick="switchAuthMode('register')" id="tabRegisterBtn" style="flex: 1; background: none; color: #666; border: none; border-radius: 0;">Register School</button>
-</div>
+<div style="text-align: left; margin-bottom: 3px; font-size: 12px; font-weight: bold;">School Name</div> 
+<input type="text" id="regSchoolName" placeholder="e.g. Oakridge Academy"> 
+<div style="text-align: left; margin-top: 5px; margin-bottom: 3px; font-size: 12px; font-weight: bold;">Admin Email</div> 
+<input type="text" id="regEmail" placeholder="admin@school.com"> 
+<div style="text-align: left; margin-top: 5px; margin-bottom: 3px; font-size: 12px; font-weight: bold;">Password</div> 
+<input type="password" id="regPassword" placeholder="Create password"> 
+<div style="text-align: left; margin-top: 5px; margin-bottom: 3px; font-size: 12px; font-weight: bold;">MoMo / Payment Number</div> 
+<input type="text" id="regMomo" placeholder="e.g. 0244603378"> 
+<button onclick="handleSchoolRegistration()" style="width: 100%; margin-top: 12px; padding: 11px;" class="btn-pay">Create School Account</button> 
 
-<!-- LOGIN FORM -->
-<div id="loginFormView">
-    <div style="text-align: left; margin-bottom: 5px; font-size: 13px; font-weight: bold;">School ID or Email</div> 
-    <input type="text" id="loginEmail" placeholder="Enter admin email or school ID" value="admin@righthope.com"> 
-    <div style="text-align: left; margin-top: 10px; margin-bottom: 5px; font-size: 13px; font-weight: bold;">Password</div> 
-    <input type="password" id="loginPassword" placeholder="Enter password" value="password123"> 
-    
-    <!-- Role selector on login for testing or teacher access -->
-    <div style="text-align: left; margin-top: 10px; margin-bottom: 5px; font-size: 13px; font-weight: bold;">Select Login Role</div>
-    <select id="loginRoleSelect" style="margin-bottom: 15px;">
-        <option value="admin">Administrator (Full Access)</option>
-        <option value="teacher">Teacher (Marks Entry Only)</option>
-    </select>
+<div style="margin-top: 20px; text-align: center;"> 
+<a href="#" onclick="showScreen('login-screen')" style="color: var(--primary); text-decoration: none; font-weight: bold; font-size: 13px;">&larr; Back to Staff Login</a> 
+</div> 
+</div> 
+</div> 
 
-    <button onclick="handleLogin()" style="width: 100%; padding: 12px;">Login to Cloud Portal</button> 
-</div>
+<!-- 3. CLEAN STAFF LOGIN SCREEN (No Registration Tabs Here!) --> 
+<div id="login-screen" class="auth-screen-overlay"> 
+<div class="auth-card"> 
+<h2 style="color: var(--primary); margin-bottom: 5px;">🎓 NB-SchoolOS</h2> 
+<p style="color: #666; font-size: 13px; margin-bottom: 20px;">Multi-Tenant Cloud Portal</p> 
 
-<!-- REGISTRATION FORM -->
-<div id="registerFormView" style="display: none;">
-    <div style="text-align: left; margin-bottom: 3px; font-size: 12px; font-weight: bold;">School Name</div> 
-    <input type="text" id="regSchoolName" placeholder="e.g. Oakridge Academy"> 
-    <div style="text-align: left; margin-top: 5px; margin-bottom: 3px; font-size: 12px; font-weight: bold;">Admin Email</div> 
-    <input type="text" id="regEmail" placeholder="admin@school.com"> 
-    <div style="text-align: left; margin-top: 5px; margin-bottom: 3px; font-size: 12px; font-weight: bold;">Password</div> 
-    <input type="password" id="regPassword" placeholder="Create password"> 
-    <div style="text-align: left; margin-top: 5px; margin-bottom: 3px; font-size: 12px; font-weight: bold;">MoMo / Payment Number</div> 
-    <input type="text" id="regMomo" placeholder="e.g. 0244603378"> 
-    <button onclick="handleSchoolRegistration()" style="width: 100%; margin-top: 15px; padding: 12px;" class="btn-pay">Create School Account</button> 
-</div>
+<div style="text-align: left; margin-bottom: 3px; font-size: 12px; font-weight: bold;">School ID or Email</div> 
+<input type="text" id="loginEmail" placeholder="Enter admin email or school ID" value="admin@righthope.com"> 
+<div style="text-align: left; margin-top: 8px; margin-bottom: 3px; font-size: 12px; font-weight: bold;">Password</div> 
+<input type="password" id="loginPassword" placeholder="Enter password" value="password123"> 
 
-<div style="margin-top: 20px;"> 
-<a href="#" onclick="showParentPortal()" style="color: #4f46e5; text-decoration: none; font-size: 14px; font-weight: bold;">Parent Portal (Check Ward)</a> 
+<div style="text-align: left; margin-top: 8px; margin-bottom: 3px; font-size: 12px; font-weight: bold;">Select Login Role</div>
+<select id="loginRoleSelect" style="margin-bottom: 15px;">
+    <option value="admin">Administrator (Full Access)</option>
+    <option value="teacher">Teacher (Marks Entry Only)</option>
+</select>
+
+<button onclick="handleLogin()" style="width: 100%; padding: 11px;">Login to Cloud Portal</button> 
+
+<div style="margin-top: 20px; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #e2e8f0; padding-top: 15px;"> 
+<a href="#" onclick="showScreen('parent-portal-screen')" style="color: #4f46e5; text-decoration: none; font-size: 13px; font-weight: bold;">Parent Portal (Check Ward)</a> 
+<a href="#" onclick="showScreen('register-screen')" style="color: #64748b; text-decoration: none; font-size: 12px;">Register a New School Account</a> 
 </div> 
 </div> 
 </div> 
@@ -184,9 +182,7 @@ button:hover { background: var(--primary-hover); }
 <div style="width: 100%; overflow-x: auto;"> 
 <table id="teacherTable"> 
 <thead><tr><th>Staff ID</th><th>Name</th><th>Subject Specialty</th><th>Actions</th></tr></thead> 
-<tbody id="teacherTableBody"> 
-<!-- Loaded dynamically --> 
-</tbody> 
+<tbody id="teacherTableBody"></tbody> 
 </table> 
 </div> 
 </div> 
@@ -218,9 +214,7 @@ button:hover { background: var(--primary-hover); }
 <div style="width: 100%; overflow-x: auto;"> 
 <table id="studentTable"> 
 <thead><tr><th>ID</th><th>Photo</th><th>Name</th><th>Class Level</th><th>PIN</th><th>Status</th><th>Actions</th></tr></thead> 
-<tbody id="studentTableBody"> 
-<!-- Loaded from Supabase --> 
-</tbody> 
+<tbody id="studentTableBody"></tbody> 
 </table> 
 </div> 
 </div> 
@@ -234,9 +228,7 @@ button:hover { background: var(--primary-hover); }
 <div style="width: 100%; overflow-x: auto;"> 
 <table id="feesTable"> 
 <thead><tr><th>Student Name</th><th>Class</th><th>Fee Status</th><th>Payment Actions</th></tr></thead> 
-<tbody id="feesTableBody"> 
-<!-- Loaded from Supabase --> 
-</tbody> 
+<tbody id="feesTableBody"></tbody> 
 </table> 
 </div> 
 </div> 
@@ -519,22 +511,11 @@ let currentSchoolData = {
 // Initialize branding on load
 applySchoolBranding();
 
-function switchAuthMode(mode) {
-    if(mode === 'login') {
-        document.getElementById('loginFormView').style.display = 'block';
-        document.getElementById('registerFormView').style.display = 'none';
-        document.getElementById('tabLoginBtn').style.borderBottom = '2px solid var(--primary)';
-        document.getElementById('tabLoginBtn').style.color = 'var(--primary)';
-        document.getElementById('tabRegisterBtn').style.borderBottom = 'none';
-        document.getElementById('tabRegisterBtn').style.color = '#666';
-    } else {
-        document.getElementById('loginFormView').style.display = 'none';
-        document.getElementById('registerFormView').style.display = 'block';
-        document.getElementById('tabRegisterBtn').style.borderBottom = '2px solid var(--primary)';
-        document.getElementById('tabRegisterBtn').style.color = 'var(--primary)';
-        document.getElementById('tabLoginBtn').style.borderBottom = 'none';
-        document.getElementById('tabLoginBtn').style.color = '#666';
-    }
+function showScreen(screenId) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('register-screen').style.display = 'none';
+    document.getElementById('parent-portal-screen').style.display = 'none';
+    document.getElementById(screenId).style.display = 'flex';
 }
 
 async function handleSchoolRegistration() {
@@ -556,7 +537,7 @@ async function handleSchoolRegistration() {
         alert("Registration error: " + error.message);
     } else {
         alert("School account created successfully! You can now log in.");
-        switchAuthMode('login');
+        showScreen('login-screen');
         document.getElementById("loginEmail").value = email;
     }
 }
@@ -605,7 +586,7 @@ async function handleLogin() {
 
   applySchoolBranding();
 
-  document.getElementById("login-container").style.display = "none"; 
+  document.getElementById("login-screen").style.display = "none"; 
   document.getElementById("app-container").style.display = "flex"; 
   setRole(selectedRole);
   loadSubjectTable(); 
@@ -647,16 +628,6 @@ async function updateSchoolSettings() {
     }
 }
 
-function showParentPortal() { 
-  document.getElementById("login-container").style.display = "none"; 
-  document.getElementById("parent-portal-screen").style.display = "flex"; 
-} 
-
-function backToLogin() { 
-  document.getElementById("parent-portal-screen").style.display = "none"; 
-  document.getElementById("login-container").style.display = "flex"; 
-} 
-
 function setRole(role) {
     currentRole = role;
     let roleDisplay = document.getElementById('role-display');
@@ -686,7 +657,7 @@ function setRole(role) {
 function switchTab(tabId, element) { 
   if (tabId === 'logout') { 
     document.getElementById("app-container").style.display = "none"; 
-    document.getElementById("login-container").style.display = "flex"; 
+    showScreen('login-screen');
     document.getElementById("loginEmail").value = "admin@righthope.com"; 
     document.getElementById("loginPassword").value = "password123"; 
     currentSchoolId = "offline-fallback-id";
@@ -944,4 +915,4 @@ function generateIDCard() {
 loadSubjectTable(); 
 </script> 
 </body> 
-</html>
+</html> 
