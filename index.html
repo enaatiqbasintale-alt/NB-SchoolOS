@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+ <!DOCTYPE html> 
 <html lang="en"> 
 <head> 
 <meta charset="UTF-8"> 
@@ -42,34 +42,38 @@ button:hover { background: var(--primary-hover); }
 .btn-pay { background: #10b981; } 
 .btn-pay:hover { background: #059669; } 
 @media print { body * { visibility: hidden; } #printable-report-card, #printable-report-card * { visibility: visible; } #printable-report-card { position: absolute; left: 0; top: 0; width: 100%; background: white; padding: 20px; } .sidebar, .top-bar, .role-switcher-card, button, .no-print { display: none !important; } } 
-#parent-portal-screen { display: none; padding: 20px; max-width: 750px; margin: 20px auto; background: white; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); } 
-#login-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 9999; } 
-.login-card { background: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 380px; text-align: center; } 
+#parent-portal-screen { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--primary); overflow-y: auto; z-index: 9999; justify-content: center; align-items: center; } 
+.parent-portal-card { background: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 420px; margin: 40px auto; box-shadow: 0 4px 20px rgba(0,0,0,0.2); } 
+#login-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 9999; overflow-y: auto; } 
+.login-card { background: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 380px; text-align: center; margin: 20px auto; } 
 </style> 
 </head> 
 <body> 
 
-<!-- PARENT PORTAL SCREEN --> 
+<!-- DEDICATED PARENT PORTAL SCREEN (Completely Isolated from School Registration) --> 
 <div id="parent-portal-screen"> 
-<div style="text-align: center; margin-bottom: 25px;"> 
+<div class="parent-portal-card"> 
+<div style="text-align: center; margin-bottom: 20px;"> 
 <h2 id="parent-school-name" style="color: var(--primary); margin-bottom: 5px;">School Portal</h2> 
-<h3 style="color: #555; font-size: 16px;">Parent Portal - Secure Ward Verification</h3> 
+<h3 style="color: #64748b; font-size: 14px; font-weight: normal; margin: 0;">Parent Portal - Secure Ward Verification</h3> 
 </div> 
-<div style="text-align: left; font-size: 13px; font-weight: bold; margin-bottom: 5px;">Student ID Number</div>
+
+<div style="text-align: left; font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #1f2937;">Student ID Number</div>
 <input type="text" id="parentStudentIdInput" placeholder="Enter exact Student ID..." style="padding: 12px; margin-bottom: 12px;"> 
 
-<div style="text-align: left; font-size: 13px; font-weight: bold; margin-bottom: 5px;">Parent Access PIN / Secret Code</div>
+<div style="text-align: left; font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #1f2937;">Parent Access PIN / Secret Code</div>
 <input type="password" id="parentPinInput" placeholder="Enter student access PIN..." style="padding: 12px; margin-bottom: 15px;"> 
 
 <button onclick="searchChildRecordSecure()" style="width: 100%; padding: 12px;">Verify & View Ward Results</button> 
 
 <div id="childResultBox" style="margin-top: 20px; padding: 15px; background: #f8fafc; border-radius: 6px; display: none; border: 1px solid #e2e8f0; overflow-x: auto;"> 
 <h4 style="color: var(--primary); margin-top: 0;">Student Status & Performance Report Card</h4> 
-<div id="resultDetails" style="color: #333; line-height: 1.6;"></div> 
+<div id="resultDetails" style="color: #333; line-height: 1.6; font-size: 13px;"></div> 
 </div> 
 <div style="margin-top: 25px; text-align: center;"> 
-<a href="#" onclick="backToLogin()" style="color: var(--primary); text-decoration: none; font-weight: bold;">&larr; Back to Staff Login</a> 
+<a href="#" onclick="backToLogin()" style="color: var(--primary); text-decoration: none; font-weight: bold; font-size: 13px;">&larr; Back to Staff Login</a> 
 </div> 
+</div>
 </div> 
 
 <!-- STAFF LOGIN & REGISTRATION SCREEN --> 
@@ -504,8 +508,16 @@ const primarySubjects = [ "English Language", "Core Mathematics", "Integrated Sc
 const jhsSubjects = [ "English Language", "Core Mathematics", "Integrated Science", "Social Studies", "Information & Comm. Tech (ICT)", "Religious & Moral Education", "Career Tech", "Ghanaian Language", "Creative Arts" ]; 
 
 let currentRole = 'admin';
-let currentSchoolId = null;
-let currentSchoolData = null;
+let currentSchoolId = "offline-fallback-id";
+let currentSchoolData = {
+    id: "offline-fallback-id",
+    school_name: "Right Hope Academy",
+    admin_email: "admin@righthope.com",
+    momo_number: "0244603378"
+};
+
+// Initialize branding on load
+applySchoolBranding();
 
 function switchAuthMode(mode) {
     if(mode === 'login') {
@@ -575,7 +587,6 @@ async function handleLogin() {
               momo_number: "0244603378"
           };
       } else if (selectedRole === 'teacher') {
-          // Teachers can log in with any school ID/email and generic password or staff check
           currentSchoolId = schoolMatch ? schoolMatch.id : "offline-fallback-id";
           currentSchoolData = schoolMatch || {
               id: "offline-fallback-id",
@@ -638,7 +649,7 @@ async function updateSchoolSettings() {
 
 function showParentPortal() { 
   document.getElementById("login-container").style.display = "none"; 
-  document.getElementById("parent-portal-screen").style.display = "block"; 
+  document.getElementById("parent-portal-screen").style.display = "flex"; 
 } 
 
 function backToLogin() { 
@@ -678,8 +689,14 @@ function switchTab(tabId, element) {
     document.getElementById("login-container").style.display = "flex"; 
     document.getElementById("loginEmail").value = "admin@righthope.com"; 
     document.getElementById("loginPassword").value = "password123"; 
-    currentSchoolId = null;
-    currentSchoolData = null;
+    currentSchoolId = "offline-fallback-id";
+    currentSchoolData = {
+        id: "offline-fallback-id",
+        school_name: "Right Hope Academy",
+        admin_email: "admin@righthope.com",
+        momo_number: "0244603378"
+    };
+    applySchoolBranding();
     return; 
   } 
   if (currentRole === 'teacher' && tabId !== 'reports') {
@@ -789,13 +806,14 @@ async function searchChildRecordSecure() {
     return; 
   }
 
+  resultBox.style.display = "block";
+  resultDetails.innerHTML = "🔄 Verifying student records in Supabase...";
+
   let { data: studentData, error: studentError } = await supabaseClient
     .from('students')
     .select('*')
     .eq('student_id', studentIdInput)
     .single();
-
-  resultBox.style.display = "block";
 
   if (studentError || !studentData) {
     resultDetails.innerHTML = "❌ Invalid Student ID. Please check the ID provided by the school.";
@@ -926,4 +944,4 @@ function generateIDCard() {
 loadSubjectTable(); 
 </script> 
 </body> 
-</html> 
+</html>
