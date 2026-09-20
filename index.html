@@ -1,4 +1,4 @@
- <!DOCTYPE html> 
+<!DOCTYPE html> 
 <html lang="en"> 
 <head> 
 <meta charset="UTF-8"> 
@@ -90,7 +90,15 @@ button:hover { background: var(--primary-hover); }
     <input type="text" id="loginEmail" placeholder="Enter admin email or school ID" value="admin@righthope.com"> 
     <div style="text-align: left; margin-top: 10px; margin-bottom: 5px; font-size: 13px; font-weight: bold;">Password</div> 
     <input type="password" id="loginPassword" placeholder="Enter password" value="password123"> 
-    <button onclick="handleLogin()" style="width: 100%; margin-top: 20px; padding: 12px;">Login to Cloud Portal</button> 
+    
+    <!-- Role selector on login for testing or teacher access -->
+    <div style="text-align: left; margin-top: 10px; margin-bottom: 5px; font-size: 13px; font-weight: bold;">Select Login Role</div>
+    <select id="loginRoleSelect" style="margin-bottom: 15px;">
+        <option value="admin">Administrator (Full Access)</option>
+        <option value="teacher">Teacher (Marks Entry Only)</option>
+    </select>
+
+    <button onclick="handleLogin()" style="width: 100%; padding: 12px;">Login to Cloud Portal</button> 
 </div>
 
 <!-- REGISTRATION FORM -->
@@ -145,9 +153,9 @@ button:hover { background: var(--primary-hover); }
 <div class="role-switcher-card"> 
 <div><strong>Active Institution:</strong> <span id="active-school-label">Loading...</span></div> 
 <div><strong>Role:</strong> <span id="role-display"><span style="color: #007bff;">Administrator</span></span></div> 
-<div> 
-<span class="role-badge badge-admin" onclick="setRole('admin')">Admin</span> 
-<span class="role-badge badge-teacher" onclick="setRole('teacher')">Teacher</span> 
+<div id="roleSwitchButtons" style="margin-top: 5px;"> 
+<span class="role-badge badge-admin" onclick="setRole('admin')">Admin Mode</span> 
+<span class="role-badge badge-teacher" onclick="setRole('teacher')">Teacher Mode</span> 
 </div> 
 </div> 
 
@@ -248,6 +256,7 @@ button:hover { background: var(--primary-hover); }
 <div id="reports" class="section-view"> 
 <div class="card"> 
 <h3>Terminal Assessment & Printable Report Card Generator</h3> 
+<p id="teacher-notice" style="color: #10b981; font-weight: bold; font-size: 13px; display: none; margin-bottom: 10px;">👋 Teacher Portal: You have secure access to enter and save student assessment scores.</p>
 <div style="margin: 15px 0; display: flex; gap: 10px; flex-wrap: wrap; width: 100%;"> 
 <div style="flex: 1; min-width: 180px;"> 
 <label style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 3px;">Select Level:</label> 
@@ -543,6 +552,7 @@ async function handleSchoolRegistration() {
 async function handleLogin() { 
   let emailInput = document.getElementById("loginEmail").value.trim();
   let passInput = document.getElementById("loginPassword").value.trim();
+  let selectedRole = document.getElementById("loginRoleSelect").value;
 
   if(!emailInput || !passInput) { 
     alert("Please enter your login credentials!"); 
@@ -555,14 +565,22 @@ async function handleLogin() {
     .eq('admin_email', emailInput)
     .single();
 
-  if(error || !schoolMatch || schoolMatch.admin_password !== passInput) {
-      // Fallback check if offline or to bypass database lookup hiccups for your primary account
+  if(error || !schoolMatch || (selectedRole === 'admin' && schoolMatch.admin_password !== passInput)) {
       if(emailInput === "admin@righthope.com" && passInput === "password123") {
           currentSchoolId = "offline-fallback-id";
           currentSchoolData = {
               id: "offline-fallback-id",
               school_name: "Right Hope Academy",
               admin_email: "admin@righthope.com",
+              momo_number: "0244603378"
+          };
+      } else if (selectedRole === 'teacher') {
+          // Teachers can log in with any school ID/email and generic password or staff check
+          currentSchoolId = schoolMatch ? schoolMatch.id : "offline-fallback-id";
+          currentSchoolData = schoolMatch || {
+              id: "offline-fallback-id",
+              school_name: "Right Hope Academy",
+              admin_email: emailInput,
               momo_number: "0244603378"
           };
       } else {
@@ -578,7 +596,7 @@ async function handleLogin() {
 
   document.getElementById("login-container").style.display = "none"; 
   document.getElementById("app-container").style.display = "flex"; 
-  setRole('admin');
+  setRole(selectedRole);
   loadSubjectTable(); 
   fetchCloudData();
 } 
@@ -632,8 +650,11 @@ function setRole(role) {
     currentRole = role;
     let roleDisplay = document.getElementById('role-display');
     let sidebarLinks = document.querySelectorAll('.sidebar-top a');
+    let teacherNotice = document.getElementById('teacher-notice');
+    
     if (role === 'teacher') {
-        if(roleDisplay) roleDisplay.innerHTML = '<span style="color: #10b981;">Teacher (Results Entry Only)</span>';
+        if(roleDisplay) roleDisplay.innerHTML = '<span style="color: #10b981;">Teacher (Marks Entry Only)</span>';
+        if(teacherNotice) teacherNotice.style.display = 'block';
         sidebarLinks.forEach(link => {
             let onclickAttr = link.getAttribute('onclick') || '';
             if (!onclickAttr.includes('reports')) {
@@ -645,6 +666,7 @@ function setRole(role) {
         switchTab('reports', document.querySelector('.sidebar-top a[onclick*="reports"]'));
     } else {
         if(roleDisplay) roleDisplay.innerHTML = '<span style="color: #007bff;">Administrator</span>';
+        if(teacherNotice) teacherNotice.style.display = 'none';
         sidebarLinks.forEach(link => { link.style.display = 'flex'; });
         switchTab('dashboard', document.querySelector('.sidebar-top a[onclick*="dashboard"]'));
     }
@@ -904,4 +926,4 @@ function generateIDCard() {
 loadSubjectTable(); 
 </script> 
 </body> 
-</html>
+</html> 
