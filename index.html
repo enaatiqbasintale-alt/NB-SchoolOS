@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+ <!DOCTYPE html> 
 <html lang="en"> 
 <head> 
 <meta charset="UTF-8"> 
@@ -166,7 +166,7 @@ button:hover { background: var(--primary-hover); }
 <div class="card"> 
 <h3>Dashboard Overview</h3> 
 <p>Welcome back to your school's autonomous cloud management portal.</p> 
-<p style="color: #555; margin-top: 10px;">All records are securely isolated and synchronized live via Supabase multi-tenant cloud storage.</p> 
+<p style="color: #555; margin-top: 10px;">All records are securely isolated and synchronized live via Supabase multi-tenant cloud storage[span_0](start_span)[span_0](end_span).</p> 
 </div> 
 </div> 
 
@@ -279,9 +279,9 @@ button:hover { background: var(--primary-hover); }
 <thead> 
 <tr> 
 <th>Subject</th> 
-<th>Class Score (30%)</th> 
-<th>Exam Score (70%)</th> 
-<th>Total (100%)</th> 
+<th>Class Score (Max 30)</th> 
+<th>Exam Score (Max 100)</th> 
+<th>Total</th> 
 <th>Grade</th> 
 <th>Automated Remarks</th> 
 </tr> 
@@ -311,9 +311,9 @@ button:hover { background: var(--primary-hover); }
 <thead> 
 <tr style="background: #1e1b4b; color: white;"> 
 <th style="border: 1px solid #cbd5e1; padding: 8px; color: white;">Subject</th> 
-<th style="border: 1px solid #cbd5e1; padding: 8px; color: white;">Class (30%)</th> 
-<th style="border: 1px solid #cbd5e1; padding: 8px; color: white;">Exam (70%)</th> 
-<th style="border: 1px solid #cbd5e1; padding: 8px; color: white;">Total (100%)</th> 
+<th style="border: 1px solid #cbd5e1; padding: 8px; color: white;">Class (30)</th> 
+<th style="border: 1px solid #cbd5e1; padding: 8px; color: white;">Exam (100)</th> 
+<th style="border: 1px solid #cbd5e1; padding: 8px; color: white;">Total</th> 
 <th style="border: 1px solid #cbd5e1; padding: 8px; color: white;">Grade</th> 
 <th style="border: 1px solid #cbd5e1; padding: 8px; color: white;">Remarks</th> 
 </tr> 
@@ -510,6 +510,7 @@ let currentSchoolData = {
 
 // Initialize branding on load
 applySchoolBranding();
+setupAutoSave();
 
 function showScreen(screenId) {
     document.getElementById('login-screen').style.display = 'none';
@@ -865,14 +866,27 @@ function loadSubjectTable() {
     let row = tbody.insertRow(); 
     row.innerHTML = ` 
       <td><strong>${subject}</strong></td> 
-      <td><input type="number" min="0" max="30" value="22" class="class-score" oninput="calculateRow(this)"></td> 
-      <td><input type="number" min="0" max="70" value="53" class="exam-score" oninput="calculateRow(this)"></td> 
-      <td><span class="row-total" style="font-weight: bold; color: var(--primary);">75</span></td> 
+      <td><input type="number" min="0" max="30" value="22" class="class-score" oninput="validateScoreInput(this, 30)"></td> 
+      <td><input type="number" min="0" max="100" value="65" class="exam-score" oninput="validateScoreInput(this, 100)"></td> 
+      <td><span class="row-total" style="font-weight: bold; color: var(--primary);">87</span></td> 
       <td><span class="row-grade" style="font-weight: bold; color: #0284c7;">A</span></td> 
       <td><span class="row-remark" style="font-style: italic; color: #555;">Excellent</span></td> 
     `; 
   }); 
 } 
+
+function validateScoreInput(input, maxLimit) {
+    let val = parseFloat(input.value);
+    if (isNaN(val)) {
+        input.value = 0;
+    } else if (val > maxLimit) {
+        alert(`Score cannot exceed ${maxLimit} marks.`);
+        input.value = maxLimit;
+    } else if (val < 0) {
+        input.value = 0;
+    }
+    calculateRow(input);
+}
 
 function calculateRow(element) { 
   let row = element.parentNode.parentNode; 
@@ -885,6 +899,29 @@ function calculateRow(element) {
   row.querySelector('.row-grade').innerText = grade; 
   row.querySelector('.row-remark').innerText = remark; 
 } 
+
+function setupAutoSave() {
+    setInterval(() => {
+        let studentName = document.getElementById("reportStudentInput").value;
+        if (!studentName) return;
+        
+        let rowsData = [];
+        document.querySelectorAll("#assessmentBody tr").forEach(row => {
+            rowsData.push({
+                subject: row.cells[0].innerText,
+                classScore: row.querySelector('.class-score').value,
+                examScore: row.querySelector('.exam-score').value
+            });
+        });
+        
+        localStorage.setItem('nb_autosave_report', JSON.stringify({
+            student: studentName,
+            term: document.getElementById("reportTermSelect").value,
+            data: rowsData,
+            timestamp: new Date().toISOString()
+        }));
+    }, 10000); 
+}
 
 function printOfficialReportCard() { 
   let studentName = document.getElementById("reportStudentInput").value.trim(); 
@@ -915,4 +952,4 @@ function generateIDCard() {
 loadSubjectTable(); 
 </script> 
 </body> 
-</html> 
+</html>
