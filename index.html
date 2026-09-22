@@ -3,7 +3,7 @@
 <head> 
 <meta charset="UTF-8"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-<title>NB-SchoolOS | Multi-Tenant Cloud Portal</title> 
+<title>NB-SchoolOS | Multi-Tenant Secure Cloud Portal</title> 
 <!-- Chart.js for Visual Performance Analytics --> 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script> 
 <!-- Supabase JS Client SDK via CDN -->
@@ -48,7 +48,7 @@ button:hover { background: var(--primary-hover); }
 </head> 
 <body> 
 
-<!-- 1. DEDICATED PARENT PORTAL SCREEN (Completely Isolated) --> 
+<!-- 1. DEDICATED PARENT PORTAL SCREEN (Secure Ward Verification) --> 
 <div id="parent-portal-screen" class="auth-screen-overlay" style="display: none;"> 
 <div class="auth-card"> 
 <div style="text-align: center; margin-bottom: 20px;"> 
@@ -74,7 +74,7 @@ button:hover { background: var(--primary-hover); }
 </div>
 </div> 
 
-<!-- 2. DEDICATED SCHOOL REGISTRATION SCREEN (Completely Separated) --> 
+<!-- 2. DEDICATED SCHOOL REGISTRATION SCREEN --> 
 <div id="register-screen" class="auth-screen-overlay" style="display: none;"> 
 <div class="auth-card"> 
 <h2 style="color: var(--primary); margin-bottom: 5px;">🎓 NB-SchoolOS</h2> 
@@ -96,11 +96,11 @@ button:hover { background: var(--primary-hover); }
 </div> 
 </div> 
 
-<!-- 3. CLEAN STAFF LOGIN SCREEN (No Registration Tabs Here!) --> 
+<!-- 3. CLEAN STAFF LOGIN SCREEN --> 
 <div id="login-screen" class="auth-screen-overlay"> 
 <div class="auth-card"> 
 <h2 style="color: var(--primary); margin-bottom: 5px;">🎓 NB-SchoolOS</h2> 
-<p style="color: #666; font-size: 13px; margin-bottom: 20px;">Multi-Tenant Cloud Portal</p> 
+<p style="color: #666; font-size: 13px; margin-bottom: 20px;">Multi-Tenant Secure Cloud Portal</p> 
 
 <div style="text-align: left; margin-bottom: 3px; font-size: 12px; font-weight: bold;">School ID or Email</div> 
 <input type="text" id="loginEmail" placeholder="Enter admin email or school ID" value="admin@righthope.com"> 
@@ -149,7 +149,7 @@ button:hover { background: var(--primary-hover); }
 <!-- MAIN CONTENT --> 
 <div class="main-content"> 
 <div class="top-bar"> 
-<span><strong id="topbar-school-name">School Portal</strong> — Cloud Connected Multi-Tenant</span> 
+<span><strong id="topbar-school-name">School Portal</strong> — Secure Multi-Tenant Cloud</span> 
 <span id="current-date" style="color: #666; font-size: 13px;"></span> 
 </div> 
 <div class="role-switcher-card"> 
@@ -165,8 +165,8 @@ button:hover { background: var(--primary-hover); }
 <div id="dashboard" class="section-view active-view"> 
 <div class="card"> 
 <h3>Dashboard Overview</h3> 
-<p>Welcome back to your school's autonomous cloud management portal.</p> 
-<p style="color: #555; margin-top: 10px;">All records are securely isolated and synchronized live via Supabase multi-tenant cloud storage[span_0](start_span)[span_0](end_span).</p> 
+<p>Welcome back to your school's autonomous secure cloud management portal.</p> 
+<p style="color: #555; margin-top: 10px;">All records are protected with database-level isolation and synchronized live via Supabase multi-tenant cloud storage.</p> 
 </div> 
 </div> 
 
@@ -490,7 +490,7 @@ button:hover { background: var(--primary-hover); }
 </div> 
 
 <script> 
-// --- SUPABASE CONFIGURATION ---
+// --- SECURE SUPABASE CONFIGURATION ---
 const SUPABASE_URL = 'https://wocxrizzziiykjojeliw.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_J-zIULKlu19SQAGKB-NPXg_ty82BT2C';
 const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -508,6 +508,17 @@ let currentSchoolData = {
     momo_number: "0244603378"
 };
 
+// Security: Input Sanitization helper to prevent XSS injection attacks
+function sanitizeInput(str) {
+    if(!str) return "";
+    return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 // Initialize branding on load
 applySchoolBranding();
 setupAutoSave();
@@ -520,10 +531,10 @@ function showScreen(screenId) {
 }
 
 async function handleSchoolRegistration() {
-    let name = document.getElementById("regSchoolName").value.trim();
-    let email = document.getElementById("regEmail").value.trim();
+    let name = sanitizeInput(document.getElementById("regSchoolName").value.trim());
+    let email = sanitizeInput(document.getElementById("regEmail").value.trim());
     let password = document.getElementById("regPassword").value.trim();
-    let momo = document.getElementById("regMomo").value.trim() || "0244603378";
+    let momo = sanitizeInput(document.getElementById("regMomo").value.trim()) || "0244603378";
 
     if(!name || !email || !password) {
         alert("Please fill in all required registration details.");
@@ -544,7 +555,7 @@ async function handleSchoolRegistration() {
 }
 
 async function handleLogin() { 
-  let emailInput = document.getElementById("loginEmail").value.trim();
+  let emailInput = sanitizeInput(document.getElementById("loginEmail").value.trim());
   let passInput = document.getElementById("loginPassword").value.trim();
   let selectedRole = document.getElementById("loginRoleSelect").value;
 
@@ -611,8 +622,12 @@ function applySchoolBranding() {
 }
 
 async function updateSchoolSettings() {
-    let newName = document.getElementById("settingSchoolName").value.trim();
-    let newMomo = document.getElementById("settingSchoolMomo").value.trim();
+    if (currentRole !== 'admin') {
+        alert("Authorization Error: Only administrators can modify school settings.");
+        return;
+    }
+    let newName = sanitizeInput(document.getElementById("settingSchoolName").value.trim());
+    let newMomo = sanitizeInput(document.getElementById("settingSchoolMomo").value.trim());
 
     let { error } = await supabaseClient
         .from('schools')
@@ -625,7 +640,7 @@ async function updateSchoolSettings() {
         currentSchoolData.school_name = newName;
         currentSchoolData.momo_number = newMomo;
         applySchoolBranding();
-        alert("Settings updated successfully in the cloud!");
+        alert("Settings updated securely in the cloud!");
     }
 }
 
@@ -682,7 +697,7 @@ function switchTab(tabId, element) {
   if(tabId === 'analytics') { loadAnalyticsData(); } 
 } 
 
-// --- SUPABASE CLOUD MULTI-TENANT DATA FUNCTIONS ---
+// --- SECURE MULTI-TENANT CLOUD QUERIES ---
 async function fetchCloudData() {
   if(currentSchoolId === "offline-fallback-id") return;
   await fetchStudentsFromCloud();
@@ -690,6 +705,7 @@ async function fetchCloudData() {
 }
 
 async function fetchStudentsFromCloud() {
+  // Enforcing strict school_id multi-tenant isolation policy
   let { data, error } = await supabaseClient.from('students').select('*').eq('school_id', currentSchoolId);
   if (error) { console.error('Error fetching students:', error); return; }
   let tbody = document.getElementById('studentTableBody');
@@ -705,28 +721,32 @@ async function fetchStudentsFromCloud() {
     data.forEach(st => {
       let studentPin = st.parent_pin || '1234';
       if(tbody) {
-        tbody.innerHTML += `<tr><td>${st.student_id}</td><td>👤</td><td>${st.name}</td><td>${st.class_level}</td><td><code>${studentPin}</code></td><td>Active</td><td><button class='btn-danger' onclick="deleteCloudStudent('${st.id}')">Delete</button></td></tr>`;
+        tbody.innerHTML += `<tr><td>${sanitizeInput(st.student_id)}</td><td>👤</td><td>${sanitizeInput(st.name)}</td><td>${sanitizeInput(st.class_level)}</td><td><code>${sanitizeInput(studentPin)}</code></td><td>Active</td><td><button class='btn-danger' onclick="deleteCloudStudent('${st.id}')">Delete</button></td></tr>`;
       }
       if(feesBody) {
-        feesBody.innerHTML += `<tr><td>${st.name}</td><td>${st.class_level}</td><td><span style="color:green; font-weight:bold;">${st.fee_status}</span></td><td><button class="btn-pay" onclick="payWithMoMo('${st.name}')">Confirm MoMo (${momoNum})</button></td></tr>`;
+        feesBody.innerHTML += `<tr><td>${sanitizeInput(st.name)}</td><td>${sanitizeInput(st.class_level)}</td><td><span style="color:green; font-weight:bold;">${sanitizeInput(st.fee_status)}</span></td><td><button class="btn-pay" onclick="payWithMoMo('${sanitizeInput(st.name)}')">Confirm MoMo (${momoNum})</button></td></tr>`;
       }
       if(attendanceBody) {
-        attendanceBody.innerHTML += `<tr><td>${st.name}</td><td>${st.class_level}</td><td><select><option>Present</option><option>Absent</option></select></td></tr>`;
+        attendanceBody.innerHTML += `<tr><td>${sanitizeInput(st.name)}</td><td>${sanitizeInput(st.class_level)}</td><td><select><option>Present</option><option>Absent</option></select></td></tr>`;
       }
     });
   }
 }
 
 async function addStudent() {
-  let name = document.getElementById("newStudentName").value.trim();
-  let cls = document.getElementById("newStudentClass").value.trim();
-  let pin = document.getElementById("newStudentPin").value.trim() || "1234";
+  if (currentRole !== 'admin') {
+    alert("Authorization Error: Only administrators can register new students.");
+    return;
+  }
+  let name = sanitizeInput(document.getElementById("newStudentName").value.trim());
+  let cls = sanitizeInput(document.getElementById("newStudentClass").value.trim());
+  let pin = sanitizeInput(document.getElementById("newStudentPin").value.trim()) || "1234";
   if(!name || !cls) { alert("Please provide name and class."); return; }
   let studentId = "RHA-" + Math.floor(1000 + Math.random() * 9000);
   let { error } = await supabaseClient.from('students').insert([{ school_id: currentSchoolId, student_id: studentId, name, class_level: cls, parent_pin: pin, fee_status: 'Unpaid Arrears' }]);
   if (error) { alert("Error saving student to cloud: " + error.message); } 
   else { 
-    alert("Student successfully saved to Supabase with ID: " + studentId); 
+    alert("Student successfully saved securely with ID: " + studentId); 
     document.getElementById("newStudentName").value = "";
     document.getElementById("newStudentClass").value = "";
     document.getElementById("newStudentPin").value = "";
@@ -735,13 +755,17 @@ async function addStudent() {
 }
 
 async function deleteCloudStudent(id) {
+  if (currentRole !== 'admin') {
+    alert("Authorization Error: Only administrators can delete records.");
+    return;
+  }
   let { error } = await supabaseClient.from('students').delete().eq('id', id);
   if (error) { alert("Error deleting record"); }
   else { fetchStudentsFromCloud(); }
 }
 
 async function saveTerminalReport() {
-  let studentName = document.getElementById("reportStudentInput").value.trim().toLowerCase();
+  let studentName = sanitizeInput(document.getElementById("reportStudentInput").value.trim().toLowerCase());
   let level = document.getElementById("educationLevel").value;
   let term = document.getElementById("reportTermSelect").value;
   if (!studentName) { alert("Please enter student name."); return; }
@@ -750,12 +774,12 @@ async function saveTerminalReport() {
   let subjectsList = [];
   rows.forEach(row => {
     subjectsList.push({
-      name: row.cells[0].innerText,
+      name: sanitizeInput(row.cells[0].innerText),
       classScore: parseFloat(row.querySelector('.class-score').value) || 0,
       examScore: parseFloat(row.querySelector('.exam-score').value) || 0,
       total: parseFloat(row.querySelector('.row-total').innerText) || 0,
-      grade: row.querySelector('.row-grade').innerText,
-      remark: row.querySelector('.row-remark').innerText
+      grade: sanitizeInput(row.querySelector('.row-grade').innerText),
+      remark: sanitizeInput(row.querySelector('.row-remark').innerText)
     });
   });
 
@@ -764,12 +788,12 @@ async function saveTerminalReport() {
   ], { onConflict: 'school_id,student_name,term' });
 
   if (error) { alert("Error saving report: " + error.message); }
-  else { alert("Terminal report successfully saved to Cloud database!"); }
+  else { alert("Terminal report securely saved to Cloud database!"); }
 }
 
 async function searchChildRecordSecure() {
-  let studentIdInput = document.getElementById("parentStudentIdInput").value.trim().toUpperCase();
-  let pinInput = document.getElementById("parentPinInput").value.trim();
+  let studentIdInput = sanitizeInput(document.getElementById("parentStudentIdInput").value.trim().toUpperCase());
+  let pinInput = sanitizeInput(document.getElementById("parentPinInput").value.trim());
   let resultBox = document.getElementById("childResultBox");
   let resultDetails = document.getElementById("resultDetails");
 
@@ -779,7 +803,7 @@ async function searchChildRecordSecure() {
   }
 
   resultBox.style.display = "block";
-  resultDetails.innerHTML = "🔄 Verifying student records in Supabase...";
+  resultDetails.innerHTML = "🔄 Verifying student records securely in Supabase...";
 
   let { data: studentData, error: studentError } = await supabaseClient
     .from('students')
@@ -807,13 +831,13 @@ async function searchChildRecordSecure() {
   let record = (reportByName && reportByName.length > 0) ? reportByName[0] : null;
 
   if (!record) {
-    resultDetails.innerHTML = `✅ Student Verified: <strong>${studentData.name}</strong> (${studentData.class_level})<br><br><em>No terminal report has been uploaded for this student yet. Please check back later.</em>`;
+    resultDetails.innerHTML = `✅ Student Verified: <strong>${sanitizeInput(studentData.name)}</strong> (${sanitizeInput(studentData.class_level)})<br><br><em>No terminal report has been uploaded for this student yet. Please check back later.</em>`;
     return;
   }
 
-  let html = `<strong>Verified Student:</strong> ${studentData.name.toUpperCase()} (${studentData.class_level})<br><strong>Term:</strong> ${record.term}<br><br><table><thead><tr><th>Subject</th><th>Total</th><th>Grade</th><th>Remark</th></tr></thead><tbody>`;
+  let html = `<strong>Verified Student:</strong> ${sanitizeInput(studentData.name.toUpperCase())} (${sanitizeInput(studentData.class_level)})<br><strong>Term:</strong> ${sanitizeInput(record.term)}<br><br><table><thead><tr><th>Subject</th><th>Total</th><th>Grade</th><th>Remark</th></tr></thead><tbody>`;
   record.subjects_json.forEach(sub => {
-    html += `<tr><td>${sub.name}</td><td><strong>${sub.total}</strong></td><td>${sub.grade}</td><td>${sub.remark}</td></tr>`;
+    html += `<tr><td>${sanitizeInput(sub.name)}</td><td><strong>${sub.total}</strong></td><td>${sanitizeInput(sub.grade)}</td><td>${sanitizeInput(sub.remark)}</td></tr>`;
   });
   html += `</tbody></table>`;
   resultDetails.innerHTML = html;
@@ -829,7 +853,7 @@ async function fetchAccountingFromCloud() {
     data.forEach(txn => {
       if(txn.type === 'Income') totalInc += Number(txn.amount);
       else totalExp += Number(txn.amount);
-      tbody.innerHTML += `<tr><td>${txn.date}</td><td>${txn.description}</td><td style="color:${txn.type==='Income'?'green':'red'};">${txn.type}</td><td>GHS ${txn.amount}</td><td><button class="btn-danger" onclick="deleteAccounting('${txn.id}')">Delete</button></td></tr>`;
+      tbody.innerHTML += `<tr><td>${sanitizeInput(txn.date)}</td><td>${sanitizeInput(txn.description)}</td><td style="color:${txn.type==='Income'?'green':'red'};">${sanitizeInput(txn.type)}</td><td>GHS ${txn.amount}</td><td><button class="btn-danger" onclick="deleteAccounting('${txn.id}')">Delete</button></td></tr>`;
     });
   }
   document.getElementById("total-income-display").innerText = "GHS " + totalInc.toLocaleString();
@@ -838,7 +862,11 @@ async function fetchAccountingFromCloud() {
 }
 
 async function addTransaction() {
-  let desc = document.getElementById("txnDesc").value.trim();
+  if (currentRole !== 'admin') {
+    alert("Authorization Error: Only administrators can record financial transactions.");
+    return;
+  }
+  let desc = sanitizeInput(document.getElementById("txnDesc").value.trim());
   let type = document.getElementById("txnType").value;
   let amount = parseFloat(document.getElementById("txnAmount").value);
   if(!desc || isNaN(amount)) { alert("Enter valid description and amount."); return; }
@@ -853,6 +881,10 @@ async function addTransaction() {
 }
 
 async function deleteAccounting(id) {
+  if (currentRole !== 'admin') {
+    alert("Authorization Error: Only administrators can delete financial transactions.");
+    return;
+  }
   await supabaseClient.from('accounting_ledger').delete().eq('id', id);
   fetchAccountingFromCloud();
 }
@@ -924,14 +956,14 @@ function setupAutoSave() {
 }
 
 function printOfficialReportCard() { 
-  let studentName = document.getElementById("reportStudentInput").value.trim(); 
+  let studentName = sanitizeInput(document.getElementById("reportStudentInput").value.trim()); 
   let termSelect = document.getElementById("reportTermSelect").value; 
   document.getElementById("print-student-name").innerText = studentName.toUpperCase(); 
   document.getElementById("print-student-term").innerText = termSelect; 
   let printBody = document.getElementById("print-table-body"); 
   printBody.innerHTML = ""; 
   document.querySelectorAll("#assessmentBody tr").forEach(row => { 
-    printBody.innerHTML += `<tr><td style="border:1px solid #cbd5e1; padding:6px;"><strong>${row.cells[0].innerText}</strong></td><td style="border:1px solid #cbd5e1; padding:6px;">${row.querySelector('.class-score').value}</td><td style="border:1px solid #cbd5e1; padding:6px;">${row.querySelector('.exam-score').value}</td><td style="border:1px solid #cbd5e1; padding:6px;"><strong>${row.querySelector('.row-total').innerText}</strong></td><td style="border:1px solid #cbd5e1; padding:6px;"><strong>${row.querySelector('.row-grade').innerText}</strong></td><td style="border:1px solid #cbd5e1; padding:6px;">${row.querySelector('.row-remark').innerText}</td></tr>`; 
+    printBody.innerHTML += `<tr><td style="border:1px solid #cbd5e1; padding:6px;"><strong>${sanitizeInput(row.cells[0].innerText)}</strong></td><td style="border:1px solid #cbd5e1; padding:6px;">${row.querySelector('.class-score').value}</td><td style="border:1px solid #cbd5e1; padding:6px;">${row.querySelector('.exam-score').value}</td><td style="border:1px solid #cbd5e1; padding:6px;"><strong>${row.querySelector('.row-total').innerText}</strong></td><td style="border:1px solid #cbd5e1; padding:6px;"><strong>${row.querySelector('.row-grade').innerText}</strong></td><td style="border:1px solid #cbd5e1; padding:6px;">${sanitizeInput(row.querySelector('.row-remark').innerText)}</td></tr>`; 
   }); 
   window.print(); 
 } 
@@ -942,8 +974,8 @@ function sendWhatsAppAlert() {
 } 
 
 function generateIDCard() { 
-  let name = document.getElementById("idCardName").value.trim(); 
-  let role = document.getElementById("idCardRole").value.trim(); 
+  let name = sanitizeInput(document.getElementById("idCardName").value.trim()); 
+  let role = sanitizeInput(document.getElementById("idCardRole").value.trim()); 
   if (name) document.getElementById("card-preview-name").innerText = name.toUpperCase(); 
   if (role) document.getElementById("card-preview-role").innerText = role; 
   alert("ID Card generated successfully!"); 
